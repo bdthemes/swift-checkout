@@ -44,26 +44,45 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
                         <label for="<?php echo esc_attr(sanitize_title($attribute_name)); ?>">
                             <?php echo esc_html(wc_attribute_label($attribute_name)); ?>
                         </label>
-                        <select
-                            name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
-                            id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
-                            data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
-                            class="spc-variation-select">
-                            <option value=""><?php echo esc_html__('Choose an option', 'swift-checkout'); ?></option>
-                            <?php
-                            if ($attribute->is_taxonomy()) {
-                                $terms = wc_get_product_terms($product->get_id(), $attribute_name, ['fields' => 'all']);
-                                foreach ($terms as $term) {
-                                    echo '<option value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+                        <?php
+                        $variations = $product->get_available_variations();
+                        $variation_attributes = array();
+
+                        // Get all variation attributes
+                        foreach ($variations as $variation) {
+                            foreach ($variation['attributes'] as $attr_name => $attr_value) {
+                                if (!isset($variation_attributes[$attr_name])) {
+                                    $variation_attributes[$attr_name] = array();
                                 }
-                            } else {
-                                $options = $attribute->get_options();
-                                foreach ($options as $option) {
-                                    echo '<option value="' . esc_attr($option) . '">' . esc_html($option) . '</option>';
+                                if (!in_array($attr_value, $variation_attributes[$attr_name])) {
+                                    $variation_attributes[$attr_name][] = $attr_value;
                                 }
                             }
-                            ?>
-                        </select>
+                        }
+
+                        // Display select for current attribute
+                        if (isset($variation_attributes['attribute_' . $attribute_name])) :
+                        ?>
+                            <select
+                                name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
+                                id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
+                                data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
+                                class="spc-variation-select">
+                                <option value=""><?php echo esc_html__('Choose an option', 'swift-checkout'); ?></option>
+                                <?php
+                                foreach ($variation_attributes['attribute_' . $attribute_name] as $value) {
+                                    $label = $value;
+                                    if ($attribute->is_taxonomy()) {
+                                        $term = get_term_by('slug', $value, $attribute_name);
+                                        if ($term) {
+                                            $label = $term->name;
+                                        }
+                                    }
+                                    echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
 
