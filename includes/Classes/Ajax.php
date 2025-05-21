@@ -56,7 +56,9 @@ class Ajax {
 
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $quantity = isset($_POST['quantity']) ? absint($_POST['quantity']) : 1;
-        $variations = isset($_POST['variations']) ? array_map('sanitize_text_field', wp_unslash($_POST['variations'])) : array();
+        $variations = isset($_POST['variations']) ? json_decode(stripslashes($_POST['variations']), true) : array();
+
+        error_log(print_r($_POST, true));
 
         if ($product_id <= 0) {
             wp_send_json_error(array('message' => __('Invalid product', 'swift-checkout')));
@@ -284,7 +286,7 @@ class Ajax {
 
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $variation_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
-        $attributes = isset($_POST['attributes']) ? array_map('sanitize_text_field', wp_unslash($_POST['attributes'])) : array();
+        $attributes = isset($_POST['attributes']) ? $_POST['attributes'] : array();
 
         $product = wc_get_product($product_id);
         if (!$product || !$product->is_type('variable')) {
