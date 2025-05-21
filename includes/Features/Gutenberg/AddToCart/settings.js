@@ -7,12 +7,14 @@ const Settings = ({ attributes, setAttributes }) => {
     const { content, tag, productId } = attributes;
 
     // Get all products for the dropdown
-    const products = useSelect((select) => {
-        return select('core').getEntityRecords('postType', 'product', {
-            per_page: -1,
-            status: 'publish'
-        });
-    }, []);
+const products = useSelect((select) => {
+    return select('core').getEntityRecords('postType', 'product', {
+        per_page: -1,
+        _fields: ['id', 'title'],
+        status: 'publish',
+        stock_status: 'instock',
+    });
+}, []);
 
     // Format products for SelectControl options
     const productOptions = products ? products.map(product => ({
