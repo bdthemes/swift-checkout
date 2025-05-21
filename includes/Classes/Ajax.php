@@ -58,8 +58,6 @@ class Ajax {
         $quantity = isset($_POST['quantity']) ? absint($_POST['quantity']) : 1;
         $variations = isset($_POST['variations']) ? json_decode(stripslashes($_POST['variations']), true) : array();
 
-        error_log(print_r($_POST, true));
-
         if ($product_id <= 0) {
             wp_send_json_error(array('message' => __('Invalid product', 'swift-checkout')));
             exit;
