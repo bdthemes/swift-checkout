@@ -1,0 +1,26 @@
+{
+    "name": "sigmative/swift-checkout",
+    "description": "Swift Checkout for WooCommerce.",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "swift-checkout",
+        "elementor",
+        "gutenberg",
+        "blocks"
+    ],
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "SwiftCheckout\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sigmative"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

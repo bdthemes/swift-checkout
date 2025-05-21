@@ -1,0 +1,67 @@
+/**
+ *Swift Checkout Admin Styles
+ */
+
+.swift-checkout-settings .nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.swift-checkout-settings .tab-content {
+    margin-top: 20px;
+}
+
+.swift-checkout-settings .form-table th {
+    width: 250px;
+}
+
+.swift-checkout-settings .error-message {
+    color: #d63638;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.swift-checkout-settings .description {
+    margin-top: 5px;
+    font-style: italic;
+    color: #666;
+}
+
+/* Builder selection styling */
+.swift-checkout-settings .builder-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #f9f9f9;
+}
+
+.swift-checkout-settings .builder-option img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.swift-checkout-settings .builder-option .builder-info {
+    flex: 1;
+}
+
+.swift-checkout-settings .builder-option h3 {
+    margin: 0 0 10px 0;
+}
+
+.swift-checkout-settings .builder-option p {
+    margin: 0;
+}
+
+/* Feature options styling */
+.swift-checkout-settings .feature-option {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.swift-checkout-settings .feature-option:last-child {
+    border-bottom: none;
+}
