@@ -57,6 +57,10 @@
         },
         "style": {
             "type": "object"
+        },
+        "stylePreset": {
+            "type": "string",
+            "default": "simple"
         }
     },
     "textdomain": "swift-checkout",

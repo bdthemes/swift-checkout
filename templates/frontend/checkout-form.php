@@ -18,34 +18,35 @@ if (!defined('ABSPATH')) {
 		<div class="spc-form-section">
 
 			<div class="spc-form-row spc-form-row-name">
+				<input type="text" id="spc-name" name="name" class="spc-form-input" required placeholder=" ">
 				<label for="spc-name" class="spc-form-label">
 					Full Name <span class="required">*</span>
 				</label>
-				<input type="text" id="spc-name" name="name" class="spc-form-input" required>
 			</div>
 
 
 			<div class="spc-input-group">
 
 				<div class="spc-form-row spc-form-row-phone">
+					<input type="tel" id="spc-phone" name="phone" class="spc-form-input" required placeholder=" ">
 					<label for="spc-phone" class="spc-form-label">
 						Phone <span class="required">*</span>
 					</label>
-					<input type="tel" id="spc-phone" name="phone" class="spc-form-input" required>
 				</div>
 
 				<div class="spc-form-row spc-form-row-email">
+					<input type="email" id="spc-email" name="email" class="spc-form-input" placeholder=" ">
 					<label for="spc-email" class="spc-form-label">
 						Email Address (Optional)
 					</label>
-					<input type="email" id="spc-email" name="email" class="spc-form-input">
 				</div>
 			</div>
 			<div class="spc-form-row spc-form-row-address">
+				<textarea id="spc-address" name="address" class="spc-form-input" rows="3" required
+					placeholder=" "></textarea>
 				<label for="spc-address" class="spc-form-label">
 					Full Address <span class="required">*</span>
 				</label>
-				<textarea id="spc-address" name="address" class="spc-form-input" rows="3" required></textarea>
 			</div>
 		</div>
 		<div class="spc-form-section">

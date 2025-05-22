@@ -16,52 +16,74 @@ if (!defined('ABSPATH')) {
 /**
  * Add to Cart Widget Class
  */
-class AddToCart extends \Elementor\Widget_Base {
+class AddToCart extends \Elementor\Widget_Base
+{
     /**
      * Get widget name
      */
-    public function get_name() {
+    public function get_name()
+    {
         return 'swift-checkout-add-to-cart';
     }
 
     /**
      * Get widget title
      */
-    public function get_title() {
+    public function get_title()
+    {
         return esc_html__('Add to Cart', 'swift-checkout');
     }
 
     /**
      * Get widget icon
      */
-    public function get_icon() {
+    public function get_icon()
+    {
         return 'eicon-cart';
     }
 
     /**
      * Get widget categories
      */
-    public function get_categories() {
+    public function get_categories()
+    {
         return ['swift-checkout'];
     }
 
     /**
      * Get widget keywords
      */
-    public function get_keywords() {
+    public function get_keywords()
+    {
         return ['add to cart', 'cart', 'checkout'];
     }
 
     /**
      * Register widget controls
      */
-    protected function register_controls() {
+    protected function register_controls()
+    {
         // Content Section
         $this->start_controls_section(
             'content_section',
             [
                 'label' => esc_html__('Content', 'swift-checkout'),
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        // Style Selection Control
+        $this->add_control(
+            'stylePreset',
+            [
+                'label' => esc_html__('Preset', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'simple',
+                'options' => [
+                    'simple' => esc_html__('Simple', 'swift-checkout'),
+                    'modern' => esc_html__('Modern', 'swift-checkout'),
+                ],
+                'separator' => 'after',
             ]
         );
 
@@ -86,7 +108,8 @@ class AddToCart extends \Elementor\Widget_Base {
      *
      * @return array
      */
-    private function get_products_list() {
+    private function get_products_list()
+    {
         $products = [];
 
         $args = array(
@@ -124,7 +147,8 @@ class AddToCart extends \Elementor\Widget_Base {
     /**
      * Render widget output
      */
-    protected function render() {
+    protected function render()
+    {
         $settings = $this->get_settings_for_display();
         echo wp_kses_post(\SwiftCheckout\Renders\AddToCart::get_markup('elementor', $settings, $this));
     }
