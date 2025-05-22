@@ -15,19 +15,21 @@ if (!defined('ABSPATH')) {
     exit;
 }
 class AddToCart {
-
     /**
      * Get Add to Cart markup
      *
      * @param array $attributes Element attributes
      * @return string
      */
-    public static function get_markup($builder, $attributes, $object = null) {
+    public static function get_markup($builder, $attributes, $object = null)
+    {
+        // print_r($attributes);
         $attributes['product_id'] = $attributes['productId'];
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
             Utils::load_template('block-editor-markup.php', $attributes);
         } else { ?>
-            <div class="spc-container" data-builder="<?php echo \esc_attr($builder); ?>">
+            <div class="spc-container <?php echo isset($attributes['stylePreset']) ? \esc_attr($attributes['stylePreset']) : ''; ?>"
+                data-builder="<?php echo \esc_attr($builder); ?>">
                 <?php Utils::load_template('product-grid.php', $attributes); ?>
                 <div class="spc-mini-cart">
                     <h2 class="spc-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>

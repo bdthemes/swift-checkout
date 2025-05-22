@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 
 const Settings = ({ attributes, setAttributes }) => {
-    const { content, tag, productId } = attributes;
+    const { content, tag, productId, stylePreset } = attributes;
 
     // Get all products for the dropdown
 const products = useSelect((select) => {
@@ -25,6 +25,17 @@ const products = useSelect((select) => {
     return (
         <InspectorControls>
             <PanelBody title={__('Add to Cart Settings', 'swift-checkout')}>
+
+               <SelectControl
+                    label={__('Select Preset', 'swift-checkout')}
+                    value={stylePreset}
+                    options={[
+                        { label: __('Simple', 'swift-checkout'), value: 'simple' },
+                        { label: __('Modern', 'swift-checkout'), value: 'modern' },
+                    ]}
+                    onChange={(value) => setAttributes({ stylePreset: value })}
+                />
+                    
                 <SelectControl
                     label={__('Select Product', 'swift-checkout')}
                     value={productId?.toString()}
@@ -35,6 +46,8 @@ const products = useSelect((select) => {
                     onChange={(value) => setAttributes({ productId: parseInt(value) })}
                     help={__('Choose the product to add to cart', 'swift-checkout')}
                 />
+    
+                
             </PanelBody>
         </InspectorControls>
     )
