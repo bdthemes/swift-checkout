@@ -21,8 +21,7 @@ class AddToCart {
      * @param array $attributes Element attributes
      * @return string
      */
-    public static function get_markup($builder, $attributes, $object = null)
-    {
+    public static function get_markup($builder, $attributes, $object = null) {
         // print_r($attributes);
         $attributes['product_id'] = $attributes['productId'];
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
