@@ -133,7 +133,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 </td>
                                 <td class="product-price">
                                     <span class="woocommerce-Price-amount amount">
-                                        <?php echo wc_price($item['price']); ?>
+                                        <?php echo wp_kses_post(wc_price($item['price'])); ?>
                                     </span>
                                 </td>
                                 <td class="product-quantity">
@@ -147,7 +147,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 </td>
                                 <td class="product-subtotal">
                                     <span class="woocommerce-Price-amount amount">
-                                        <?php echo wc_price($item['price'] * $item['quantity']); ?>
+                                        <?php echo wp_kses_post(wc_price($item['price'] * $item['quantity'])); ?>
                                     </span>
                                 </td>
                                 <td class="product-remove" style="text-align: right;">
@@ -168,7 +168,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                             foreach ($attributes['sample_cart_items'] as $item) {
                                 $total += $item['price'] * $item['quantity'];
                             }
-                            echo wc_price($total);
+                            echo wp_kses_post(wc_price($total));
                             ?>
                         </td>
                     </tr>
