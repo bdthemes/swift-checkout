@@ -183,10 +183,10 @@ $attributes['sample_cart_items'] = $sample_cart_items;
         <form id="spc-checkout-form" method="post">
             <div class="spc-form-section">
                 <div class="spc-form-row spc-form-row-name">
+                    <input type="text" id="spc-name" name="name" class="spc-form-input" required placeholder>
                     <label for="spc-name" class="spc-form-label">
                         <?php \esc_html_e('Full Name', 'swift-checkout'); ?> <span class="required">*</span>
                     </label>
-                    <input type="text" id="spc-name" name="name" class="spc-form-input" required>
                 </div>
 
                 <div class="spc-input-group">
@@ -194,14 +194,14 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                         <label for="spc-phone" class="spc-form-label">
                             <?php \esc_html_e('Phone', 'swift-checkout'); ?> <span class="required">*</span>
                         </label>
-                        <input type="tel" id="spc-phone" name="phone" class="spc-form-input" required>
+                        <input type="tel" id="spc-phone" name="phone" class="spc-form-input" required placeholder>
                     </div>
 
                     <div class="spc-form-row spc-form-row-email">
                         <label for="spc-email" class="spc-form-label">
                             <?php \esc_html_e('Email Address (Optional)', 'swift-checkout'); ?>
                         </label>
-                        <input type="email" id="spc-email" name="email" class="spc-form-input">
+                        <input type="email" id="spc-email" name="email" class="spc-form-input" placeholder>
                     </div>
                 </div>
 
@@ -209,7 +209,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     <label for="spc-address" class="spc-form-label">
                         <?php \esc_html_e('Full Address', 'swift-checkout'); ?> <span class="required">*</span>
                     </label>
-                    <textarea id="spc-address" name="address" class="spc-form-input" rows="3" required></textarea>
+                    <textarea id="spc-address" name="address" class="spc-form-input" rows="3" required placeholder></textarea>
                 </div>
             </div>
 
