@@ -1,0 +1,385 @@
+# Copyright (C) 2025 bdthemes
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Swift Checkout 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/WPXERO/swift-checkout/issues\n"
+"Last-Translator: Lazy Blocks Team\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-05-22T12:10:14+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.13.0-alpha\n"
+"X-Domain: swift-checkout\n"
+
+#. Plugin Name of the plugin
+#: swift-checkout.php
+#: includes/Classes/Admin.php:39
+#: includes/Classes/Admin.php:40
+#: includes/Core/Register.php:129
+#: includes/Core/Register.php:142
+#: includes/Features/Elementor/AddToCart/AddToCart.php:31
+msgid "Swift Checkout"
+msgstr ""
+
+#. Description of the plugin
+#: swift-checkout.php
+msgid "Swift Checkout for WooCommerce."
+msgstr ""
+
+#. Author of the plugin
+#: swift-checkout.php
+msgid "bdthemes"
+msgstr ""
+
+#. Author URI of the plugin
+#: swift-checkout.php
+msgid "https://bdthemes.com"
+msgstr ""
+
+#: includes/Classes/Ajax.php:62
+msgid "Invalid product"
+msgstr ""
+
+#: includes/Classes/Ajax.php:79
+#: includes/Classes/Ajax.php:303
+msgid "No matching variation found."
+msgstr ""
+
+#: includes/Classes/Ajax.php:90
+msgid "Could not add item to cart"
+msgstr ""
+
+#: includes/Classes/Ajax.php:106
+#: includes/Classes/Ajax.php:125
+msgid "Invalid cart item"
+msgstr ""
+
+#: includes/Classes/Ajax.php:142
+msgid "Your cart is empty"
+msgstr ""
+
+#: includes/Classes/Ajax.php:160
+msgid "Please fill in all required fields"
+msgstr ""
+
+#: includes/Classes/Ajax.php:212
+msgid "Order created fromSwift Checkout"
+msgstr ""
+
+#: includes/Classes/Ajax.php:218
+msgid "Order created successfully"
+msgstr ""
+
+#: includes/Classes/Ajax.php:260
+msgid "Invalid order ID"
+msgstr ""
+
+#: includes/Classes/Ajax.php:267
+msgid "Order not found"
+msgstr ""
+
+#: includes/Classes/Ajax.php:291
+msgid "Invalid product."
+msgstr ""
+
+#: includes/Classes/Ajax.php:312
+msgid "In stock"
+msgstr ""
+
+#: includes/Classes/Ajax.php:314
+msgid "Out of stock"
+msgstr ""
+
+#. translators: %s: WooCommerce plugin name
+#: includes/Classes/Dependencies.php:230
+#, php-format
+msgid "Swift Checkout requires %s to be installed and activated."
+msgstr ""
+
+#: includes/Classes/Dependencies.php:234
+msgid "Install Now"
+msgstr ""
+
+#. translators: %s: WooCommerce plugin name
+#: includes/Classes/Dependencies.php:264
+#, php-format
+msgid "Swift Checkout requires %s to be activated."
+msgstr ""
+
+#: includes/Classes/Dependencies.php:268
+msgid "Activate Now"
+msgstr ""
+
+#. translators: %1$s: Swift Checkout plugin name, %2$s: Required WooCommerce version
+#: includes/Classes/Dependencies.php:284
+#, php-format
+msgid "Swift Checkout requires %1$s version %2$s or higher."
+msgstr ""
+
+#: includes/Core/BuilderConfig.php:45
+msgid "Elementor"
+msgstr ""
+
+#: includes/Core/BuilderConfig.php:47
+msgid "Elementor is a powerful page builder plugin for WordPress."
+msgstr ""
+
+#: includes/Core/BuilderConfig.php:51
+msgid "Gutenberg"
+msgstr ""
+
+#: includes/Core/BuilderConfig.php:53
+msgid "Gutenberg is the default WordPress editor introduced in WordPress 5.0."
+msgstr ""
+
+#: includes/Core/ElementConfig.php:44
+#: templates/frontend/add-to-cart.php:94
+#: templates/frontend/add-to-cart.php:101
+#: templates/frontend/block-editor-markup.php:89
+#: templates/frontend/block-editor-markup.php:96
+msgid "Add to Cart"
+msgstr ""
+
+#: includes/Core/ElementConfig.php:47
+msgid "A simple add to cart element."
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:63
+msgid "Content"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:74
+#: templates/frontend/block-editor-markup.php:107
+#: templates/frontend/mini-cart.php:35
+#: templates/frontend/order-received.php:51
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:32
+msgid "Product"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:79
+msgid "Select a product to display"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:86
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:50
+msgid "Auto Add to Cart"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:88
+msgid "Yes"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:89
+msgid "No"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:92
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:51
+msgid "Automatically add the selected product to cart when page loads"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:101
+msgid "Preset"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:105
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:44
+msgid "Simple"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:106
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:45
+msgid "Modern"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:114
+msgid "Button Alignment"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:118
+msgid "Left"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:122
+msgid "Center"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:126
+msgid "Right"
+msgstr ""
+
+#: includes/Features/Elementor/AddToCart/AddToCart.php:130
+msgid "Justified"
+msgstr ""
+
+#: includes/Renders/AddToCart.php:54
+#: templates/frontend/block-editor-markup.php:102
+msgid "Your Cart"
+msgstr ""
+
+#: templates/frontend/add-to-cart.php:24
+#: templates/frontend/block-editor-markup.php:25
+msgid "Product not found or not available."
+msgstr ""
+
+#: templates/frontend/add-to-cart.php:35
+#: templates/frontend/block-editor-markup.php:49
+msgid "Select Options"
+msgstr ""
+
+#: templates/frontend/add-to-cart.php:71
+#: templates/frontend/block-editor-markup.php:66
+msgid "Choose an option"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:108
+#: templates/frontend/mini-cart.php:36
+msgid "Price"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:109
+#: templates/frontend/mini-cart.php:37
+msgid "Quantity"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:110
+#: templates/frontend/mini-cart.php:38
+msgid "Subtotal"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:112
+#: templates/frontend/mini-cart.php:39
+msgid "Remove"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:171
+#: templates/frontend/mini-cart.php:83
+#: templates/frontend/order-received.php:52
+msgid "Total"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:188
+msgid "Contact Information"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:194
+msgid "Full Name"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:202
+msgid "Phone"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:209
+msgid "Email Address (Optional)"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:218
+msgid "Full Address"
+msgstr ""
+
+#: templates/frontend/block-editor-markup.php:226
+msgid "Place Order"
+msgstr ""
+
+#: templates/frontend/order-received.php:18
+msgid "Order received"
+msgstr ""
+
+#: templates/frontend/order-received.php:21
+msgid "Thank you. Your order has been received."
+msgstr ""
+
+#: templates/frontend/order-received.php:26
+msgid "Order number:"
+msgstr ""
+
+#: templates/frontend/order-received.php:30
+msgid "Date:"
+msgstr ""
+
+#: templates/frontend/order-received.php:34
+msgid "Total:"
+msgstr ""
+
+#: templates/frontend/order-received.php:39
+msgid "Payment method:"
+msgstr ""
+
+#: templates/frontend/order-received.php:46
+msgid "Order details"
+msgstr ""
+
+#: templates/frontend/order-received.php:95
+msgid "Note:"
+msgstr ""
+
+#: templates/frontend/order-received.php:108
+msgid "Billing address"
+msgstr ""
+
+#: templates/frontend/order-received.php:115
+msgid "Shipping address"
+msgstr ""
+
+#: templates/frontend/order-received.php:123
+msgid "Continue shopping"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:30
+msgid "Add to Cart Settings"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:35
+msgid "Select a product..."
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/settings.js:41
+msgid "Style Preset"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/index.js:1
+#: includes/Features/Gutenberg/AddToCart/index.js:19
+msgid "Please select a product"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/block.json
+#: includes/Features/Gutenberg/AddToCart/block.json
+msgctxt "block title"
+msgid "Swift Checkout"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/block.json
+#: includes/Features/Gutenberg/AddToCart/block.json
+msgctxt "block description"
+msgid "A Swift Checkout add to cart block with customizable styles."
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/block.json
+#: includes/Features/Gutenberg/AddToCart/block.json
+msgctxt "block keyword"
+msgid "add to cart"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/block.json
+#: includes/Features/Gutenberg/AddToCart/block.json
+msgctxt "block keyword"
+msgid "cart"
+msgstr ""
+
+#: includes/assets/gutenberg/AddToCart/block.json
+#: includes/Features/Gutenberg/AddToCart/block.json
+msgctxt "block keyword"
+msgid "checkout"
+msgstr ""
