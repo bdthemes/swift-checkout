@@ -64,7 +64,9 @@
 
 .spc-add-to-cart,
 .spc-select-options {
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
 .spc-container .button-left {
   text-align: left;
 }

@@ -38,6 +38,10 @@
         "productId": {
             "type": "number"
         },
+        "auto_add_to_cart": {
+            "type": "boolean",
+            "default": false
+        },
         "tag": {
             "type": "string",
             "default": "h2"

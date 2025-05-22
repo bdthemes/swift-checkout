@@ -23,7 +23,7 @@ class AddToCart {
      */
     public static function get_markup($builder, $attributes, $object = null) {
         // Handle auto add to cart if enabled
-        if (isset($attributes['auto_add_to_cart']) && $attributes['auto_add_to_cart'] === 'yes' && !empty($attributes['productId'])) {
+        if (isset($attributes['auto_add_to_cart']) && ($attributes['auto_add_to_cart'] === true || $attributes['auto_add_to_cart'] === 'yes') && !empty($attributes['productId'])) {
             // Only add to cart if not already in cart
             $product_in_cart = false;
             if (function_exists('\WC') && isset(\WC()->cart)) {
