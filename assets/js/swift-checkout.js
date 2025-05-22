@@ -11,6 +11,9 @@
         init: function() {
             this.bindEvents();
             this.updateCartVisibility();
+
+            // Update cart visibility when fragments are refreshed
+            $(document.body).on('wc_fragments_refreshed spc_fragments_refreshed', this.updateCartVisibility);
         },
 
         /**
@@ -409,13 +412,17 @@
             const $cartItems = $('.spc-cart-item');
             const $miniCart = $('.spc-mini-cart');
             const $checkoutForm = $('.spc-checkout-form');
+            const $addToCartButtons = $('.spc-add-to-cart, .spc-select-options');
+
             if ($cartItems.length > 0) {
                 $miniCart.addClass('spc-visible');
                 $checkoutForm.addClass('spc-visible');
+                $addToCartButtons.hide(); // Hide add to cart buttons when cart has items
             }
             else {
                 $miniCart.removeClass('spc-visible');
                 $checkoutForm.removeClass('spc-visible');
+                $addToCartButtons.show(); // Show add to cart buttons when cart is empty
             }
         }
     };
@@ -423,6 +430,20 @@
     // Initialize when DOM is ready
     $(document).ready(function() {
         SwiftCheckout.init();
+
+        // Handle auto add to cart functionality
+        $('.spc-container').each(function() {
+            const $container = $(this);
+            const $widget = $container.closest('.elementor-widget-swift-checkout-add-to-cart');
+
+            if ($widget.length && $widget.data('auto-add-to-cart') === 'yes') {
+                const productId = $widget.data('product-id');
+                if (productId) {
+                    // Trigger cart fragment refresh
+                    $(document.body).trigger('wc_fragment_refresh');
+                }
+            }
+        });
     });
 
 })(jQuery);
