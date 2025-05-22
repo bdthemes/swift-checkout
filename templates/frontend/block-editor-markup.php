@@ -15,6 +15,7 @@ if (!defined('ABSPATH')) {
 }
 // Get product ID from attributes
 $product_id = !empty($args['product_id']) ? absint($args['product_id']) : 0;
+$preset = !empty($args['stylePreset']) ? $args['stylePreset'] : 'simple';
 // Get the product
 $product = wc_get_product($product_id);
 
@@ -41,7 +42,7 @@ $sample_cart_items = array(
 // Add sample cart items to attributes for template
 $attributes['sample_cart_items'] = $sample_cart_items;
 ?>
-<div class="spc-container <?php echo isset($attributes['stylePreset']) ? \esc_attr($attributes['stylePreset']) : ''; ?>" data-builder=" gutenberg">
+<div class="spc-container <?php echo esc_attr($preset); ?>" data-builder=" gutenberg">
     <div class="spc-product-card" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
         <?php if ($product->is_type('variable')) : ?>
             <button class="spc-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
