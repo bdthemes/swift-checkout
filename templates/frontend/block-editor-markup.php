@@ -44,22 +44,22 @@ $attributes['sample_cart_items'] = $sample_cart_items;
 ?>
 <div class="spc-container <?php echo esc_attr($preset); ?>" data-builder=" gutenberg">
     <div class="spc-product-card" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-        <?php if ($product->is_type('variable')) : ?>
+        <?php if ($product->is_type('variable')): ?>
             <button class="spc-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php esc_html_e('Select Options', 'swift-checkout'); ?>
             </button>
-            <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>" style="display: none;">
+            <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>"
+                style="display: none;">
                 <form class="spc-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                     <?php
                     $attributes = $product->get_attributes();
-                    foreach ($attributes as $attribute_name => $attribute) :
-                    ?>
+                    foreach ($attributes as $attribute_name => $attribute):
+                        ?>
                         <div class="spc-variation-row">
                             <label for="<?php echo esc_attr(sanitize_title($attribute_name)); ?>">
                                 <?php echo esc_html(wc_attribute_label($attribute_name)); ?>
                             </label>
-                            <select
-                                name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
+                            <select name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 class="spc-variation-select">
@@ -91,7 +91,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     </div>
                 </form>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
             </button>
@@ -108,15 +108,18 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                         <th class="product-price"><?php esc_html_e('Price', 'swift-checkout'); ?></th>
                         <th class="product-quantity"><?php esc_html_e('Quantity', 'swift-checkout'); ?></th>
                         <th class="product-subtotal"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></th>
-                        <th class="product-remove" style="text-align: right;"><?php esc_html_e('Remove', 'swift-checkout'); ?></th>
+                        <th class="product-remove" style="text-align: right;">
+                            <?php esc_html_e('Remove', 'swift-checkout'); ?>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    if (!empty($attributes['sample_cart_items'])) :
-                        foreach ($attributes['sample_cart_items'] as $item) :
+                    if (!empty($attributes['sample_cart_items'])):
+                        foreach ($attributes['sample_cart_items'] as $item):
                             $product = wc_get_product($item['product_id']);
-                            if (!$product) continue;
+                            if (!$product)
+                                continue;
 
                             $item_key = md5($item['product_id'] . (isset($item['variation_id']) ? $item['variation_id'] : ''));
                             $variation_attributes = '';
@@ -124,11 +127,11 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                             if ($product->is_type('variation')) {
                                 $variation_attributes = wc_get_formatted_variation($product->get_variation_attributes(), true);
                             }
-                    ?>
+                            ?>
                             <tr class="spc-cart-item" data-item-key="<?php echo esc_attr($item_key); ?>">
                                 <td class="product-name">
                                     <?php echo esc_html($item['name']); ?>
-                                    <?php if ($variation_attributes) : ?>
+                                    <?php if ($variation_attributes): ?>
                                         <div class="spc-variation-details"><?php echo esc_html($variation_attributes); ?></div>
                                     <?php endif; ?>
                                 </td>
@@ -139,11 +142,13 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 </td>
                                 <td class="product-quantity">
                                     <div class="spc-quantity">
-                                        <button class="spc-qty-minus" data-item-key="<?php echo esc_attr($item_key); ?>">–</button>
+                                        <button class="spc-qty-minus"
+                                            data-item-key="<?php echo esc_attr($item_key); ?>">–</button>
                                         <input type="number" min="1" class="spc-qty-input"
                                             value="<?php echo esc_attr($item['quantity']); ?>"
                                             data-item-key="<?php echo esc_attr($item_key); ?>">
-                                        <button class="spc-qty-plus" data-item-key="<?php echo esc_attr($item_key); ?>">+</button>
+                                        <button class="spc-qty-plus"
+                                            data-item-key="<?php echo esc_attr($item_key); ?>">+</button>
                                     </div>
                                 </td>
                                 <td class="product-subtotal">
@@ -152,10 +157,11 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                     </span>
                                 </td>
                                 <td class="product-remove" style="text-align: right;">
-                                    <button class="spc-remove-item" data-item-key="<?php echo esc_attr($item_key); ?>">×</button>
+                                    <button class="spc-remove-item"
+                                        data-item-key="<?php echo esc_attr($item_key); ?>">×</button>
                                 </td>
                             </tr>
-                    <?php
+                            <?php
                         endforeach;
                     endif;
                     ?>
@@ -191,25 +197,26 @@ $attributes['sample_cart_items'] = $sample_cart_items;
 
                 <div class="spc-input-group">
                     <div class="spc-form-row spc-form-row-phone">
+                        <input type="tel" id="spc-phone" name="phone" class="spc-form-input" required placeholder>
                         <label for="spc-phone" class="spc-form-label">
                             <?php \esc_html_e('Phone', 'swift-checkout'); ?> <span class="required">*</span>
                         </label>
-                        <input type="tel" id="spc-phone" name="phone" class="spc-form-input" required placeholder>
                     </div>
 
                     <div class="spc-form-row spc-form-row-email">
+                        <input type="email" id="spc-email" name="email" class="spc-form-input" placeholder>
                         <label for="spc-email" class="spc-form-label">
                             <?php \esc_html_e('Email Address (Optional)', 'swift-checkout'); ?>
                         </label>
-                        <input type="email" id="spc-email" name="email" class="spc-form-input" placeholder>
                     </div>
                 </div>
 
                 <div class="spc-form-row spc-form-row-address">
+                    <textarea id="spc-address" name="address" class="spc-form-input" rows="3" required
+                        placeholder></textarea>
                     <label for="spc-address" class="spc-form-label">
                         <?php \esc_html_e('Full Address', 'swift-checkout'); ?> <span class="required">*</span>
                     </label>
-                    <textarea id="spc-address" name="address" class="spc-form-input" rows="3" required placeholder></textarea>
                 </div>
             </div>
 
