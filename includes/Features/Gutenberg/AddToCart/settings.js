@@ -1,10 +1,11 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
+import { useMemo } from '@wordpress/element';
 
 const Settings = ({ attributes, setAttributes }) => {
-    const { content, tag, productId, stylePreset, auto_add_to_cart } = attributes;
+    const { productId, stylePreset, auto_add_to_cart } = attributes;
 
     // Get all products for the dropdown
     const products = useSelect((select) => {
@@ -12,15 +13,17 @@ const Settings = ({ attributes, setAttributes }) => {
             per_page: -1,
             _fields: ['id', 'title'],
             status: 'publish',
-            stock_status: 'instock',
         });
     }, []);
 
-    // Format products for SelectControl options
-    const productOptions = products ? products.map(product => ({
-        label: product.title.rendered,
-        value: product.id.toString()
-    })) : [];
+    // Memoize product options to prevent unnecessary re-renders
+    const productOptions = useMemo(() => {
+        if (!products) return [];
+        return products.map(product => ({
+            label: product.title.rendered,
+            value: product.id.toString()
+        }));
+    }, [products]);
 
     return (
         <InspectorControls>

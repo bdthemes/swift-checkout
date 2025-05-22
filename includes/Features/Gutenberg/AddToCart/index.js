@@ -3,7 +3,6 @@ import { useBlockProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
 import ServerSideRender from "@wordpress/server-side-render";
 import { Spinner } from "@wordpress/components";
-import { useEffect } from "@wordpress/element";
 import metadata from "./block.json";
 import Settings from "./settings";
 

@@ -28,7 +28,7 @@ class AddToCart extends \Elementor\Widget_Base {
      * Get widget title
      */
     public function get_title() {
-        return esc_html__('Add to Cart', 'swift-checkout');
+        return esc_html__('Swift Checkout', 'swift-checkout');
     }
 
     /**
@@ -65,20 +65,7 @@ class AddToCart extends \Elementor\Widget_Base {
             ]
         );
 
-        // Style Selection Control
-        $this->add_control(
-            'stylePreset',
-            [
-                'label' => esc_html__('Preset', 'swift-checkout'),
-                'type' => \Elementor\Controls_Manager::SELECT,
-                'default' => 'simple',
-                'options' => [
-                    'simple' => esc_html__('Simple', 'swift-checkout'),
-                    'modern' => esc_html__('Modern', 'swift-checkout'),
-                ],
-                'separator' => 'after',
-            ]
-        );
+
 
         // Product Selection Control
         $this->add_control(
@@ -107,7 +94,20 @@ class AddToCart extends \Elementor\Widget_Base {
         );
 
         // Button Alignment Control
-
+        // Style Selection Control
+        $this->add_control(
+            'stylePreset',
+            [
+                'label' => esc_html__('Preset', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'simple',
+                'options' => [
+                    'simple' => esc_html__('Simple', 'swift-checkout'),
+                    'modern' => esc_html__('Modern', 'swift-checkout'),
+                ],
+                'separator' => 'before',
+            ]
+        );
         $this->add_control(
             'cartButtonAlignment',
             [

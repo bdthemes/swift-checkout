@@ -113,11 +113,6 @@ final class SwiftCheckout {
             // Initialize registration handler
             Register::get_instance();
             Enqueue::get_instance();
-
-            if (!is_admin()) {
-                Shortcode::init();
-            }
-
             // Initialize AJAX handler
             Ajax::init();
         }

@@ -49,7 +49,7 @@ class AddToCart {
                 data-builder="<?php echo \esc_attr($builder); ?>"
                 data-product-id="<?php echo \esc_attr($attributes['productId'] ?? ''); ?>"
                 data-auto-add-to-cart="<?php echo \esc_attr($attributes['auto_add_to_cart'] ?? 'no'); ?>">
-                <?php Utils::load_template('product-grid.php', $attributes); ?>
+                <?php Utils::load_template('add-to-cart.php', $attributes); ?>
                 <div class="spc-mini-cart">
                     <h2 class="spc-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
                     <?php Utils::load_template('mini-cart.php', $attributes); ?>

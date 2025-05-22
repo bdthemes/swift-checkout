@@ -3,13 +3,15 @@
     "apiVersion": 3,
     "name": "swift-checkout/add-to-cart",
     "version": "1.0.0",
-    "title": "Add to Cart",
+    "title": "Swift Checkout",
     "category": "swift-checkout",
     "icon": "cart",
-    "description": "A add to cart block with customizable styles.",
+    "description": "A Swift Checkout add to cart block with customizable styles.",
     "keywords": ["add to cart", "cart", "checkout"],
     "supports": {
         "html": false,
+        "align": true,
+        "alignWide": true,
         "anchor": true,
         "className": true,
         "color": {
