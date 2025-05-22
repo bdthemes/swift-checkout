@@ -8,7 +8,6 @@
 
 namespace SwiftCheckout\Templates\Frontend;
 
-use SwiftCheckout\Classes\Utils;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
