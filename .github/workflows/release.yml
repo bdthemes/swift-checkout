@@ -31,7 +31,7 @@ jobs:
               with:
                 filename: 'swift-checkout.zip'
                 exclusions: >-
-                  /*sync.ffs_db /*.idea/* /*.DS_Store /*.gitignore /*node_modules/* /*.github/* /*.git/* /*.cursorrules /*.eslintrc /*.gitattributes /*.prettierrc
+                  /*sync.ffs_db /*.idea/* /*.DS_Store /*.gitignore /*.editorconfig /*node_modules/* /*.github/* /*.git/* /*.cursorrules /*.eslintrc /*.gitattributes /*.prettierrc
                   /*composer.lock /includes/assets/* /*.sublime-project /*.sublime-workspace /*.DS_Store? /*._* /*.Spotlight-V100 /*.Trashes
                   /*ehthumbs.db /*Thumbs.db /build/* /node_modules/* /*package-lock.json /*pnpm-lock.yaml /*.env /*.env.* /*.log /*npm-debug.log*
                   /*yarn-debug.log* /*yarn-error.log* /.cache/* /.temp/* /coverage/* /build/Release/* /.npm/* /.eslintcache/* /*.tgz /*.zip

@@ -6,5 +6,14 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'eftec\\bladeone\\' => array($vendorDir . '/eftec/bladeone/lib'),
+    'WP_CLI\\I18n\\' => array($vendorDir . '/wp-cli/i18n-command/src'),
+    'VariableAnalysis\\' => array($vendorDir . '/sirbrillig/phpcs-variable-analysis/VariableAnalysis'),
+    'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'SwiftCheckout\\' => array($baseDir . '/includes'),
+    'Peast\\' => array($vendorDir . '/mck89/peast/lib/Peast'),
+    'Mustangostang\\' => array($vendorDir . '/wp-cli/mustangostang-spyc/src'),
+    'Gettext\\Languages\\' => array($vendorDir . '/gettext/languages/src'),
+    'Gettext\\' => array($vendorDir . '/gettext/gettext/src'),
+    'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => array($vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src'),
 );

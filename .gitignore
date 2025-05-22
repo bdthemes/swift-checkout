@@ -57,3 +57,5 @@ build/Release
 
 # Output of `wp-scripts plugin-zip`
 *.zip
+
+/vendor/

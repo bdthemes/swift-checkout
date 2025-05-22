@@ -1,0 +1,244 @@
+{
+   "domain": "swift-checkout",
+   "locale_data": {
+      "swift-checkout": {
+         "": {
+            "domain": "swift-checkout"
+         },
+         "Swift Checkout": [
+            ""
+         ],
+         "Swift Checkout for WooCommerce.": [
+            ""
+         ],
+         "bdthemes": [
+            ""
+         ],
+         "https://bdthemes.com": [
+            ""
+         ],
+         "Invalid product": [
+            ""
+         ],
+         "No matching variation found.": [
+            ""
+         ],
+         "Could not add item to cart": [
+            ""
+         ],
+         "Invalid cart item": [
+            ""
+         ],
+         "Your cart is empty": [
+            ""
+         ],
+         "Please fill in all required fields": [
+            ""
+         ],
+         "Order created fromSwift Checkout": [
+            ""
+         ],
+         "Order created successfully": [
+            ""
+         ],
+         "Invalid order ID": [
+            ""
+         ],
+         "Order not found": [
+            ""
+         ],
+         "Invalid product.": [
+            ""
+         ],
+         "In stock": [
+            ""
+         ],
+         "Out of stock": [
+            ""
+         ],
+         "Swift Checkout requires %s to be installed and activated.": [
+            ""
+         ],
+         "Install Now": [
+            ""
+         ],
+         "Swift Checkout requires %s to be activated.": [
+            ""
+         ],
+         "Activate Now": [
+            ""
+         ],
+         "Swift Checkout requires %1$s version %2$s or higher.": [
+            ""
+         ],
+         "Elementor": [
+            ""
+         ],
+         "Elementor is a powerful page builder plugin for WordPress.": [
+            ""
+         ],
+         "Gutenberg": [
+            ""
+         ],
+         "Gutenberg is the default WordPress editor introduced in WordPress 5.0.": [
+            ""
+         ],
+         "Add to Cart": [
+            ""
+         ],
+         "A simple add to cart element.": [
+            ""
+         ],
+         "Content": [
+            ""
+         ],
+         "Product": [
+            ""
+         ],
+         "Select a product to display": [
+            ""
+         ],
+         "Auto Add to Cart": [
+            ""
+         ],
+         "Yes": [
+            ""
+         ],
+         "No": [
+            ""
+         ],
+         "Automatically add the selected product to cart when page loads": [
+            ""
+         ],
+         "Preset": [
+            ""
+         ],
+         "Simple": [
+            ""
+         ],
+         "Modern": [
+            ""
+         ],
+         "Button Alignment": [
+            ""
+         ],
+         "Left": [
+            ""
+         ],
+         "Center": [
+            ""
+         ],
+         "Right": [
+            ""
+         ],
+         "Justified": [
+            ""
+         ],
+         "Your Cart": [
+            ""
+         ],
+         "Product not found or not available.": [
+            ""
+         ],
+         "Select Options": [
+            ""
+         ],
+         "Choose an option": [
+            ""
+         ],
+         "Price": [
+            ""
+         ],
+         "Quantity": [
+            ""
+         ],
+         "Subtotal": [
+            ""
+         ],
+         "Remove": [
+            ""
+         ],
+         "Total": [
+            ""
+         ],
+         "Contact Information": [
+            ""
+         ],
+         "Full Name": [
+            ""
+         ],
+         "Phone": [
+            ""
+         ],
+         "Email Address (Optional)": [
+            ""
+         ],
+         "Full Address": [
+            ""
+         ],
+         "Place Order": [
+            ""
+         ],
+         "Order received": [
+            ""
+         ],
+         "Thank you. Your order has been received.": [
+            ""
+         ],
+         "Order number:": [
+            ""
+         ],
+         "Date:": [
+            ""
+         ],
+         "Total:": [
+            ""
+         ],
+         "Payment method:": [
+            ""
+         ],
+         "Order details": [
+            ""
+         ],
+         "Note:": [
+            ""
+         ],
+         "Billing address": [
+            ""
+         ],
+         "Shipping address": [
+            ""
+         ],
+         "Continue shopping": [
+            ""
+         ],
+         "Add to Cart Settings": [
+            ""
+         ],
+         "Select a product...": [
+            ""
+         ],
+         "Style Preset": [
+            ""
+         ],
+         "Please select a product": [
+            ""
+         ],
+         "block title\u0004Swift Checkout": [
+            ""
+         ],
+         "block description\u0004A Swift Checkout add to cart block with customizable styles.": [
+            ""
+         ],
+         "block keyword\u0004add to cart": [
+            ""
+         ],
+         "block keyword\u0004cart": [
+            ""
+         ],
+         "block keyword\u0004checkout": [
+            ""
+         ]
+      }
+   }
+}

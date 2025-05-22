@@ -29,11 +29,9 @@ require_once plugin_dir_path(__FILE__) . 'includes/Traits/Singleton.php';
 use SwiftCheckout\Traits\Singleton;
 use SwiftCheckout\Core\Register;
 use SwiftCheckout\Classes\Dependencies;
-use SwiftCheckout\Classes\Shortcode;
 use SwiftCheckout\Classes\Enqueue;
 use SwiftCheckout\Classes\Ajax;
-use SwiftCheckout\Classes\Settings;
-use SwiftCheckout\Classes\Admin;
+
 
 /**
  * Main SwiftCheckout Class.
@@ -101,6 +99,7 @@ final class SwiftCheckout {
         // Add init hook with priority 10
         add_filter('admin_body_class', [$this, 'add_body_classes']);
         add_filter('body_class', [$this, 'add_body_classes']);
+        add_action('plugins_loaded', [$this, 'load_plugin_textdomain']);
     }
 
     /**
@@ -168,6 +167,10 @@ final class SwiftCheckout {
         return is_array($classes)
             ? array_merge($classes, $swift_checkout_classes)
             : $classes . ' ' . implode(' ', $swift_checkout_classes);
+    }
+
+    public function load_plugin_textdomain() {
+        load_plugin_textdomain('swift-checkout', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     }
 }
 

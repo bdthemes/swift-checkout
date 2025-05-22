@@ -1,26 +1,43 @@
 {
-    "name": "sigmative/swift-checkout",
-    "description": "Swift Checkout for WooCommerce.",
-    "keywords": [
-        "wordpress",
-        "plugin",
-        "swift-checkout",
-        "elementor",
-        "gutenberg",
-        "blocks"
-    ],
-    "type": "wordpress-plugin",
-    "license": "GPL-2.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "SwiftCheckout\\": "includes/"
-        }
-    },
-    "authors": [
-        {
-            "name": "sigmative"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {}
+	"name": "sigmative/swift-checkout",
+	"description": "Swift Checkout for WooCommerce.",
+	"keywords": [
+		"wordpress",
+		"plugin",
+		"swift-checkout",
+		"elementor",
+		"gutenberg",
+		"blocks"
+	],
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"psr-4": {
+			"SwiftCheckout\\": "includes/"
+		}
+	},
+	"authors": [
+		{
+			"name": "sigmative"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {},
+	"require-dev": {
+		"wp-coding-standards/wpcs": "^2.3",
+		"sirbrillig/phpcs-variable-analysis": "^2.8",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"wp-cli/i18n-command": "^2.4",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+		"php-stubs/wordpress-stubs": "^6.1"
+	},
+	"scripts": {
+		"phpcs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"phpcbf": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+		"wp": "\"vendor/wp-cli/wp-cli/bin/wp\"",
+		"test:unit": "./vendor/bin/phpunit"
+	},
+	"config": {
+		"allow-plugins": true
+	}
 }

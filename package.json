@@ -5,11 +5,22 @@
 	"author": "bdthemes",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
+	"files": [
+		"assets",
+		"includes",
+		"languages",
+		"templates",
+		"swift-checkout.php",
+		"readme.txt"
+	],
 	"scripts": {
 		"build": "wp-scripts build --webpack-copy-php --source-path=includes/Features/Gutenberg --output-path=includes/assets/gutenberg",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
+		"build:prod": "npm run make-pot && npm run make-json && npm run build && npm run plugin-zip",
+		"make-pot": "composer wp -- i18n make-pot ./ ./languages/swift-checkout.pot --skip-audit --exclude=vendor,vendors,tests,node_modules,build,dist-zip --headers='{\"Last-Translator\":\"Lazy Blocks Team\",\"Report-Msgid-Bugs-To\":\"https://github.com/WPXERO/swift-checkout/issues\"}'",
+		"make-json": "po2json ./languages/swift-checkout.pot ./languages/swift-checkout.json --format=jed1.x --pretty --domain=swift-checkout",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start --webpack-copy-php --source-path=includes/Features/Gutenberg --output-path=includes/assets/gutenberg"
