@@ -20,26 +20,28 @@ $product = wc_get_product($product_id);
 
 // Check if product exists and is purchasable
 if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
-?>
+    ?>
     <div class="spc-no-products">
         <?php esc_html_e('Product not found or not available.', 'swift-checkout'); ?>
     </div>
-<?php
+    <?php
     return;
 }
 ?>
 
-<div class="spc-product-card" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-    <?php if ($product->is_type('variable')) : ?>
+<div class="spc-product-card <?php echo esc_attr($cartButtonAlignment); ?>"
+    data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+    <?php if ($product->is_type('variable')): ?>
         <button class="spc-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
             <?php esc_html_e('Select Options', 'swift-checkout'); ?>
         </button>
-        <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>" style="display: none;">
+        <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>"
+            style="display: none;">
             <form class="spc-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php
                 $attributes = $product->get_attributes();
-                foreach ($attributes as $attribute_name => $attribute) :
-                ?>
+                foreach ($attributes as $attribute_name => $attribute):
+                    ?>
                     <div class="spc-variation-row">
                         <label for="<?php echo esc_attr(sanitize_title($attribute_name)); ?>">
                             <?php echo esc_html(wc_attribute_label($attribute_name)); ?>
@@ -61,10 +63,9 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
                         }
 
                         // Display select for current attribute
-                        if (isset($variation_attributes['attribute_' . $attribute_name])) :
-                        ?>
-                            <select
-                                name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
+                        if (isset($variation_attributes['attribute_' . $attribute_name])):
+                            ?>
+                            <select name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 class="spc-variation-select">
@@ -96,7 +97,7 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
                 </div>
             </form>
         </div>
-    <?php else : ?>
+    <?php else: ?>
         <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
             <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
         </button>

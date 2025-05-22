@@ -62,6 +62,26 @@
   color: var(--spc-color-background);
 }
 
+.spc-container .button-left {
+  text-align: left;
+}
+
+.spc-container .button-center {
+  text-align: center;
+}
+
+.spc-container .button-right {
+  text-align: right;
+}
+
+.spc-container .button-justify {
+  text-align: justify;
+}
+
+.spc-container .button-justify .spc-add-to-cart {
+  width: 100%;
+}
+
 /* Common Form Styles */
 .spc-container .spc-form-row {
   margin-bottom: 20px;

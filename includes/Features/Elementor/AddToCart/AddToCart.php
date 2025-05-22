@@ -100,6 +100,37 @@ class AddToCart extends \Elementor\Widget_Base
             ]
         );
 
+        // Button Alignment Control
+
+        $this->add_control(
+            'cartButtonAlignment',
+            [
+                'label' => esc_html__('Button Alignment', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'button-left' => [
+                        'title' => esc_html__('Left', 'swift-checkout'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                    'button-center' => [
+                        'title' => esc_html__('Center', 'swift-checkout'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'button-right' => [
+                        'title' => esc_html__('Right', 'swift-checkout'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                    'button-justify' => [
+                        'title' => esc_html__('Justified', 'swift-checkout'),
+                        'icon' => 'eicon-text-align-justify',
+                    ],
+                ],
+                'default' => 'button-left',
+                'toggle' => true,
+            ]
+        );
+
+
         $this->end_controls_section();
     }
 
