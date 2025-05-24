@@ -240,7 +240,7 @@ const Settings = ({ attributes, setAttributes }) => {
 
                                                         // Order fields
                                                         { label: __('Order Notes', 'swift-checkout'), value: 'order_notes' },
-                                                        { label: __('Create Account', 'swift-checkout'), value: 'create_account' },
+                                                        // { label: __('Create Account', 'swift-checkout'), value: 'create_account' },
                                                         { label: __('Different Shipping Address', 'swift-checkout'), value: 'shipping_address' },
                                                     ]}
                                                     onChange={(value) => updateCheckoutField(index, 'field_type', value)}

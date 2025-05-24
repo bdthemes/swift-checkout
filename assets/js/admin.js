@@ -170,7 +170,7 @@
                 $icon.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-up');
 
                 // Make sure content is ready for animation
-                $content.removeClass('collapsed').hide();
+                $content.removeClass('collapsed').css('display', 'none');
 
                 // Animate the expansion
                 $content.slideDown(200);

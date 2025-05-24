@@ -187,7 +187,7 @@ class AddToCart extends \Elementor\Widget_Base {
 
                     // Order fields
                     'order_notes' => esc_html__('Order Notes', 'swift-checkout'),
-                    'create_account' => esc_html__('Create Account', 'swift-checkout'),
+                    // 'create_account' => esc_html__('Create Account', 'swift-checkout'),
                     'shipping_address' => esc_html__('Different Shipping Address', 'swift-checkout'),
                 ],
             ]

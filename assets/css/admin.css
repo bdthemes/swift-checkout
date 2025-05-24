@@ -172,41 +172,6 @@
     padding-top: 2px;
 }
 
-/* Field type visual indicators */
-.swift-checkout-field-header::before {
-    content: '';
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 8px;
-}
-
-.swift-checkout-field-item[data-field-type="name"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="first_name"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="last_name"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="email"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="phone"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="company"] .swift-checkout-field-header::before {
-    background-color: #2271b1; /* Personal info fields - blue */
-}
-
-.swift-checkout-field-item[data-field-type="address"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="address_1"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="address_2"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="city"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="state"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="postcode"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="country"] .swift-checkout-field-header::before {
-    background-color: #3d9970; /* Address fields - green */
-}
-
-.swift-checkout-field-item[data-field-type="order_notes"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="create_account"] .swift-checkout-field-header::before,
-.swift-checkout-field-item[data-field-type="shipping_address"] .swift-checkout-field-header::before {
-    background-color: #ff851b; /* Order fields - orange */
-}
-
 /* Add/Remove field buttons */
 .components-button.has-icon.swift-checkout-add-field {
     justify-content: center;
