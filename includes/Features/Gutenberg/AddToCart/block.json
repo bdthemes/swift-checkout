@@ -50,7 +50,7 @@
         },
         "align": {
             "type": "string",
-            "default": "left"
+            "default": "center"
         },
         "textColor": {
             "type": "string"
@@ -67,6 +67,39 @@
         "stylePreset": {
             "type": "string",
             "default": "simple"
+        },
+        "enable_custom_fields": {
+            "type": "boolean",
+            "default": false
+        },
+        "checkout_fields": {
+            "type": "array",
+            "default": [
+							{
+								"field_type": "name",
+								"field_required": true,
+								"field_label": "Full Name",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "phone",
+								"field_required": true,
+								"field_label": "Phone",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "email",
+								"field_required": true,
+								"field_label": "Email Address",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "address_1",
+								"field_required": true,
+								"field_label": "Full Address",
+								"field_placeholder": ""
+							}
+						]
         }
     },
     "textdomain": "swift-checkout",

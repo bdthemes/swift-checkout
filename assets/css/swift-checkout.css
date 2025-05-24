@@ -716,3 +716,74 @@
 .spc-container .spc-order-table tr td:last-child {
   text-align: right;
 }
+
+/* Add new styles for checkout field types */
+
+/* Checkbox field styling */
+.spc-checkbox-row {
+    margin-bottom: 15px;
+}
+
+.spc-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.spc-checkbox-input {
+    margin-right: 8px;
+}
+
+/* Shipping address fields */
+.spc-shipping-address-fields {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.spc-shipping-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Select fields (country, state) */
+.spc-form-row select.spc-form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    height: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+.spc-form-row select.spc-form-input:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness for the new fields */
+@media (max-width: 768px) {
+    .spc-form-row select.spc-form-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .spc-checkbox-label {
+        font-size: 14px;
+    }
+}

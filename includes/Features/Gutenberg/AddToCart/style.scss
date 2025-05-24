@@ -1,0 +1,196 @@
+/**
+ * Gutenberg Block Editor Styles
+ */
+
+.swift-checkout-block-preview {
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.swift-checkout-no-product {
+    padding: 30px 0;
+    color: #666;
+}
+
+.swift-checkout-preview {
+    margin: 0 auto;
+    max-width: 300px;
+}
+
+.swift-checkout-button-placeholder {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #2271b1;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Field drag & drop styles */
+.swift-checkout-fields-container {
+    margin: 15px 0;
+}
+
+.swift-checkout-field-item {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.swift-checkout-field-item:hover {
+    border-color: #2271b1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.swift-checkout-field-header {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    user-select: none;
+}
+
+.swift-checkout-field-header:hover {
+    background-color: #f0f0f0;
+}
+
+.swift-checkout-field-drag-handle {
+    margin-right: 8px;
+    color: #999;
+    cursor: grab;
+}
+
+.swift-checkout-field-drag-handle:hover {
+    color: #2271b1;
+}
+
+.swift-checkout-field-title {
+    flex-grow: 1;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.swift-checkout-field-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.swift-checkout-field-actions .dashicons {
+    color: #777;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.swift-checkout-field-actions .dashicons:hover {
+    color: #2271b1;
+}
+
+.swift-checkout-field-content {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    display: none; /* Hidden by default, will be shown with jQuery */
+    animation: slideDown 0.2s ease-out;
+}
+
+/* Initially show content in the editor */
+.edit-post-visual-editor .swift-checkout-field-content {
+    display: block;
+}
+
+/* Sortable placeholder */
+.swift-checkout-field-placeholder {
+    border: 2px dashed #2271b1;
+    background-color: rgba(34, 113, 177, 0.1);
+    height: 60px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+/* Collapsed state */
+.swift-checkout-field-item.collapsed .swift-checkout-field-content {
+    display: none !important;
+}
+
+/* Dragging states */
+.swift-checkout-field-item.is-dragging {
+    opacity: 0.7;
+    transform: scale(1.02);
+    border: 1px dashed #2271b1;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.swift-checkout-field-item.drag-over {
+    border: 2px dashed #2271b1;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-top: 2px;
+}
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// /* Category styling for fields */
+// .swift-checkout-field-item[data-field-type="name"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="first_name"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="last_name"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="email"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="phone"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="company"] .swift-checkout-field-header::before {
+//     content: '';
+//     display: inline-block;
+//     width: 12px;
+//     height: 12px;
+//     border-radius: 50%;
+//     margin-right: 8px;
+//     background-color: #2271b1; /* Personal info fields - blue */
+// }
+
+// .swift-checkout-field-item[data-field-type="address"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="address_1"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="address_2"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="city"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="state"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="postcode"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="country"] .swift-checkout-field-header::before {
+//     content: '';
+//     display: inline-block;
+//     width: 12px;
+//     height: 12px;
+//     border-radius: 50%;
+//     margin-right: 8px;
+//     background-color: #3d9970; /* Address fields - green */
+// }
+
+// .swift-checkout-field-item[data-field-type="order_notes"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="create_account"] .swift-checkout-field-header::before,
+// .swift-checkout-field-item[data-field-type="shipping_address"] .swift-checkout-field-header::before {
+//     content: '';
+//     display: inline-block;
+//     width: 12px;
+//     height: 12px;
+//     border-radius: 50%;
+//     margin-right: 8px;
+//     background-color: #ff851b; /* Order fields - orange */
+// }

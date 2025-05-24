@@ -38,6 +38,9 @@
 
             // Submit order
             $(document).on('submit', '#spc-checkout-form', this.submitOrder);
+
+            // Toggle shipping address fields
+            $(document).on('change', '#spc-shipping_address', this.toggleShippingFields);
         },
 
         /**
@@ -328,7 +331,26 @@
 
             const $form = $(this);
             const $submitButton = $form.find('#spc-submit-order');
-            const formData = $form.serialize();
+            const isShippingDifferent = $('#spc-shipping_address').is(':checked');
+
+            // Collect required fields information
+            const requiredFields = {};
+            $form.find('.spc-form-input').each(function() {
+                const $input = $(this);
+                const fieldName = $input.attr('name');
+
+                // Skip shipping fields if shipping address is not checked
+                if (!isShippingDifferent && fieldName && fieldName.startsWith('shipping_')) {
+                    return;
+                }
+
+                if (fieldName) {
+                    requiredFields[fieldName] = $input.prop('required');
+                }
+            });
+
+            // Add to formData
+            const formData = $form.serialize() + '&required_fields=' + encodeURIComponent(JSON.stringify(requiredFields));
 
             $submitButton.prop('disabled', true).addClass('loading');
             $('.spc-checkout-error').empty();
@@ -342,7 +364,7 @@
                         // Show success message or redirect
                         SwiftCheckout.showOrderConfirmation(response.data);
                     } else {
-                        $('.spc-checkout-error').text(response.data.message || 'Error creating order');
+                        $('.spc-checkout-error').html(response.data.message || 'Error creating order');
                     }
                 },
                 error: function() {
@@ -424,12 +446,35 @@
                 $checkoutForm.removeClass('spc-visible');
                 $addToCartButtons.show(); // Show add to cart buttons when cart is empty
             }
+        },
+
+        /**
+         * Toggle shipping address fields visibility
+         */
+        toggleShippingFields: function() {
+            const $checkbox = $(this);
+            const $shippingFields = $('#spc-shipping-address-fields');
+
+            if ($checkbox.is(':checked')) {
+                $shippingFields.slideDown(300);
+                console.log('Showing shipping fields');
+            } else {
+                $shippingFields.slideUp(300);
+                console.log('Hiding shipping fields');
+            }
         }
     };
 
     // Initialize when DOM is ready
     $(document).ready(function() {
         SwiftCheckout.init();
+
+        // Initialize shipping fields visibility
+        const $shippingCheckbox = $('#spc-shipping_address');
+        if ($shippingCheckbox.length) {
+            // Trigger the change event to set initial state
+            $shippingCheckbox.trigger('change');
+        }
 
         // Handle auto add to cart functionality
         $('.spc-container').each(function() {

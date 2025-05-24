@@ -107,7 +107,6 @@ final class SwiftCheckout {
      * Setup plugin components after all plugins are loaded
      */
     public function setup() {
-        // Admin::get_instance();
         // Check dependencies and initialize components
         if (Dependencies::check_dependencies()) {
             // Initialize registration handler
@@ -116,6 +115,11 @@ final class SwiftCheckout {
             // Initialize AJAX handler
             Ajax::init();
         }
+
+        // Load the admin class
+        add_action('admin_init', function () {
+            Admin::get_instance();
+        });
 
         // Initialize variable prodct handler
         // require_once SWIFT_CHECKOUT_PLUGIN_DIR . 'includes/class-swift-checkout-variable-product.php';

@@ -143,29 +143,57 @@ class Ajax {
             exit;
         }
 
-        // Get checkout fields - simplified version
-        $name = isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '';
-        $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
-        $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
-        $address = isset($_POST['address']) ? sanitize_text_field(wp_unslash($_POST['address'])) : '';
-        $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
+        // Get checkout fields - all possible fields
+        $fields = array(
+            'name' => isset($_POST['name']) ? sanitize_text_field(wp_unslash($_POST['name'])) : '',
+            'first_name' => isset($_POST['first_name']) ? sanitize_text_field(wp_unslash($_POST['first_name'])) : '',
+            'last_name' => isset($_POST['last_name']) ? sanitize_text_field(wp_unslash($_POST['last_name'])) : '',
+            'email' => isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '',
+            'phone' => isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '',
+            'company' => isset($_POST['company']) ? sanitize_text_field(wp_unslash($_POST['company'])) : '',
 
-        // Extract first and last name from full name
-        $name_parts = explode(' ', $name, 2);
-        $first_name = $name_parts[0];
-        $last_name = isset($name_parts[1]) ? $name_parts[1] : '';
+            'address' => isset($_POST['address']) ? sanitize_text_field(wp_unslash($_POST['address'])) : '',
+            'address_1' => isset($_POST['address_1']) ? sanitize_text_field(wp_unslash($_POST['address_1'])) : '',
+            'address_2' => isset($_POST['address_2']) ? sanitize_text_field(wp_unslash($_POST['address_2'])) : '',
+            'city' => isset($_POST['city']) ? sanitize_text_field(wp_unslash($_POST['city'])) : '',
+            'state' => isset($_POST['state']) ? sanitize_text_field(wp_unslash($_POST['state'])) : '',
+            'postcode' => isset($_POST['postcode']) ? sanitize_text_field(wp_unslash($_POST['postcode'])) : '',
+            'country' => isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '',
 
-        // Basic validation
-        if (empty($name) || empty($phone) || empty($address)) {
-            wp_send_json_error(array('message' => __('Please fill in all required fields', 'swift-checkout')));
-            exit;
+            'order_notes' => isset($_POST['order_notes']) ? sanitize_text_field(wp_unslash($_POST['order_notes'])) : '',
+            'create_account' => isset($_POST['create_account']) ? (bool) $_POST['create_account'] : false,
+            'shipping_address' => isset($_POST['shipping_address']) ? (bool) $_POST['shipping_address'] : false,
+        );
+
+        // Get the required fields configuration
+        $required_fields = isset($_POST['required_fields']) ? json_decode(sanitize_text_field(wp_unslash($_POST['required_fields'])), true) : array('name' => true, 'phone' => true, 'address' => true);
+
+        // If name is provided but not first/last name, split it
+        if (!empty($fields['name']) && (empty($fields['first_name']) || empty($fields['last_name']))) {
+            $name_parts = explode(' ', $fields['name'], 2);
+            $fields['first_name'] = $name_parts[0];
+            $fields['last_name'] = isset($name_parts[1]) ? $name_parts[1] : '';
         }
 
-        // Validate email format
-        // if (!is_email($email)) {
-        // 	wp_send_json_error(array('message' => __('Please enter a valid email address', 'swift-checkout')));
-        // 	exit;
-        // }
+        // Basic validation - only check fields that are marked as required
+        $validation_errors = array();
+
+        foreach ($required_fields as $field => $is_required) {
+            if ($is_required && empty($fields[$field])) {
+                $field_label = ucfirst(str_replace('_', ' ', $field));
+                $validation_errors[] = sprintf(__('Please enter your %s', 'swift-checkout'), $field_label);
+            }
+        }
+
+        // Email format validation (only if email is provided)
+        if (!empty($fields['email']) && !is_email($fields['email'])) {
+            $validation_errors[] = __('Please enter a valid email address', 'swift-checkout');
+        }
+
+        if (!empty($validation_errors)) {
+            wp_send_json_error(array('message' => implode('<br>', $validation_errors)));
+            exit;
+        }
 
         try {
             // Create the order
@@ -186,21 +214,78 @@ class Ajax {
                 }
             }
 
-            // Set address with simplified fields
-            $address_fields = array(
-                'first_name' => $first_name,
-                'last_name'  => $last_name,
-                'phone'      => $phone,
-                'address_1'  => $address,
-                // 'country'    => empty($country) ? 'US' : $country,
+            // Prepare address fields
+            $address_fields = array();
+
+            // Map fields to WooCommerce address fields
+            $address_mapping = array(
+                'first_name' => 'first_name',
+                'last_name' => 'last_name',
+                'company' => 'company',
+                'phone' => 'phone',
+                'email' => 'email',
+                'address' => 'address_1', // Map full address to address_1
+                'address_1' => 'address_1',
+                'address_2' => 'address_2',
+                'city' => 'city',
+                'state' => 'state',
+                'postcode' => 'postcode',
+                'country' => 'country',
             );
 
-            if (!empty($email)) {
-                $address_fields['email'] = $email;
+            foreach ($address_mapping as $field => $wc_field) {
+                if (!empty($fields[$field])) {
+                    $address_fields[$wc_field] = $fields[$field];
+                }
             }
 
+            // Set default country if not provided
+            if (empty($address_fields['country'])) {
+                $address_fields['country'] = WC()->countries->get_base_country();
+            }
+
+            // Set billing and shipping addresses
             $order->set_address($address_fields, 'billing');
-            $order->set_address($address_fields, 'shipping');
+
+            // Handle shipping address if different shipping address is checked
+            if (!empty($fields['shipping_address']) && $fields['shipping_address']) {
+                $shipping_fields = array();
+
+                // Map shipping address fields
+                $shipping_mapping = array(
+                    'shipping_first_name' => 'first_name',
+                    'shipping_last_name' => 'last_name',
+                    'shipping_company' => 'company',
+                    'shipping_address_1' => 'address_1',
+                    'shipping_address_2' => 'address_2',
+                    'shipping_city' => 'city',
+                    'shipping_state' => 'state',
+                    'shipping_postcode' => 'postcode',
+                    'shipping_country' => 'country',
+                );
+
+                foreach ($shipping_mapping as $post_field => $wc_field) {
+                    if (isset($_POST[$post_field])) {
+                        $shipping_fields[$wc_field] = sanitize_text_field(wp_unslash($_POST[$post_field]));
+                    }
+                }
+
+                // Set default country if not provided for shipping
+                if (empty($shipping_fields['country'])) {
+                    $shipping_fields['country'] = WC()->countries->get_base_country();
+                }
+
+                // Set shipping address
+                $order->set_address($shipping_fields, 'shipping');
+            } else {
+                // Use same address for shipping
+                $order->set_address($address_fields, 'shipping');
+            }
+
+            // Add order notes if provided
+            if (!empty($fields['order_notes'])) {
+                $order->add_order_note($fields['order_notes'], 1, true); // Customer note
+            }
 
             // Set payment method
             $order->set_payment_method('bacs'); // Default to bank transfer
@@ -209,7 +294,7 @@ class Ajax {
             $order->calculate_totals();
 
             // Set order status to pending
-            $order->update_status('pending', __('Order created fromSwift Checkout', 'swift-checkout'));
+            $order->update_status('pending', __('Order created from Swift Checkout', 'swift-checkout'));
 
             // Empty cart
             WC()->cart->empty_cart();

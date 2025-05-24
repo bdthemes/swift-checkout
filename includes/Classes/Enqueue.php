@@ -50,6 +50,9 @@ class Enqueue {
      * @return void
      */
     public static function enqueue_scripts() {
+        // Enqueue WordPress dashicons for field collapse icons
+        wp_enqueue_style('dashicons');
+
         // Enqueue custom CSS
         wp_enqueue_style(
             'swift-checkout-style',
@@ -76,6 +79,14 @@ class Enqueue {
                 'nonce' => wp_create_nonce('spc_nonce'),
                 'currency_symbol' => get_woocommerce_currency_symbol(),
                 'checkout_url' => wc_get_checkout_url(),
+                'i18n' => array(
+                    'collapse' => __('Collapse', 'swift-checkout'),
+                    'expand' => __('Expand', 'swift-checkout'),
+                    'personal_info' => __('Personal Information', 'swift-checkout'),
+                    'billing_address' => __('Billing Address', 'swift-checkout'),
+                    'shipping_address' => __('Shipping Address', 'swift-checkout'),
+                    'order_details' => __('Order Details', 'swift-checkout'),
+                ),
             )
         );
     }
