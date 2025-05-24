@@ -233,21 +233,27 @@ class AddToCart extends \Elementor\Widget_Base {
                 'fields' => $repeater->get_controls(),
                 'default' => [
                     [
-                        'field_type' => 'name',
+                        'field_type' => 'first_name',
                         'field_required' => 'yes',
-                        'field_label' => esc_html__('Full Name', 'swift-checkout'),
+                        'field_label' => esc_html__('First Name', 'swift-checkout'),
                         'field_placeholder' => '',
                     ],
                     [
-                        'field_type' => 'email',
+                        'field_type' => 'last_name',
                         'field_required' => 'yes',
-                        'field_label' => esc_html__('Email Address', 'swift-checkout'),
+                        'field_label' => esc_html__('Last Name', 'swift-checkout'),
                         'field_placeholder' => '',
                     ],
                     [
                         'field_type' => 'phone',
                         'field_required' => 'yes',
                         'field_label' => esc_html__('Phone', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'email',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Email Address', 'swift-checkout'),
                         'field_placeholder' => '',
                     ],
                     [

@@ -52,24 +52,32 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			// Track if we have phone and email for putting them in the same row
 			$has_phone = false;
 			$has_email = false;
+			$has_first_name = false;
+			$has_last_name = false;
 
 			// First pass to identify phone and email for grouping
-			if ($use_custom_fields) {
-				foreach ($fields_to_display as $field) {
-					if (isset($field['field_type'])) {
-						if ($field['field_type'] === 'phone') {
-							$has_phone = true;
-						}
-						if ($field['field_type'] === 'email') {
-							$has_email = true;
-						}
+			foreach ($fields_to_display as $field) {
+				if (isset($field['field_type'])) {
+					if ($field['field_type'] === 'phone') {
+						$has_phone = true;
+					}
+					if ($field['field_type'] === 'email') {
+						$has_email = true;
+					}
+					if ($field['field_type'] === 'first_name') {
+						$has_first_name = true;
+					}
+					if ($field['field_type'] === 'last_name') {
+						$has_last_name = true;
 					}
 				}
 			}
 
 			// Should we group phone and email?
 			$group_phone_email = $has_phone && $has_email;
-			$in_group = false;
+			$group_name_fields = $has_first_name && $has_last_name;
+			$in_phone_email_group = false;
+			$in_name_group = false;
 
 			foreach ($fields_to_display as $field) :
 				if (empty($field['field_type'])) {
@@ -82,9 +90,15 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				$placeholder = isset($field['field_placeholder']) ? $field['field_placeholder'] : ' ';
 
 				// Start phone/email group if needed
-				if ($group_phone_email && ($type === 'phone' || $type === 'email') && !$in_group) {
+				if ($group_phone_email && ($type === 'phone') && !$in_phone_email_group) {
 					echo '<div class="spc-input-group">';
-					$in_group = true;
+					$in_phone_email_group = true;
+				}
+
+				// Start first_name/last_name group if needed
+				if ($group_name_fields && ($type === 'first_name') && !$in_name_group) {
+					echo '<div class="spc-input-group">';
+					$in_name_group = true;
 				}
 
 				// Determine input type based on field_type
@@ -187,16 +201,19 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 					<div id="spc-shipping-address-fields" class="spc-shipping-address-fields" style="display: none;">
 						<h3 class="spc-shipping-title">Shipping Address</h3>
 
-						<!-- First Name -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_first_name" name="shipping_first_name" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_first_name" class="spc-form-label">First Name</label>
-						</div>
+						<!-- First Name and Last Name in a group -->
+						<div class="spc-input-group">
+							<!-- First Name -->
+							<div class="spc-form-row">
+								<input type="text" id="spc-shipping_first_name" name="shipping_first_name" class="spc-form-input" placeholder=" ">
+								<label for="spc-shipping_first_name" class="spc-form-label">First Name</label>
+							</div>
 
-						<!-- Last Name -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_last_name" name="shipping_last_name" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_last_name" class="spc-form-label">Last Name</label>
+							<!-- Last Name -->
+							<div class="spc-form-row">
+								<input type="text" id="spc-shipping_last_name" name="shipping_last_name" class="spc-form-input" placeholder=" ">
+								<label for="spc-shipping_last_name" class="spc-form-label">Last Name</label>
+							</div>
 						</div>
 
 						<!-- Address Line 1 -->
@@ -284,14 +301,23 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				}
 
 				// Close phone/email group if needed
-				if ($group_phone_email && $in_group && $type === 'email') {
+				if ($group_phone_email && $in_phone_email_group && $type === 'email') {
 					echo '</div>';
-					$in_group = false;
+					$in_phone_email_group = false;
+				}
+
+				// Close first_name/last_name group if needed
+				if ($group_name_fields && $in_name_group && $type === 'last_name') {
+					echo '</div>';
+					$in_name_group = false;
 				}
 			endforeach;
 
-			// Close group if still open
-			if ($in_group) {
+			// Close groups if still open
+			if ($in_phone_email_group) {
+				echo '</div>';
+			}
+			if ($in_name_group) {
 				echo '</div>';
 			}
 			?>
