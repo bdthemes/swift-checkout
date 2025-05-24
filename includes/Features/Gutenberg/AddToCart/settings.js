@@ -1,11 +1,12 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, ToggleControl, TextControl, Button, Flex, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
+import { times, remove } from 'lodash';
 
 const Settings = ({ attributes, setAttributes }) => {
-    const { productId, stylePreset, auto_add_to_cart } = attributes;
+    const { productId, stylePreset, auto_add_to_cart, enable_custom_fields, checkout_fields } = attributes;
 
     // Get all products for the dropdown
     const products = useSelect((select) => {
@@ -24,6 +25,34 @@ const Settings = ({ attributes, setAttributes }) => {
             value: product.id.toString()
         }));
     }, [products]);
+
+    // Helper function to update a checkout field
+    const updateCheckoutField = (index, key, value) => {
+        const updatedFields = [...checkout_fields];
+        updatedFields[index] = {
+            ...updatedFields[index],
+            [key]: value,
+        };
+        setAttributes({ checkout_fields: updatedFields });
+    };
+
+    // Helper function to add a new checkout field
+    const addCheckoutField = () => {
+        const newField = {
+            field_type: 'name',
+            field_required: true,
+            field_label: '',
+            field_placeholder: '',
+        };
+        setAttributes({ checkout_fields: [...checkout_fields, newField] });
+    };
+
+    // Helper function to remove a checkout field
+    const removeCheckoutField = (index) => {
+        const updatedFields = [...checkout_fields];
+        updatedFields.splice(index, 1);
+        setAttributes({ checkout_fields: updatedFields });
+    };
 
     return (
         <InspectorControls>
@@ -52,6 +81,68 @@ const Settings = ({ attributes, setAttributes }) => {
                     checked={auto_add_to_cart}
                     onChange={(value) => setAttributes({ auto_add_to_cart: value })}
                 />
+            </PanelBody>
+
+            <PanelBody title={__('Checkout Fields', 'swift-checkout')} initialOpen={false}>
+                <ToggleControl
+                    label={__('Customize Checkout Fields', 'swift-checkout')}
+                    help={__('Enable to customize which checkout fields to display', 'swift-checkout')}
+                    checked={enable_custom_fields}
+                    onChange={(value) => setAttributes({ enable_custom_fields: value })}
+                />
+
+                {enable_custom_fields && (
+                    <>
+                        {times(checkout_fields.length, (index) => {
+                            const field = checkout_fields[index];
+                            return (
+                                <div key={index} className="swift-checkout-field-item" style={{ marginBottom: '15px', padding: '10px', border: '1px solid #ddd', borderRadius: '4px' }}>
+                                    <SelectControl
+                                        label={__('Field Type', 'swift-checkout')}
+                                        value={field.field_type}
+                                        options={[
+                                            { label: __('Full Name', 'swift-checkout'), value: 'name' },
+                                            { label: __('Phone', 'swift-checkout'), value: 'phone' },
+                                            { label: __('Email Address', 'swift-checkout'), value: 'email' },
+                                            { label: __('Full Address', 'swift-checkout'), value: 'address' },
+                                        ]}
+                                        onChange={(value) => updateCheckoutField(index, 'field_type', value)}
+                                    />
+                                    <ToggleControl
+                                        label={__('Required', 'swift-checkout')}
+                                        checked={field.field_required}
+                                        onChange={(value) => updateCheckoutField(index, 'field_required', value)}
+                                    />
+                                    <TextControl
+                                        label={__('Field Label', 'swift-checkout')}
+                                        value={field.field_label}
+                                        onChange={(value) => updateCheckoutField(index, 'field_label', value)}
+                                    />
+                                    <TextControl
+                                        label={__('Placeholder', 'swift-checkout')}
+                                        value={field.field_placeholder}
+                                        onChange={(value) => updateCheckoutField(index, 'field_placeholder', value)}
+                                    />
+                                    <Button
+                                        isDestructive
+                                        onClick={() => removeCheckoutField(index)}
+                                        style={{ marginTop: '10px' }}
+                                    >
+                                        {__('Remove Field', 'swift-checkout')}
+                                    </Button>
+                                </div>
+                            );
+                        })}
+
+                        <Button
+                            variant="secondary"
+                            onClick={addCheckoutField}
+                            style={{ marginTop: '10px' }}
+                        >
+                            {__('Add Field', 'swift-checkout')}
+                        </Button>
+                    </>
+                )}
             </PanelBody>
         </InspectorControls>
     );

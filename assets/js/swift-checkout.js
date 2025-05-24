@@ -328,7 +328,19 @@
 
             const $form = $(this);
             const $submitButton = $form.find('#spc-submit-order');
-            const formData = $form.serialize();
+
+            // Collect required fields information
+            const requiredFields = {};
+            $form.find('.spc-form-input').each(function() {
+                const $input = $(this);
+                const fieldName = $input.attr('name');
+                if (fieldName) {
+                    requiredFields[fieldName] = $input.prop('required');
+                }
+            });
+
+            // Add to formData
+            const formData = $form.serialize() + '&required_fields=' + encodeURIComponent(JSON.stringify(requiredFields));
 
             $submitButton.prop('disabled', true).addClass('loading');
             $('.spc-checkout-error').empty();
@@ -342,7 +354,7 @@
                         // Show success message or redirect
                         SwiftCheckout.showOrderConfirmation(response.data);
                     } else {
-                        $('.spc-checkout-error').text(response.data.message || 'Error creating order');
+                        $('.spc-checkout-error').html(response.data.message || 'Error creating order');
                     }
                 },
                 error: function() {

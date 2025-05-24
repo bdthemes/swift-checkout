@@ -150,22 +150,42 @@ class Ajax {
         $address = isset($_POST['address']) ? sanitize_text_field(wp_unslash($_POST['address'])) : '';
         $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
 
+        // Get the required fields configuration
+        $required_fields = isset($_POST['required_fields']) ? json_decode(sanitize_text_field(wp_unslash($_POST['required_fields'])), true) : array('name' => true, 'phone' => true, 'address' => true);
+
         // Extract first and last name from full name
         $name_parts = explode(' ', $name, 2);
         $first_name = $name_parts[0];
         $last_name = isset($name_parts[1]) ? $name_parts[1] : '';
 
-        // Basic validation
-        if (empty($name) || empty($phone) || empty($address)) {
-            wp_send_json_error(array('message' => __('Please fill in all required fields', 'swift-checkout')));
-            exit;
+        // Basic validation - only check fields that are marked as required
+        $validation_errors = array();
+
+        if (isset($required_fields['name']) && $required_fields['name'] && empty($name)) {
+            $validation_errors[] = __('Please enter your name', 'swift-checkout');
         }
 
-        // Validate email format
-        // if (!is_email($email)) {
-        // 	wp_send_json_error(array('message' => __('Please enter a valid email address', 'swift-checkout')));
-        // 	exit;
-        // }
+        if (isset($required_fields['phone']) && $required_fields['phone'] && empty($phone)) {
+            $validation_errors[] = __('Please enter your phone number', 'swift-checkout');
+        }
+
+        if (isset($required_fields['address']) && $required_fields['address'] && empty($address)) {
+            $validation_errors[] = __('Please enter your address', 'swift-checkout');
+        }
+
+        if (isset($required_fields['email']) && $required_fields['email'] && empty($email)) {
+            $validation_errors[] = __('Please enter your email address', 'swift-checkout');
+        }
+
+        // Email format validation (only if email is provided)
+        if (!empty($email) && !is_email($email)) {
+            $validation_errors[] = __('Please enter a valid email address', 'swift-checkout');
+        }
+
+        if (!empty($validation_errors)) {
+            wp_send_json_error(array('message' => implode('<br>', $validation_errors)));
+            exit;
+        }
 
         try {
             // Create the order
@@ -190,13 +210,20 @@ class Ajax {
             $address_fields = array(
                 'first_name' => $first_name,
                 'last_name'  => $last_name,
-                'phone'      => $phone,
-                'address_1'  => $address,
                 // 'country'    => empty($country) ? 'US' : $country,
             );
 
+            // Only add fields that were submitted (even if optional)
+            if (!empty($phone)) {
+                $address_fields['phone'] = $phone;
+            }
+
             if (!empty($email)) {
                 $address_fields['email'] = $email;
+            }
+
+            if (!empty($address)) {
+                $address_fields['address_1'] = $address;
             }
 
             $order->set_address($address_fields, 'billing');
@@ -209,7 +236,7 @@ class Ajax {
             $order->calculate_totals();
 
             // Set order status to pending
-            $order->update_status('pending', __('Order created fromSwift Checkout', 'swift-checkout'));
+            $order->update_status('pending', __('Order created from Swift Checkout', 'swift-checkout'));
 
             // Empty cart
             WC()->cart->empty_cart();

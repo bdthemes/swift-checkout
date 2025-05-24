@@ -136,6 +136,118 @@ class AddToCart extends \Elementor\Widget_Base {
             ]
         );
         $this->end_controls_section();
+
+        // Checkout Fields Section
+        $this->start_controls_section(
+            'checkout_fields_section',
+            [
+                'label' => esc_html__('Checkout Fields', 'swift-checkout'),
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+
+        $this->add_control(
+            'enable_custom_fields',
+            [
+                'label' => esc_html__('Customize Checkout Fields', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => esc_html__('Yes', 'swift-checkout'),
+                'label_off' => esc_html__('No', 'swift-checkout'),
+                'return_value' => 'yes',
+                'default' => 'no',
+                'description' => esc_html__('Enable to customize which checkout fields to display', 'swift-checkout'),
+            ]
+        );
+
+        $repeater = new \Elementor\Repeater();
+
+        $repeater->add_control(
+            'field_type',
+            [
+                'label' => esc_html__('Field Type', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'name',
+                'options' => [
+                    'name' => esc_html__('Full Name', 'swift-checkout'),
+                    'phone' => esc_html__('Phone', 'swift-checkout'),
+                    'email' => esc_html__('Email Address', 'swift-checkout'),
+                    'address' => esc_html__('Full Address', 'swift-checkout'),
+                ],
+            ]
+        );
+
+        $repeater->add_control(
+            'field_required',
+            [
+                'label' => esc_html__('Required', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'label_on' => esc_html__('Yes', 'swift-checkout'),
+                'label_off' => esc_html__('No', 'swift-checkout'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+            ]
+        );
+
+        $repeater->add_control(
+            'field_label',
+            [
+                'label' => esc_html__('Field Label', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '',
+                'placeholder' => esc_html__('Field Label', 'swift-checkout'),
+            ]
+        );
+
+        $repeater->add_control(
+            'field_placeholder',
+            [
+                'label' => esc_html__('Placeholder', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => '',
+                'placeholder' => esc_html__('Placeholder text', 'swift-checkout'),
+            ]
+        );
+
+        $this->add_control(
+            'checkout_fields',
+            [
+                'label' => esc_html__('Fields', 'swift-checkout'),
+                'type' => \Elementor\Controls_Manager::REPEATER,
+                'fields' => $repeater->get_controls(),
+                'default' => [
+                    [
+                        'field_type' => 'name',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Full Name', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'phone',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Phone', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'email',
+                        'field_required' => 'no',
+                        'field_label' => esc_html__('Email Address (Optional)', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'address',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Full Address', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                ],
+                'title_field' => '{{{ field_label }}}',
+                'condition' => [
+                    'enable_custom_fields' => 'yes',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
     }
 
     /**
