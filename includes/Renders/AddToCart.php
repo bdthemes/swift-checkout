@@ -57,13 +57,13 @@ class AddToCart {
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
             Utils::load_template('block-editor-markup.php', $attributes);
         } else { ?>
-            <div class="spc-container <?php echo isset($attributes['align']) ? htmlspecialchars($attributes['align'], ENT_QUOTES, 'UTF-8') : ''; ?> <?php echo isset($attributes['stylePreset']) ? htmlspecialchars($attributes['stylePreset'], ENT_QUOTES, 'UTF-8') : ''; ?>"
-                data-builder="<?php echo htmlspecialchars($builder, ENT_QUOTES, 'UTF-8'); ?>"
-                data-product-id="<?php echo htmlspecialchars($attributes['productId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
-                data-auto-add-to-cart="<?php echo htmlspecialchars($attributes['auto_add_to_cart'] ?? 'no', ENT_QUOTES, 'UTF-8'); ?>">
+            <div class="spc-container <?php echo esc_attr(isset($attributes['align']) ? $attributes['align'] : ''); ?> <?php echo esc_attr(isset($attributes['stylePreset']) ? $attributes['stylePreset'] : ''); ?>"
+                data-builder="<?php echo esc_attr($builder); ?>"
+                data-product-id="<?php echo esc_attr($attributes['productId'] ?? ''); ?>"
+                data-auto-add-to-cart="<?php echo esc_attr($attributes['auto_add_to_cart'] ?? 'no'); ?>">
                 <?php Utils::load_template('add-to-cart.php', $attributes); ?>
                 <div class="spc-mini-cart">
-                    <h2 class="spc-mini-cart-title"><?php \_e('Your Cart', 'swift-checkout'); ?></h2>
+                    <h2 class="spc-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
                     <?php Utils::load_template('mini-cart.php', $attributes); ?>
                 </div>
                 <?php Utils::load_template('checkout-form.php', $attributes); ?>
