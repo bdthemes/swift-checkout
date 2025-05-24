@@ -181,6 +181,7 @@ class Ajax {
         foreach ($required_fields as $field => $is_required) {
             if ($is_required && empty($fields[$field])) {
                 $field_label = ucfirst(str_replace('_', ' ', $field));
+                /* translators: %s: Field label (e.g. "First Name", "Email", etc.) */
                 $validation_errors[] = sprintf(__('Please enter your %s', 'swift-checkout'), $field_label);
             }
         }

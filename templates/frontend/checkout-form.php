@@ -115,19 +115,19 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				if ($type === 'address' || $type === 'order_notes') {
 					// These fields use textarea
 			?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
-						<textarea id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo htmlspecialchars($placeholder, ENT_QUOTES, 'UTF-8'); ?>"></textarea>
-						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
-							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
+						<textarea id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>"></textarea>
+						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
 				<?php
 				} elseif ($type === 'country') {
 					// Country dropdown
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
-						<select id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
-							<option value=""><?php echo htmlspecialchars($placeholder ? $placeholder : 'Select a country', ENT_QUOTES, 'UTF-8'); ?></option>
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
+						<select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+							<option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a country'); ?></option>
 							<?php
 							// Get countries from WooCommerce if available
 							$countries = array();
@@ -140,21 +140,21 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 
 							// Display countries
 							foreach ($countries as $code => $country_name) {
-								echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($country_name, ENT_QUOTES, 'UTF-8') . '</option>';
+								echo '<option value="' . esc_attr($code) . '">' . esc_html($country_name) . '</option>';
 							}
 							?>
 						</select>
-						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
-							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
 				<?php
 				} elseif ($type === 'state') {
 					// State/County dropdown
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
-						<select id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
-							<option value=""><?php echo htmlspecialchars($placeholder ? $placeholder : 'Select a state', ENT_QUOTES, 'UTF-8'); ?></option>
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
+						<select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+							<option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a state'); ?></option>
 							<?php
 							// Get states from WooCommerce if available
 							$states = array();
@@ -168,32 +168,32 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 
 							// Display states
 							foreach ($states as $code => $state_name) {
-								echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($state_name, ENT_QUOTES, 'UTF-8') . '</option>';
+								echo '<option value="' . esc_attr($code) . '">' . esc_html($state_name) . '</option>';
 							}
 							?>
 						</select>
-						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
-							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
 				<?php
 				} elseif ($type === 'create_account') {
 					// Checkbox fields
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?> spc-checkbox-row">
-						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-checkbox-label">
-							<input type="checkbox" id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
-							<?php echo htmlspecialchars($label ? $label : 'Create an account?', ENT_QUOTES, 'UTF-8'); ?>
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
+						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-checkbox-label">
+							<input type="checkbox" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+							<?php echo esc_html($label ? $label : 'Create an account?'); ?>
 						</label>
 					</div>
 				<?php
 				} elseif ($type === 'shipping_address') {
 					// Checkbox for different shipping address
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?> spc-checkbox-row">
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
 						<label for="spc-shipping_address" class="spc-checkbox-label">
 							<input type="checkbox" id="spc-shipping_address" name="shipping_address" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
-							<?php echo htmlspecialchars($label ? $label : 'Ship to a different address?', ENT_QUOTES, 'UTF-8'); ?>
+							<?php echo esc_html($label ? $label : 'Ship to a different address?'); ?>
 						</label>
 					</div>
 
@@ -251,7 +251,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 
 								// Display states
 								foreach ($states as $code => $state_name) {
-									echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($state_name, ENT_QUOTES, 'UTF-8') . '</option>';
+									echo '<option value="' . esc_attr($code) . '">' . esc_html($state_name) . '</option>';
 								}
 								?>
 							</select>
@@ -280,7 +280,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 
 								// Display countries
 								foreach ($countries as $code => $country_name) {
-									echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($country_name, ENT_QUOTES, 'UTF-8') . '</option>';
+									echo '<option value="' . esc_attr($code) . '">' . esc_html($country_name) . '</option>';
 								}
 								?>
 							</select>
@@ -291,10 +291,10 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				} else {
 					// Regular input field
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
-						<input type="<?php echo htmlspecialchars($input_type, ENT_QUOTES, 'UTF-8'); ?>" id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo htmlspecialchars($placeholder, ENT_QUOTES, 'UTF-8'); ?>">
-						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
-							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
+						<input type="<?php echo esc_attr($input_type); ?>" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>">
+						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
 			<?php
@@ -325,7 +325,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 		<div class="spc-form-section">
 			<div class="spc-form-row spc-form-row-submit">
 				<button type="submit" id="spc-submit-order" class="spc-submit-order" name="spc_submit_order">
-					Place Order
+					<?php esc_html_e('Place Order', 'swift-checkout'); ?>
 				</button>
 				<div class="spc-checkout-error"></div>
 			</div>
