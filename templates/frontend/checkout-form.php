@@ -40,7 +40,7 @@ $default_fields = array(
 );
 
 // Use custom fields if enabled and available, otherwise use default fields
-$use_custom_fields = isset($enable_custom_fields) && $enable_custom_fields === 'yes' && !empty($checkout_fields);
+$use_custom_fields = !empty($checkout_fields);
 $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 ?>
 
@@ -54,15 +54,13 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			$has_email = false;
 
 			// First pass to identify phone and email for grouping
-			if ($use_custom_fields) {
-				foreach ($fields_to_display as $field) {
-					if (isset($field['field_type'])) {
-						if ($field['field_type'] === 'phone') {
-							$has_phone = true;
-						}
-						if ($field['field_type'] === 'email') {
-							$has_email = true;
-						}
+			foreach ($fields_to_display as $field) {
+				if (isset($field['field_type'])) {
+					if ($field['field_type'] === 'phone') {
+						$has_phone = true;
+					}
+					if ($field['field_type'] === 'email') {
+						$has_email = true;
 					}
 				}
 			}
