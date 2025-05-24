@@ -51,13 +51,13 @@ class AddToCart {
         // Add checkout fields data to the attributes
         $attributes['enable_custom_fields'] = $enable_custom_fields ? 'yes' : 'no';
         $attributes['checkout_fields'] = $checkout_fields;
+        $attributes['align'] = isset($attributes['align']) ? 'align' . $attributes['align'] : '';
 
-        // print_r($attributes);
         $attributes['product_id'] = $attributes['productId'];
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
             Utils::load_template('block-editor-markup.php', $attributes);
         } else { ?>
-            <div class="spc-container <?php echo isset($attributes['stylePreset']) ? htmlspecialchars($attributes['stylePreset'], ENT_QUOTES, 'UTF-8') : ''; ?>"
+            <div class="spc-container <?php echo isset($attributes['align']) ? htmlspecialchars($attributes['align'], ENT_QUOTES, 'UTF-8') : ''; ?> <?php echo isset($attributes['stylePreset']) ? htmlspecialchars($attributes['stylePreset'], ENT_QUOTES, 'UTF-8') : ''; ?>"
                 data-builder="<?php echo htmlspecialchars($builder, ENT_QUOTES, 'UTF-8'); ?>"
                 data-product-id="<?php echo htmlspecialchars($attributes['productId'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                 data-auto-add-to-cart="<?php echo htmlspecialchars($attributes['auto_add_to_cart'] ?? 'no', ENT_QUOTES, 'UTF-8'); ?>">

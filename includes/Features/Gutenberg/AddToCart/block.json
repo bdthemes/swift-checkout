@@ -50,7 +50,7 @@
         },
         "align": {
             "type": "string",
-            "default": "left"
+            "default": "center"
         },
         "textColor": {
             "type": "string"
@@ -75,49 +75,31 @@
         "checkout_fields": {
             "type": "array",
             "default": [
-                {
-                    "field_type": "name",
-                    "field_required": true,
-                    "field_label": "Full Name",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "email",
-                    "field_required": true,
-                    "field_label": "Email Address",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "phone",
-                    "field_required": true,
-                    "field_label": "Phone",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "address_1",
-                    "field_required": true,
-                    "field_label": "Street Address",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "city",
-                    "field_required": true,
-                    "field_label": "City",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "postcode",
-                    "field_required": true,
-                    "field_label": "ZIP / Postal Code",
-                    "field_placeholder": ""
-                },
-                {
-                    "field_type": "country",
-                    "field_required": true,
-                    "field_label": "Country",
-                    "field_placeholder": "Select a country"
-                }
-            ]
+							{
+								"field_type": "name",
+								"field_required": true,
+								"field_label": "Full Name",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "phone",
+								"field_required": true,
+								"field_label": "Phone",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "email",
+								"field_required": true,
+								"field_label": "Email Address",
+								"field_placeholder": ""
+							},
+							{
+								"field_type": "address_1",
+								"field_required": true,
+								"field_label": "Full Address",
+								"field_placeholder": ""
+							}
+						]
         }
     },
     "textdomain": "swift-checkout",
