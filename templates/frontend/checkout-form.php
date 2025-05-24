@@ -40,7 +40,7 @@ $default_fields = array(
 );
 
 // Use custom fields if enabled and available, otherwise use default fields
-$use_custom_fields = !empty($checkout_fields);
+$use_custom_fields = isset($enable_custom_fields) && $enable_custom_fields === 'yes' && !empty($checkout_fields);
 $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 ?>
 
@@ -54,13 +54,15 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			$has_email = false;
 
 			// First pass to identify phone and email for grouping
-			foreach ($fields_to_display as $field) {
-				if (isset($field['field_type'])) {
-					if ($field['field_type'] === 'phone') {
-						$has_phone = true;
-					}
-					if ($field['field_type'] === 'email') {
-						$has_email = true;
+			if ($use_custom_fields) {
+				foreach ($fields_to_display as $field) {
+					if (isset($field['field_type'])) {
+						if ($field['field_type'] === 'phone') {
+							$has_phone = true;
+						}
+						if ($field['field_type'] === 'email') {
+							$has_email = true;
+						}
 					}
 				}
 			}
@@ -91,17 +93,182 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 					$input_type = 'email';
 				} elseif ($type === 'phone') {
 					$input_type = 'tel';
+				} elseif ($type === 'postcode') {
+					$input_type = 'text';
 				}
 
 				// Render the field
-				if ($type === 'address') {
-					// Address is a textarea
+				if ($type === 'address' || $type === 'order_notes') {
+					// These fields use textarea
 			?>
-					<div class="spc-form-row spc-form-row-address">
-						<textarea id="spc-address" name="address" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo htmlspecialchars($placeholder, ENT_QUOTES, 'UTF-8'); ?>"></textarea>
-						<label for="spc-address" class="spc-form-label">
+					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
+						<textarea id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo htmlspecialchars($placeholder, ENT_QUOTES, 'UTF-8'); ?>"></textarea>
+						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
 							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
+					</div>
+				<?php
+				} elseif ($type === 'country') {
+					// Country dropdown
+				?>
+					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
+						<select id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+							<option value=""><?php echo htmlspecialchars($placeholder ? $placeholder : 'Select a country', ENT_QUOTES, 'UTF-8'); ?></option>
+							<?php
+							// Get countries from WooCommerce if available
+							$countries = array();
+							if (function_exists('WC')) {
+								$wc = WC();
+								if (isset($wc->countries) && is_object($wc->countries)) {
+									$countries = $wc->countries->get_countries();
+								}
+							}
+
+							// Display countries
+							foreach ($countries as $code => $country_name) {
+								echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($country_name, ENT_QUOTES, 'UTF-8') . '</option>';
+							}
+							?>
+						</select>
+						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
+							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+						</label>
+					</div>
+				<?php
+				} elseif ($type === 'state') {
+					// State/County dropdown
+				?>
+					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>">
+						<select id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+							<option value=""><?php echo htmlspecialchars($placeholder ? $placeholder : 'Select a state', ENT_QUOTES, 'UTF-8'); ?></option>
+							<?php
+							// Get states from WooCommerce if available
+							$states = array();
+							if (function_exists('WC')) {
+								$wc = WC();
+								if (isset($wc->countries) && is_object($wc->countries)) {
+									$base_country = $wc->countries->get_base_country();
+									$states = $wc->countries->get_states($base_country);
+								}
+							}
+
+							// Display states
+							foreach ($states as $code => $state_name) {
+								echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($state_name, ENT_QUOTES, 'UTF-8') . '</option>';
+							}
+							?>
+						</select>
+						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-form-label">
+							<?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+						</label>
+					</div>
+				<?php
+				} elseif ($type === 'create_account') {
+					// Checkbox fields
+				?>
+					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?> spc-checkbox-row">
+						<label for="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-checkbox-label">
+							<input type="checkbox" id="spc-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" name="<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?>" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+							<?php echo htmlspecialchars($label ? $label : 'Create an account?', ENT_QUOTES, 'UTF-8'); ?>
+						</label>
+					</div>
+				<?php
+				} elseif ($type === 'shipping_address') {
+					// Checkbox for different shipping address
+				?>
+					<div class="spc-form-row spc-form-row-<?php echo htmlspecialchars($type, ENT_QUOTES, 'UTF-8'); ?> spc-checkbox-row">
+						<label for="spc-shipping_address" class="spc-checkbox-label">
+							<input type="checkbox" id="spc-shipping_address" name="shipping_address" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+							<?php echo htmlspecialchars($label ? $label : 'Ship to a different address?', ENT_QUOTES, 'UTF-8'); ?>
+						</label>
+					</div>
+
+					<!-- Shipping address form - hidden by default -->
+					<div id="spc-shipping-address-fields" class="spc-shipping-address-fields" style="display: none;">
+						<h3 class="spc-shipping-title">Shipping Address</h3>
+
+						<!-- First Name -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_first_name" name="shipping_first_name" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_first_name" class="spc-form-label">First Name</label>
+						</div>
+
+						<!-- Last Name -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_last_name" name="shipping_last_name" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_last_name" class="spc-form-label">Last Name</label>
+						</div>
+
+						<!-- Address Line 1 -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_address_1" name="shipping_address_1" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_address_1" class="spc-form-label">Street Address</label>
+						</div>
+
+						<!-- Address Line 2 -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_address_2" name="shipping_address_2" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_address_2" class="spc-form-label">Apartment, suite, etc. (Optional)</label>
+						</div>
+
+						<!-- City -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_city" name="shipping_city" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_city" class="spc-form-label">City</label>
+						</div>
+
+						<!-- State -->
+						<div class="spc-form-row">
+							<select id="spc-shipping_state" name="shipping_state" class="spc-form-input">
+								<option value="">Select a state</option>
+								<?php
+								// Get states from WooCommerce if available
+								$states = array();
+								if (function_exists('WC')) {
+									$wc = WC();
+									if (isset($wc->countries) && is_object($wc->countries)) {
+										$base_country = $wc->countries->get_base_country();
+										$states = $wc->countries->get_states($base_country);
+									}
+								}
+
+								// Display states
+								foreach ($states as $code => $state_name) {
+									echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($state_name, ENT_QUOTES, 'UTF-8') . '</option>';
+								}
+								?>
+							</select>
+							<label for="spc-shipping_state" class="spc-form-label">State/County</label>
+						</div>
+
+						<!-- Postcode -->
+						<div class="spc-form-row">
+							<input type="text" id="spc-shipping_postcode" name="shipping_postcode" class="spc-form-input" placeholder=" ">
+							<label for="spc-shipping_postcode" class="spc-form-label">ZIP / Postal Code</label>
+						</div>
+
+						<!-- Country -->
+						<div class="spc-form-row">
+							<select id="spc-shipping_country" name="shipping_country" class="spc-form-input">
+								<option value="">Select a country</option>
+								<?php
+								// Get countries from WooCommerce if available
+								$countries = array();
+								if (function_exists('WC')) {
+									$wc = WC();
+									if (isset($wc->countries) && is_object($wc->countries)) {
+										$countries = $wc->countries->get_countries();
+									}
+								}
+
+								// Display countries
+								foreach ($countries as $code => $country_name) {
+									echo '<option value="' . htmlspecialchars($code, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($country_name, ENT_QUOTES, 'UTF-8') . '</option>';
+								}
+								?>
+							</select>
+							<label for="spc-shipping_country" class="spc-form-label">Country</label>
+						</div>
 					</div>
 				<?php
 				} else {

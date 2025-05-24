@@ -101,10 +101,27 @@ const Settings = ({ attributes, setAttributes }) => {
                                         label={__('Field Type', 'swift-checkout')}
                                         value={field.field_type}
                                         options={[
+                                            // Personal fields
                                             { label: __('Full Name', 'swift-checkout'), value: 'name' },
-                                            { label: __('Phone', 'swift-checkout'), value: 'phone' },
+                                            { label: __('First Name', 'swift-checkout'), value: 'first_name' },
+                                            { label: __('Last Name', 'swift-checkout'), value: 'last_name' },
                                             { label: __('Email Address', 'swift-checkout'), value: 'email' },
+                                            { label: __('Phone', 'swift-checkout'), value: 'phone' },
+                                            { label: __('Company Name', 'swift-checkout'), value: 'company' },
+
+                                            // Address fields
                                             { label: __('Full Address', 'swift-checkout'), value: 'address' },
+                                            { label: __('Address Line 1', 'swift-checkout'), value: 'address_1' },
+                                            { label: __('Address Line 2', 'swift-checkout'), value: 'address_2' },
+                                            { label: __('City', 'swift-checkout'), value: 'city' },
+                                            { label: __('State/County', 'swift-checkout'), value: 'state' },
+                                            { label: __('Postcode/ZIP', 'swift-checkout'), value: 'postcode' },
+                                            { label: __('Country', 'swift-checkout'), value: 'country' },
+
+                                            // Order fields
+                                            { label: __('Order Notes', 'swift-checkout'), value: 'order_notes' },
+                                            { label: __('Create Account', 'swift-checkout'), value: 'create_account' },
+                                            { label: __('Different Shipping Address', 'swift-checkout'), value: 'shipping_address' },
                                         ]}
                                         onChange={(value) => updateCheckoutField(index, 'field_type', value)}
                                     />

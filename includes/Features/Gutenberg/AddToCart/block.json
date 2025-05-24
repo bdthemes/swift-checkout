@@ -82,22 +82,40 @@
                     "field_placeholder": ""
                 },
                 {
+                    "field_type": "email",
+                    "field_required": true,
+                    "field_label": "Email Address",
+                    "field_placeholder": ""
+                },
+                {
                     "field_type": "phone",
                     "field_required": true,
                     "field_label": "Phone",
                     "field_placeholder": ""
                 },
                 {
-                    "field_type": "email",
-                    "field_required": false,
-                    "field_label": "Email Address (Optional)",
+                    "field_type": "address_1",
+                    "field_required": true,
+                    "field_label": "Street Address",
                     "field_placeholder": ""
                 },
                 {
-                    "field_type": "address",
+                    "field_type": "city",
                     "field_required": true,
-                    "field_label": "Full Address",
+                    "field_label": "City",
                     "field_placeholder": ""
+                },
+                {
+                    "field_type": "postcode",
+                    "field_required": true,
+                    "field_label": "ZIP / Postal Code",
+                    "field_placeholder": ""
+                },
+                {
+                    "field_type": "country",
+                    "field_required": true,
+                    "field_label": "Country",
+                    "field_placeholder": "Select a country"
                 }
             ]
         }

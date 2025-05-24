@@ -168,10 +168,27 @@ class AddToCart extends \Elementor\Widget_Base {
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => 'name',
                 'options' => [
+                    // Personal fields
                     'name' => esc_html__('Full Name', 'swift-checkout'),
-                    'phone' => esc_html__('Phone', 'swift-checkout'),
+                    'first_name' => esc_html__('First Name', 'swift-checkout'),
+                    'last_name' => esc_html__('Last Name', 'swift-checkout'),
                     'email' => esc_html__('Email Address', 'swift-checkout'),
+                    'phone' => esc_html__('Phone', 'swift-checkout'),
+                    'company' => esc_html__('Company Name', 'swift-checkout'),
+
+                    // Address fields
                     'address' => esc_html__('Full Address', 'swift-checkout'),
+                    'address_1' => esc_html__('Address Line 1', 'swift-checkout'),
+                    'address_2' => esc_html__('Address Line 2', 'swift-checkout'),
+                    'city' => esc_html__('City', 'swift-checkout'),
+                    'state' => esc_html__('State/County', 'swift-checkout'),
+                    'postcode' => esc_html__('Postcode/ZIP', 'swift-checkout'),
+                    'country' => esc_html__('Country', 'swift-checkout'),
+
+                    // Order fields
+                    'order_notes' => esc_html__('Order Notes', 'swift-checkout'),
+                    'create_account' => esc_html__('Create Account', 'swift-checkout'),
+                    'shipping_address' => esc_html__('Different Shipping Address', 'swift-checkout'),
                 ],
             ]
         );
@@ -222,22 +239,40 @@ class AddToCart extends \Elementor\Widget_Base {
                         'field_placeholder' => '',
                     ],
                     [
+                        'field_type' => 'email',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Email Address', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
                         'field_type' => 'phone',
                         'field_required' => 'yes',
                         'field_label' => esc_html__('Phone', 'swift-checkout'),
                         'field_placeholder' => '',
                     ],
                     [
-                        'field_type' => 'email',
-                        'field_required' => 'no',
-                        'field_label' => esc_html__('Email Address (Optional)', 'swift-checkout'),
+                        'field_type' => 'address_1',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Street Address', 'swift-checkout'),
                         'field_placeholder' => '',
                     ],
                     [
-                        'field_type' => 'address',
+                        'field_type' => 'city',
                         'field_required' => 'yes',
-                        'field_label' => esc_html__('Full Address', 'swift-checkout'),
+                        'field_label' => esc_html__('City', 'swift-checkout'),
                         'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'postcode',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('ZIP / Postal Code', 'swift-checkout'),
+                        'field_placeholder' => '',
+                    ],
+                    [
+                        'field_type' => 'country',
+                        'field_required' => 'yes',
+                        'field_label' => esc_html__('Country', 'swift-checkout'),
+                        'field_placeholder' => 'Select a country',
                     ],
                 ],
                 'title_field' => '{{{ field_label }}}',
