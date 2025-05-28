@@ -44,6 +44,9 @@ class Ajax {
 
         add_action('wp_ajax_spc_get_variation', array(__CLASS__, 'get_variation'));
         add_action('wp_ajax_nopriv_spc_get_variation', array(__CLASS__, 'get_variation'));
+
+        add_action('wp_ajax_spc_update_shipping_method', array(__CLASS__, 'update_shipping_method'));
+        add_action('wp_ajax_nopriv_spc_update_shipping_method', array(__CLASS__, 'update_shipping_method'));
     }
 
     /**
@@ -406,5 +409,38 @@ class Ajax {
             'is_purchasable' => $is_purchasable,
             'variation_id' => $variation_id
         ));
+    }
+
+    /**
+     * Update shipping method via AJAX
+     *
+     * @return void
+     */
+    public static function update_shipping_method() {
+        check_ajax_referer('spc_nonce', 'nonce');
+
+        $package_key = isset($_POST['package_key']) ? absint($_POST['package_key']) : 0;
+        $shipping_method = isset($_POST['shipping_method']) ? sanitize_text_field(wp_unslash($_POST['shipping_method'])) : '';
+
+        if (empty($shipping_method)) {
+            wp_send_json_error(array('message' => __('Invalid shipping method', 'swift-checkout')));
+            exit;
+        }
+
+        // Get current chosen shipping methods
+        $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
+
+        // Update the chosen method for this package
+        $chosen_shipping_methods[$package_key] = $shipping_method;
+
+        // Save to session
+        WC()->session->set('chosen_shipping_methods', $chosen_shipping_methods);
+
+        // Trigger recalculation
+        WC()->cart->calculate_shipping();
+        WC()->cart->calculate_totals();
+
+        // Return updated fragments
+        self::get_refreshed_fragments();
     }
 }

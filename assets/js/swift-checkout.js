@@ -41,6 +41,9 @@
 
             // Toggle shipping address fields
             $(document).on('change', '#spc-shipping_address', this.toggleShippingFields);
+
+            // Handle shipping method selection
+            $(document).on('change', '.spc-shipping-method-select', this.updateShippingMethod);
         },
 
         /**
@@ -406,7 +409,7 @@
         },
 
         /**
-         * Update page fragments
+         * Update fragments
          *
          * @param {Object} fragments HTML fragments to update
          */
@@ -462,6 +465,49 @@
                 $shippingFields.slideUp(300);
                 console.log('Hiding shipping fields');
             }
+        },
+
+        /**
+         * Update shipping method
+         *
+         * @param {Event} e Change event
+         */
+        updateShippingMethod: function(e) {
+            const $input = $(this);
+            const packageKey = $input.data('package');
+            const methodId = $input.val();
+
+            if (!methodId) {
+                return;
+            }
+
+            // Add loading state
+            $('.spc-totals-shipping').addClass('updating');
+
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'spc_update_shipping_method',
+                    package_key: packageKey,
+                    shipping_method: methodId,
+                    nonce: spcData.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the cart totals to reflect the new shipping method
+                        SwiftCheckout.updateFragments(response.data.fragments);
+                    } else {
+                        console.error(response.data.message || 'Error updating shipping method');
+                    }
+                },
+                error: function() {
+                    console.error('Error connecting to server');
+                },
+                complete: function() {
+                    $('.spc-totals-shipping').removeClass('updating');
+                }
+            });
         }
     };
 

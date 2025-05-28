@@ -78,11 +78,15 @@ if (!$cart) {
             endif;
             ?>
         </tbody>
-        <tfoot>
+        <!-- <tfoot>
             <tr>
                 <td colspan="3" class="cart-subtotal-label"><?php esc_html_e('Total', 'swift-checkout'); ?></td>
                 <td colspan="2" class="cart-subtotal-value"><?php echo wp_kses_post($cart->get_cart_subtotal()); ?></td>
             </tr>
-        </tfoot>
+        </tfoot> -->
     </table>
+    <?php
+    // Include cart totals
+    SwiftCheckout\Classes\Utils::load_template('cart-totals.php');
+    ?>
 </div>
