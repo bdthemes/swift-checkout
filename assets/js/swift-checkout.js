@@ -41,6 +41,19 @@
 
             // Toggle shipping address fields
             $(document).on('change', '#spc-shipping_address', this.toggleShippingFields);
+
+            // Address fields change for shipping calculation
+            $(document).on('change', '#spc-postcode, #spc-state, #spc-country, #spc-city', this.updateShippingMethods);
+            $(document).on('change', '#spc-shipping_postcode, #spc-shipping_state, #spc-shipping_country, #spc-shipping_city',
+                function() {
+                    if ($('#spc-shipping_address').is(':checked')) {
+                        SwiftCheckout.updateShippingMethods();
+                    }
+                }
+            );
+
+            // Shipping method selection
+            $(document).on('change', '.spc-shipping-method-input', this.updateOrderTotal);
         },
 
         /**
@@ -322,6 +335,79 @@
         },
 
         /**
+         * Update available shipping methods based on address
+         */
+        updateShippingMethods: function() {
+            const $shippingMethods = $('#spc-shipping-methods');
+            const $loading = $shippingMethods.find('.spc-shipping-methods-loading');
+
+            // Check if shipping address is different
+            const useShippingAddress = $('#spc-shipping_address').is(':checked');
+
+            // Get address fields
+            let country, state, postcode, city;
+
+            if (useShippingAddress) {
+                country = $('#spc-shipping_country').val();
+                state = $('#spc-shipping_state').val();
+                postcode = $('#spc-shipping_postcode').val();
+                city = $('#spc-shipping_city').val();
+            } else {
+                country = $('#spc-country').val();
+                state = $('#spc-state').val();
+                postcode = $('#spc-postcode').val();
+                city = $('#spc-city').val();
+            }
+
+            // Don't make request if address is incomplete
+            if (!country) {
+                return;
+            }
+
+            $loading.show();
+
+            // Create AJAX request to update shipping methods
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'spc_update_shipping_methods',
+                    country: country,
+                    state: state,
+                    postcode: postcode,
+                    city: city,
+                    nonce: spcData.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data.html) {
+                        // Replace shipping methods with new HTML
+                        $shippingMethods.html(response.data.html);
+
+                        // Pre-select first shipping method
+                        const $firstMethod = $shippingMethods.find('.spc-shipping-method-input').first();
+                        if ($firstMethod.length) {
+                            $firstMethod.prop('checked', true);
+                            SwiftCheckout.updateOrderTotal();
+                        }
+                    }
+                },
+                complete: function() {
+                    $loading.hide();
+                }
+            });
+        },
+
+        /**
+         * Update order total when shipping method is selected
+         */
+        updateOrderTotal: function() {
+            // This could be extended to show real-time order total updates
+            // For now, we'll just highlight the selected shipping method
+            $('.spc-shipping-method').removeClass('selected');
+            $(this).closest('.spc-shipping-method').addClass('selected');
+        },
+
+        /**
          * Submit order handler
          *
          * @param {Event} e Submit event
@@ -332,6 +418,13 @@
             const $form = $(this);
             const $submitButton = $form.find('#spc-submit-order');
             const isShippingDifferent = $('#spc-shipping_address').is(':checked');
+
+            // Check if shipping method is selected
+            const $selectedShipping = $form.find('input[name="shipping_method"]:checked');
+            if ($selectedShipping.length === 0) {
+                $('.spc-checkout-error').html('Please select a shipping method');
+                return;
+            }
 
             // Collect required fields information
             const requiredFields = {};
@@ -462,6 +555,9 @@
                 $shippingFields.slideUp(300);
                 console.log('Hiding shipping fields');
             }
+
+            // Update shipping methods when shipping address option changes
+            SwiftCheckout.updateShippingMethods();
         }
     };
 
@@ -489,6 +585,16 @@
                 }
             }
         });
+
+        // Initialize shipping methods
+        setTimeout(function() {
+            if ($('.spc-shipping-method-input').length === 0) {
+                SwiftCheckout.updateShippingMethods();
+            } else {
+                // Pre-select first shipping method
+                $('.spc-shipping-method-input').first().prop('checked', true);
+            }
+        }, 500);
     });
 
 })(jQuery);

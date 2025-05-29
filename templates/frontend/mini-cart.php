@@ -6,6 +6,8 @@
  * @package swift_checkout
  */
 
+use SwiftCheckout\Utils;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -85,4 +87,5 @@ if (!$cart) {
             </tr>
         </tfoot>
     </table>
+    <?php include 'cart-totals.php'; ?>
 </div>
