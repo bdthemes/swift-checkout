@@ -85,6 +85,12 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				}
 
 				$type = $field['field_type'];
+				
+				// Skip shipping_method
+				if ($type === 'shipping_method') {
+					continue;
+				}
+				
 				$required = isset($field['field_required']) && ($field['field_required'] === 'yes' || $field['field_required'] === true);
 				$label = !empty($field['field_label']) ? $field['field_label'] : '';
 				$placeholder = isset($field['field_placeholder']) ? $field['field_placeholder'] : ' ';
