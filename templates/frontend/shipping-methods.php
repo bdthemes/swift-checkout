@@ -4,7 +4,7 @@
     // Get available shipping methods from WooCommerce
     $shipping_methods = array();
 
-    if (function_exists('WC') && !WC()->cart->is_empty()) {
+    if (function_exists('WC') && WC() && WC()->cart && !WC()->cart->is_empty()) {
         // Calculate shipping for current cart and destination
         $packages = WC()->shipping()->get_packages();
 

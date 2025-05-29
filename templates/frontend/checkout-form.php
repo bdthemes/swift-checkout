@@ -324,7 +324,21 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 		</div>
 		<div class="spc-form-section">
 			<!-- Shipping Methods Section -->
-			<?php include 'cart-totals.php'; ?>
+
+			<?php
+			// Check for shipping_method in fields array
+			$shipping_method_enabled = false;
+			foreach ($fields_to_display as $field) {
+				if (isset($field['field_type']) && $field['field_type'] === 'shipping_method') {
+					$shipping_method_enabled = true;
+					break;
+				}
+			}
+
+			if ($shipping_method_enabled) {
+				include 'shipping-methods.php';
+			}
+			?>
 
 			<div class="spc-form-row spc-form-row-submit">
 				<button type="submit" id="spc-submit-order" class="spc-submit-order" name="spc_submit_order">

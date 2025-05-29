@@ -493,6 +493,26 @@ $attributes['sample_cart_items'] = $sample_cart_items;
             </div>
 
             <div class="spc-form-section">
+                <?php
+                // Check for shipping_method in fields array
+                $shipping_method_enabled = false;
+                foreach ($fields_to_display as $field) {
+                    if (isset($field['field_type']) && $field['field_type'] === 'shipping_method') {
+                        $shipping_method_enabled = true;
+                        break;
+                    }
+                }
+
+                if ($shipping_method_enabled) {
+                ?>
+                    <h3 class="spc-shipping-methods-title">Shipping Methods</h3>
+                    <div id="spc-shipping-methods" class="spc-shipping-methods">
+                        <div class="spc-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:1" class="spc-shipping-method-input">Inside Dhaka – <span class="woocommerce-Price-amount amount"><bdi>60.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
+                        <div class="spc-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:2" class="spc-shipping-method-input">Outside of Dhaka – <span class="woocommerce-Price-amount amount"><bdi>120.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
+                    </div>
+                <?php
+                }
+                ?>
                 <div class="spc-form-row spc-form-row-submit">
                     <button type="submit" id="spc-submit-order" class="spc-submit-order" name="spc_submit_order">
                         <?php \esc_html_e('Place Order', 'swift-checkout'); ?>
