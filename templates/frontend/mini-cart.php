@@ -87,5 +87,4 @@ if (!$cart) {
             </tr>
         </tfoot>
     </table>
-    <?php include 'cart-totals.php'; ?>
 </div>

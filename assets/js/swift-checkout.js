@@ -420,11 +420,11 @@
             const isShippingDifferent = $('#spc-shipping_address').is(':checked');
 
             // Check if shipping method is selected
-            const $selectedShipping = $form.find('input[name="shipping_method"]:checked');
-            if ($selectedShipping.length === 0) {
-                $('.spc-checkout-error').html('Please select a shipping method');
-                return;
-            }
+            // const $selectedShipping = $form.find('input[name="shipping_method"]:checked');
+            // if ($selectedShipping.length === 0) {
+            //     $('.spc-checkout-error').html('Please select a shipping method');
+            //     return;
+            // }
 
             // Collect required fields information
             const requiredFields = {};
