@@ -27,23 +27,26 @@ class Ajax {
      */
     public static function init() {
         // Register AJAX handlers for frontend
-        add_action('wp_ajax_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
-        add_action('wp_ajax_nopriv_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
+        \add_action('wp_ajax_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
+        \add_action('wp_ajax_nopriv_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
 
-        add_action('wp_ajax_spc_update_cart', array(__CLASS__, 'update_cart'));
-        add_action('wp_ajax_nopriv_spc_update_cart', array(__CLASS__, 'update_cart'));
+        \add_action('wp_ajax_spc_update_cart', array(__CLASS__, 'update_cart'));
+        \add_action('wp_ajax_nopriv_spc_update_cart', array(__CLASS__, 'update_cart'));
 
-        add_action('wp_ajax_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
-        add_action('wp_ajax_nopriv_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
+        \add_action('wp_ajax_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
+        \add_action('wp_ajax_nopriv_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
 
-        add_action('wp_ajax_spc_create_order', array(__CLASS__, 'create_order'));
-        add_action('wp_ajax_nopriv_spc_create_order', array(__CLASS__, 'create_order'));
+        \add_action('wp_ajax_spc_create_order', array(__CLASS__, 'create_order'));
+        \add_action('wp_ajax_nopriv_spc_create_order', array(__CLASS__, 'create_order'));
 
-        add_action('wp_ajax_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
-        add_action('wp_ajax_nopriv_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
+        \add_action('wp_ajax_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
+        \add_action('wp_ajax_nopriv_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
 
-        add_action('wp_ajax_spc_get_variation', array(__CLASS__, 'get_variation'));
-        add_action('wp_ajax_nopriv_spc_get_variation', array(__CLASS__, 'get_variation'));
+        \add_action('wp_ajax_spc_get_variation', array(__CLASS__, 'get_variation'));
+        \add_action('wp_ajax_nopriv_spc_get_variation', array(__CLASS__, 'get_variation'));
+
+        \add_action('wp_ajax_spc_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
+        \add_action('wp_ajax_nopriv_spc_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
     }
 
     /**
@@ -163,6 +166,7 @@ class Ajax {
             'order_notes' => isset($_POST['order_notes']) ? sanitize_text_field(wp_unslash($_POST['order_notes'])) : '',
             'create_account' => isset($_POST['create_account']) ? (bool) $_POST['create_account'] : false,
             'shipping_address' => isset($_POST['shipping_address']) ? (bool) $_POST['shipping_address'] : false,
+            'shipping_method' => isset($_POST['shipping_method']) ? sanitize_text_field(wp_unslash($_POST['shipping_method'])) : '',
         );
 
         // Get the required fields configuration
@@ -288,6 +292,78 @@ class Ajax {
                 $order->add_order_note($fields['order_notes'], 1, true); // Customer note
             }
 
+            // Handle shipping method if selected
+            if (!empty($fields['shipping_method'])) {
+                // Check if shipping method contains rate ID format (method:instance)
+                if (strpos($fields['shipping_method'], ':') !== false) {
+                    list($method_id, $instance_id) = explode(':', $fields['shipping_method'], 2);
+
+                    // Add shipping line based on selected method
+                    $shipping_rate = null;
+
+                    // Try to find the selected shipping rate
+                    $packages = WC()->shipping()->get_packages();
+                    if (!empty($packages)) {
+                        foreach ($packages as $package) {
+                            if (!empty($package['rates']) && isset($package['rates'][$fields['shipping_method']])) {
+                                $shipping_rate = $package['rates'][$fields['shipping_method']];
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($shipping_rate) {
+                        // Add shipping line using the rate
+                        $item = new \WC_Order_Item_Shipping();
+                        $item->set_method_title($shipping_rate->get_label());
+                        $item->set_method_id($method_id);
+                        $item->set_instance_id($instance_id);
+                        $item->set_total($shipping_rate->get_cost());
+                        $item->set_taxes($shipping_rate->get_taxes());
+
+                        // Add any meta data
+                        if ($shipping_rate->get_meta_data()) {
+                            foreach ($shipping_rate->get_meta_data() as $key => $value) {
+                                $item->add_meta_data($key, $value, true);
+                            }
+                        }
+
+                        $order->add_item($item);
+                    } else {
+                        // If we couldn't find the rate in the packages, add it manually
+                        // Get shipping method instance
+                        $shipping_method = \WC_Shipping_Zones::get_shipping_method($instance_id);
+
+                        if ($shipping_method) {
+                            $cost = 0;
+                            $title = $shipping_method->get_title();
+
+                            // Get cost if available
+                            if (method_exists($shipping_method, 'get_option')) {
+                                if ($method_id === 'flat_rate') {
+                                    $cost = $shipping_method->get_option('cost');
+                                }
+                            }
+
+                            // Add shipping line
+                            $item = new \WC_Order_Item_Shipping();
+                            $item->set_method_title($title);
+                            $item->set_method_id($method_id);
+                            $item->set_instance_id($instance_id);
+                            $item->set_total($cost);
+                            $order->add_item($item);
+                        }
+                    }
+                } else {
+                    // Simple method handling (fallback)
+                    $item = new \WC_Order_Item_Shipping();
+                    $item->set_method_title($fields['shipping_method']);
+                    $item->set_method_id($fields['shipping_method']);
+                    $item->set_total(0); // Default to zero if we can't determine cost
+                    $order->add_item($item);
+                }
+            }
+
             // Set payment method
             $order->set_payment_method('bacs'); // Default to bank transfer
 
@@ -406,5 +482,155 @@ class Ajax {
             'is_purchasable' => $is_purchasable,
             'variation_id' => $variation_id
         ));
+    }
+
+    /**
+     * Update shipping methods based on customer address
+     */
+    public static function update_shipping_methods() {
+        check_ajax_referer('spc_nonce', 'nonce');
+
+        // Get address fields from request
+        $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
+        $state = isset($_POST['state']) ? sanitize_text_field(wp_unslash($_POST['state'])) : '';
+        $postcode = isset($_POST['postcode']) ? sanitize_text_field(wp_unslash($_POST['postcode'])) : '';
+        $city = isset($_POST['city']) ? sanitize_text_field(wp_unslash($_POST['city'])) : '';
+
+        if (empty($country)) {
+            wp_send_json_error(array('message' => __('Country is required', 'swift-checkout')));
+            exit;
+        }
+
+        // Set customer address in session
+        if (function_exists('WC')) {
+            WC()->customer->set_billing_location($country, $state, $postcode, $city);
+            WC()->customer->set_shipping_location($country, $state, $postcode, $city);
+
+            // Recalculate shipping for the cart
+            WC()->cart->calculate_shipping();
+            WC()->cart->calculate_totals();
+        }
+
+        // Get available shipping methods
+        ob_start();
+
+        $shipping_methods = array();
+        if (function_exists('WC') && !WC()->cart->is_empty()) {
+            // Get shipping packages
+            $packages = WC()->shipping()->get_packages();
+
+            if (!empty($packages)) {
+                $package = reset($packages); // Get first package
+                if (!empty($package['rates'])) {
+                    echo '<div class="spc-shipping-methods-list">';
+                    foreach ($package['rates'] as $method_id => $method) {
+                        echo '<div class="spc-shipping-method">';
+                        echo '<label>';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                        echo esc_html($method->get_label());
+                        echo ' - ' . wp_kses_post($method->get_cost_html());
+                        echo '</label>';
+                        echo '</div>';
+                    }
+                    echo '</div>';
+                } else {
+                    // No shipping methods for this address
+                    echo '<p>' . esc_html__('No shipping methods available for your location.', 'swift-checkout') . '</p>';
+                }
+            } else {
+                // Fallback to shipping zones if no packages available
+                self::get_shipping_zones_html();
+            }
+        } else {
+            // Fallback message if cart is empty
+            echo '<p>' . esc_html__('No shipping methods available. Please add items to your cart.', 'swift-checkout') . '</p>';
+        }
+
+        $html = ob_get_clean();
+
+        wp_send_json_success(array(
+            'html' => $html
+        ));
+    }
+
+    /**
+     * Helper method to get HTML for shipping zones
+     */
+    private static function get_shipping_zones_html() {
+        if (!class_exists('WC_Shipping_Zones')) {
+            return;
+        }
+
+        $shipping_zones = \WC_Shipping_Zones::get_zones();
+
+        // Add methods from each zone
+        foreach ($shipping_zones as $zone_id => $zone_data) {
+            $zone = new \WC_Shipping_Zone($zone_id);
+            $zone_methods = $zone->get_shipping_methods(true);
+
+            if (!empty($zone_methods)) {
+                echo '<div class="spc-shipping-zone">';
+                echo '<h4 class="spc-zone-name">' . esc_html($zone_data['zone_name']) . '</h4>';
+
+                foreach ($zone_methods as $method) {
+                    $method_id = $method->id . ':' . $method->instance_id;
+                    $method_title = $method->get_title();
+                    $method_cost = '';
+
+                    // Get cost if available
+                    if (method_exists($method, 'get_option')) {
+                        if ($method->id === 'flat_rate') {
+                            $method_cost = $method->get_option('cost');
+                        }
+                    }
+
+                    echo '<div class="spc-shipping-method">';
+                    echo '<label>';
+                    echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                    echo esc_html($method_title);
+                    if ($method_cost) {
+                        echo ' - ' . wc_price($method_cost);
+                    }
+                    echo '</label>';
+                    echo '</div>';
+                }
+
+                echo '</div>';
+            }
+        }
+
+        // Add rest of world zone if available
+        $rest_of_world = new \WC_Shipping_Zone(0);
+        $rest_methods = $rest_of_world->get_shipping_methods(true);
+
+        if (!empty($rest_methods)) {
+            echo '<div class="spc-shipping-zone">';
+            echo '<h4 class="spc-zone-name">' . esc_html__('Rest of World', 'swift-checkout') . '</h4>';
+
+            foreach ($rest_methods as $method) {
+                $method_id = $method->id . ':' . $method->instance_id;
+                $method_title = $method->get_title();
+                $method_cost = '';
+
+                // Get cost if available
+                if (method_exists($method, 'get_option')) {
+                    if ($method->id === 'flat_rate') {
+                        $method_cost = $method->get_option('cost');
+                    }
+                }
+
+                echo '<div class="spc-shipping-method">';
+                echo '<label>';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                echo esc_html($method_title);
+                if ($method_cost) {
+                    echo ' - ' . wc_price($method_cost);
+                }
+                echo '</label>';
+                echo '</div>';
+            }
+
+            echo '</div>';
+        }
     }
 }
