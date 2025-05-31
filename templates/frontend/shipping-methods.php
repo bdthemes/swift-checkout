@@ -18,6 +18,7 @@ if (!defined('ABSPATH')) {
     <?php
     // Get available shipping methods from WooCommerce
     $shipping_methods = array();
+    $first_method = true; // Track the first method to auto-select it
 
     if (function_exists('WC') && WC() && WC()->cart && !WC()->cart->is_empty()) {
         // Calculate shipping for current cart and destination
@@ -56,15 +57,20 @@ if (!defined('ABSPATH')) {
                             }
                         }
 
-                        echo '<div class="swift-checkout-shipping-method">';
+                        $selected = $first_method ? ' checked="checked"' : '';
+                        $method_class = $first_method ? 'swift-checkout-shipping-method selected' : 'swift-checkout-shipping-method';
+
+                        echo '<div class="' . $method_class . '">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . $selected . '>';
                         echo esc_html($method_title);
                         if ($method_cost) {
                             echo ' - ' . wp_kses_post(\wc_price($method_cost));
                         }
                         echo '</label>';
                         echo '</div>';
+
+                        $first_method = false; // Only the first method gets selected
                     }
 
                     echo '</div>';
@@ -73,13 +79,18 @@ if (!defined('ABSPATH')) {
         } else {
             // Display calculated shipping methods
             foreach ($shipping_methods as $method) {
-                echo '<div class="swift-checkout-shipping-method">';
+                $selected = $first_method ? ' checked="checked"' : '';
+                $method_class = $first_method ? 'swift-checkout-shipping-method selected' : 'swift-checkout-shipping-method';
+
+                echo '<div class="' . $method_class . '">';
                 echo '<label>';
-                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . $selected . '>';
                 echo esc_html($method->get_label());
                 echo ' - ' . wp_kses_post(\wc_price($method->get_cost()));
                 echo '</label>';
                 echo '</div>';
+
+                $first_method = false; // Only the first method gets selected
             }
         }
     } else {

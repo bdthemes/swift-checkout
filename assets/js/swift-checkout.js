@@ -15,12 +15,14 @@
             // Update cart visibility when fragments are refreshed
             $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', this.updateCartVisibility);
 
-            // Initial update of order totals based on default shipping method
+            // No longer making initial AJAX request for cart totals
+            // Instead, just check if there's a pre-selected shipping method
             $(document).ready(function() {
-                // If there's a pre-selected shipping method, update totals
                 const $selectedMethod = $('input[name="shipping_method"]:checked');
                 if ($selectedMethod.length) {
-                    SwiftCheckout.updateSelectedShippingMethod($selectedMethod.val());
+                    // Just update the UI to reflect the selected method without AJAX call
+                    $('.swift-checkout-shipping-method').removeClass('selected');
+                    $selectedMethod.closest('.swift-checkout-shipping-method').addClass('selected');
                 }
             });
         },
@@ -32,9 +34,6 @@
             // Add to cart - combined handler for both regular and variable products
             $(document).on('click', '.swift-checkout-add-to-cart:not([type="submit"])', this.addToCart);
             $(document).on('submit', '.swift-checkout-variations-form', this.addVariableToCart);
-
-            // Handle refresh cart button for auto-add products
-            $(document).on('click', '.swift-checkout-refresh-cart', this.refreshCart);
 
             // Variable product handling
             $(document).on('click', '.swift-checkout-select-options', this.toggleVariations);
@@ -657,64 +656,6 @@
             SwiftCheckout.updateShippingMethods();
         },
 
-        /**
-         * Handle refresh cart button for auto-add products
-         *
-         * @param {Event} e Click event
-         */
-        refreshCart: function(e) {
-            e.preventDefault();
-            const $button = $(this);
-            const productId = $button.data('product-id');
-
-            if (!productId) {
-                return;
-            }
-
-            $button.prop('disabled', true).addClass('loading');
-
-            // First clear the cart
-            $.ajax({
-                url: spcData.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'swift_checkout_remove_all_items',
-                    nonce: spcData.nonce
-                },
-                success: function() {
-                    // Then add the product
-                    $.ajax({
-                        url: spcData.ajax_url,
-                        type: 'POST',
-                        data: {
-                            action: 'swift_checkout_add_to_cart',
-                            product_id: productId,
-                            quantity: 1,
-                            variations: JSON.stringify({}),
-                            nonce: spcData.nonce
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                SwiftCheckout.updateFragments(response.data.fragments);
-                                SwiftCheckout.updateCartVisibility();
-                            } else {
-                                alert(response.data.message || 'Error adding to cart');
-                            }
-                        },
-                        error: function() {
-                            alert('Error connecting to server');
-                        },
-                        complete: function() {
-                            $button.prop('disabled', false).removeClass('loading');
-                        }
-                    });
-                },
-                error: function() {
-                    alert('Error connecting to server');
-                    $button.prop('disabled', false).removeClass('loading');
-                }
-            });
-        },
 
         /**
          * Set the position of the place order button
@@ -809,15 +750,12 @@
                     // Update shipping methods if none are displayed
                     SwiftCheckout.updateShippingMethods();
                 } else {
-                    // Select first shipping method if available and update totals
+                    // Select first shipping method if available without making AJAX call
                     const $firstMethod = $('.swift-checkout-shipping-method-input').first();
                     if ($firstMethod.length && !$firstMethod.is(':checked')) {
                         $firstMethod.prop('checked', true);
                         const $shippingMethod = $firstMethod.closest('.swift-checkout-shipping-method');
                         $shippingMethod.addClass('selected');
-
-                        // Update totals based on selected method
-                        SwiftCheckout.updateSelectedShippingMethod($firstMethod.val());
                     }
                 }
             }, 800);
