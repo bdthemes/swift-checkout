@@ -61,7 +61,7 @@ if (!defined('ABSPATH')) {
                         echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
                         echo esc_html($method_title);
                         if ($method_cost) {
-                            echo ' - ' . esc_html(\wc_price($method_cost));
+                            echo ' - ' . wp_kses_post(\wc_price($method_cost));
                         }
                         echo '</label>';
                         echo '</div>';
@@ -77,7 +77,7 @@ if (!defined('ABSPATH')) {
                 echo '<label>';
                 echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input">';
                 echo esc_html($method->get_label());
-                echo ' - ' . esc_html(\wc_price($method->get_cost()));
+                echo ' - ' . wp_kses_post(\wc_price($method->get_cost()));
                 echo '</label>';
                 echo '</div>';
             }
