@@ -3,8 +3,8 @@
 /**
  * Base Configuration Class
  *
- * @package Gebkit
- * @subpackage Gebkit/includes/Core
+ * @package SwiftCheckout
+ * @subpackage SwiftCheckout/includes/Core
  */
 
 namespace SwiftCheckout\Core;
@@ -48,21 +48,22 @@ abstract class BaseConfig {
     abstract protected function get_defaults(): array;
 
     /**
-     * Private constructor to prevent direct instantiation
+     * Constructor
      */
     public function __construct() {
-        // add_action('admin_init', [$this, 'register_settings']);
-        add_action('rest_api_init', [$this, 'register_rest_routes']);
+        \add_action('rest_api_init', [$this, 'register_rest_routes']);
     }
 
     /**
      * Register the rest routes
      */
     public function register_rest_routes(): void {
-        register_rest_route($this->settings_group, '/settings', array(
+        \register_rest_route($this->settings_group . '/v1', '/settings', array(
             'methods' => 'GET',
             'callback' => [$this, 'get_settings'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return \current_user_can('manage_options');
+            },
         ));
     }
 
@@ -70,7 +71,7 @@ abstract class BaseConfig {
      * Register the settings
      */
     public function register_settings(): void {
-        register_setting($this->settings_group, $this->get_option_name(), array(
+        \register_setting($this->settings_group, $this->get_option_name(), array(
             'type' => 'string',
             'show_in_rest' => true,
             'default' => json_encode($this->get_defaults()),
@@ -94,7 +95,7 @@ abstract class BaseConfig {
      * @return array
      */
     public function get_settings(): array {
-        $settings = get_option($this->get_option_name());
+        $settings = \get_option($this->get_option_name());
         if (empty($settings)) {
             return $this->get_defaults();
         }
@@ -110,7 +111,7 @@ abstract class BaseConfig {
      */
     public function update_settings(array $settings): bool {
         $settings = json_encode($settings);
-        return update_option($this->get_option_name(), $settings);
+        return \update_option($this->get_option_name(), $settings);
     }
 
     /**
