@@ -670,7 +670,6 @@ class Ajax {
         // Get the selected shipping method
         $shipping_method = isset($_POST['shipping_method']) ? sanitize_text_field(wp_unslash($_POST['shipping_method'])) : '';
 
-        // Prepare default response
         $response = array(
             'success' => false,
             'shipping_total' => '',
@@ -685,10 +684,6 @@ class Ajax {
         // Update the chosen shipping method
         if (function_exists('WC') && WC()->cart) {
             try {
-                // Get original values for fallback
-                $original_shipping = WC()->cart->get_cart_shipping_total();
-                $original_total = WC()->cart->get_total();
-
                 // Split the shipping method if it has format like "flat_rate:1"
                 if (strpos($shipping_method, ':') !== false) {
                     list($method_id, $instance_id) = explode(':', $shipping_method, 2);
@@ -705,20 +700,17 @@ class Ajax {
                 WC()->cart->calculate_totals();
 
                 // Get updated values
-                $shipping_total = WC()->cart->get_cart_shipping_total();
-                $cart_total = WC()->cart->get_total();
-
                 $response['success'] = true;
-                $response['shipping_total'] = wp_kses_post($shipping_total);
-                $response['cart_total'] = wp_kses_post($cart_total);
+                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
             } catch (Exception $e) {
                 // Log error but don't interrupt the user experience
                 error_log('Swift Checkout - Error updating cart totals: ' . $e->getMessage());
 
-                // Use original values if we caught an exception
+                // Try to return data anyway to prevent UI issues
                 $response['success'] = true;
-                $response['shipping_total'] = wp_kses_post($original_shipping);
-                $response['cart_total'] = wp_kses_post($original_total);
+                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
             }
         }
 

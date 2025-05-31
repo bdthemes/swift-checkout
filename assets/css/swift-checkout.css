@@ -897,34 +897,14 @@ body.swift-checkout-frontend .swift-checkout-place-order-wrapper.custom-position
   right: auto;
 }
 
-/* Improved smooth transitions for price updates */
+/* Smooth transitions for price updates */
 .cart-shipping-value,
 .cart-total-value,
 .cart-subtotal-value {
-  transition: opacity 0.3s ease-in-out;
-  position: relative;
+  transition: opacity 0.2s ease-in-out;
 }
 
-/* Loading indicators with improved styling */
-.cart-shipping-value.is-updating,
-.cart-total-value.is-updating {
-  position: relative;
-}
-
-.cart-shipping-value.is-updating::before,
-.cart-total-value.is-updating::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.4);
-  z-index: 1;
-  border-radius: 2px;
-}
-
-/* Remove old style */
+/* Loading indicators */
 .cart-shipping-value.updating,
 .cart-total-value.updating {
   opacity: 0.7;
@@ -933,18 +913,11 @@ body.swift-checkout-frontend .swift-checkout-place-order-wrapper.custom-position
 
 .cart-shipping-value.updating:after,
 .cart-total-value.updating:after {
-  display: none;
-}
-
-/* New value transition style */
-.new-value {
-  opacity: 0;
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.new-value.visible {
-  opacity: 1;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.4);
 }
