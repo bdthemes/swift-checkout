@@ -125,4 +125,49 @@ class Utils {
             include $template;
         }
     }
+
+    /**
+     * Set the current product ID for a specific checkout instance
+     *
+     * @param int $product_id Product ID
+     * @return void
+     */
+    public static function set_current_product_id($product_id) {
+        // Use a cookie to store the current product ID
+        if (!headers_sent() && $product_id) {
+            setcookie('spc_current_product_id', $product_id, time() + 3600, '/');
+            $_COOKIE['spc_current_product_id'] = $product_id;
+        }
+    }
+
+    /**
+     * Get the current product ID for a specific checkout instance
+     *
+     * @return int|null Product ID or null if not found
+     */
+    public static function get_current_product_id() {
+        return isset($_COOKIE['spc_current_product_id']) ? (int)$_COOKIE['spc_current_product_id'] : null;
+    }
+
+    /**
+     * Filter cart items to show only those for the current product
+     *
+     * @param array $cart_items Array of cart items
+     * @param int $product_id Product ID to filter by
+     * @return array Filtered cart items
+     */
+    public static function filter_cart_items_by_product($cart_items, $product_id) {
+        if (!$product_id || empty($cart_items)) {
+            return $cart_items;
+        }
+
+        $filtered_items = array();
+        foreach ($cart_items as $key => $item) {
+            if ($item['product_id'] == $product_id) {
+                $filtered_items[$key] = $item;
+            }
+        }
+
+        return $filtered_items;
+    }
 }

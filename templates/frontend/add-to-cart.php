@@ -26,6 +26,9 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
 <?php
     return;
 }
+
+// Auto-add to cart flag
+$auto_add = isset($args['auto_add_to_cart']) && ($args['auto_add_to_cart'] === 'yes' || $args['auto_add_to_cart'] === true);
 ?>
 
 <div class="spc-product-card <?php isset($args['cartButtonAlignment']) ? esc_attr($args['cartButtonAlignment']) : ''; ?>"
@@ -97,8 +100,17 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
             </form>
         </div>
     <?php else: ?>
-        <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-            <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
-        </button>
+        <?php if (!$auto_add): ?>
+            <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
+            </button>
+        <?php else: ?>
+            <div class="spc-auto-add-notice">
+                <p><?php esc_html_e('This product will be automatically added to your cart.', 'swift-checkout'); ?></p>
+                <button class="spc-add-to-cart spc-refresh-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                    <?php esc_html_e('Refresh Cart', 'swift-checkout'); ?>
+                </button>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>

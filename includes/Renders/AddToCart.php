@@ -35,6 +35,8 @@ class AddToCart {
                 }
 
                 if (!$product_in_cart) {
+                    // Clear cart first to ensure only one product is in the cart
+                    \WC()->cart->empty_cart();
                     \WC()->cart->add_to_cart($attributes['productId']);
                 }
             }
@@ -64,7 +66,12 @@ class AddToCart {
                 <?php Utils::load_template('add-to-cart.php', $attributes); ?>
                 <div class="spc-mini-cart">
                     <h2 class="spc-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
-                    <?php Utils::load_template('mini-cart.php', $attributes); ?>
+                    <?php
+                    // Pass the specific product ID to mini-cart
+                    $mini_cart_args = $attributes;
+                    $mini_cart_args['specific_product_id'] = $attributes['productId'] ?? 0;
+                    Utils::load_template('mini-cart.php', $mini_cart_args);
+                    ?>
                 </div>
                 <?php Utils::load_template('checkout-form.php', $attributes); ?>
             </div>

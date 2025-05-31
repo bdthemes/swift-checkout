@@ -24,6 +24,9 @@
             $(document).on('click', '.spc-add-to-cart:not([type="submit"])', this.addToCart);
             $(document).on('submit', '.spc-variations-form', this.addVariableToCart);
 
+            // Handle refresh cart button for auto-add products
+            $(document).on('click', '.spc-refresh-cart', this.refreshCart);
+
             // Variable product handling
             $(document).on('click', '.spc-select-options', this.toggleVariations);
             $(document).on('change', '.spc-variation-select', this.updateVariation);
@@ -139,6 +142,8 @@
                 success: function(response) {
                     if (response.success) {
                         SwiftCheckout.updateFragments(response.data.fragments);
+                        // Hide other add to cart buttons since we now have an item in cart
+                        $('.spc-add-to-cart:not([data-product-id="' + productId + '"])').hide();
                         setTimeout(function() {
                             SwiftCheckout.updateCartVisibility();
                         }, 100);
@@ -198,6 +203,9 @@
                         SwiftCheckout.updateFragments(response.data.fragments);
                         // Hide variations after adding to cart
                         $form.closest('.spc-variations-wrapper').slideUp(300);
+                        // Hide other add to cart buttons since we now have an item in cart
+                        $('.spc-add-to-cart:not([data-product-id="' + productId + '"])').hide();
+                        $('.spc-select-options:not([data-product-id="' + productId + '"])').hide();
                         setTimeout(function() {
                             SwiftCheckout.updateCartVisibility();
                         }, 100);
@@ -527,17 +535,28 @@
             const $cartItems = $('.spc-cart-item');
             const $miniCart = $('.spc-mini-cart');
             const $checkoutForm = $('.spc-checkout-form');
-            const $addToCartButtons = $('.spc-add-to-cart, .spc-select-options');
+            const $addToCartButtons = $('.spc-add-to-cart:not(.spc-refresh-cart)');
+            const $refreshButtons = $('.spc-refresh-cart');
+            const $selectOptionsButtons = $('.spc-select-options');
 
             if ($cartItems.length > 0) {
+                // Show cart and checkout when we have items
                 $miniCart.addClass('spc-visible');
                 $checkoutForm.addClass('spc-visible');
-                $addToCartButtons.hide(); // Hide add to cart buttons when cart has items
+
+                // Hide regular add to cart buttons, but keep refresh buttons visible
+                $addToCartButtons.hide();
+                $selectOptionsButtons.hide();
+                $refreshButtons.show();
             }
             else {
+                // Hide cart and checkout when empty
                 $miniCart.removeClass('spc-visible');
                 $checkoutForm.removeClass('spc-visible');
-                $addToCartButtons.show(); // Show add to cart buttons when cart is empty
+
+                // Show all buttons when cart is empty
+                $addToCartButtons.show();
+                $selectOptionsButtons.show();
             }
         },
 
@@ -558,6 +577,65 @@
 
             // Update shipping methods when shipping address option changes
             SwiftCheckout.updateShippingMethods();
+        },
+
+        /**
+         * Handle refresh cart button for auto-add products
+         *
+         * @param {Event} e Click event
+         */
+        refreshCart: function(e) {
+            e.preventDefault();
+            const $button = $(this);
+            const productId = $button.data('product-id');
+
+            if (!productId) {
+                return;
+            }
+
+            $button.prop('disabled', true).addClass('loading');
+
+            // First clear the cart
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'spc_remove_all_items',
+                    nonce: spcData.nonce
+                },
+                success: function() {
+                    // Then add the product
+                    $.ajax({
+                        url: spcData.ajax_url,
+                        type: 'POST',
+                        data: {
+                            action: 'spc_add_to_cart',
+                            product_id: productId,
+                            quantity: 1,
+                            variations: JSON.stringify({}),
+                            nonce: spcData.nonce
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                SwiftCheckout.updateFragments(response.data.fragments);
+                                SwiftCheckout.updateCartVisibility();
+                            } else {
+                                alert(response.data.message || 'Error adding to cart');
+                            }
+                        },
+                        error: function() {
+                            alert('Error connecting to server');
+                        },
+                        complete: function() {
+                            $button.prop('disabled', false).removeClass('loading');
+                        }
+                    });
+                },
+                error: function() {
+                    alert('Error connecting to server');
+                    $button.prop('disabled', false).removeClass('loading');
+                }
+            });
         }
     };
 
@@ -565,26 +643,54 @@
     $(document).ready(function() {
         SwiftCheckout.init();
 
+        // Process each Swift Checkout container on the page
+        $('.spc-container').each(function() {
+            const $container = $(this);
+            const productId = $container.data('product-id');
+            const autoAddToCart = $container.data('auto-add-to-cart');
+
+            if (productId) {
+                // First clear the cart completely
+                $.ajax({
+                    url: spcData.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'spc_remove_all_items',
+                        nonce: spcData.nonce
+                    },
+                    success: function() {
+                        // After clearing, add the product if auto-add is enabled
+                        if (autoAddToCart === 'yes') {
+                            // Add product to cart
+                            $.ajax({
+                                url: spcData.ajax_url,
+                                type: 'POST',
+                                data: {
+                                    action: 'spc_add_to_cart',
+                                    product_id: productId,
+                                    quantity: 1,
+                                    variations: JSON.stringify({}),
+                                    nonce: spcData.nonce
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        SwiftCheckout.updateFragments(response.data.fragments);
+                                        SwiftCheckout.updateCartVisibility();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
         // Initialize shipping fields visibility
         const $shippingCheckbox = $('#spc-shipping_address');
         if ($shippingCheckbox.length) {
             // Trigger the change event to set initial state
             $shippingCheckbox.trigger('change');
         }
-
-        // Handle auto add to cart functionality
-        $('.spc-container').each(function() {
-            const $container = $(this);
-            const $widget = $container.closest('.elementor-widget-swift-checkout-add-to-cart');
-
-            if ($widget.length && $widget.data('auto-add-to-cart') === 'yes') {
-                const productId = $widget.data('product-id');
-                if (productId) {
-                    // Trigger cart fragment refresh
-                    $(document.body).trigger('wc_fragment_refresh');
-                }
-            }
-        });
 
         // Initialize shipping methods
         setTimeout(function() {
