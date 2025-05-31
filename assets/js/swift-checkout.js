@@ -39,8 +39,8 @@
             // Remove from cart
             $(document).on('click', '.swift-checkout-remove-item', this.removeFromCart);
 
-            // Submit order
-            $(document).on('submit', '#swift-checkout-checkout-form', this.submitOrder);
+            // Submit order - button is now outside the form
+            $(document).on('click', '#swift-checkout-submit-order', this.triggerOrderSubmit);
 
             // Toggle shipping address fields
             $(document).on('change', '#swift-checkout-shipping_address', this.toggleShippingFields);
@@ -416,15 +416,15 @@
         },
 
         /**
-         * Submit order handler
+         * Trigger order submission when the standalone button is clicked
          *
-         * @param {Event} e Submit event
+         * @param {Event} e Click event
          */
-        submitOrder: function(e) {
+        triggerOrderSubmit: function(e) {
             e.preventDefault();
 
-            const $form = $(this);
-            const $submitButton = $form.find('#swift-checkout-submit-order');
+            const $form = $('#swift-checkout-checkout-form');
+            const $submitButton = $(this);
             const isShippingDifferent = $('#swift-checkout-shipping_address').is(':checked');
 
             // Check if shipping method is selected
@@ -636,12 +636,34 @@
                     $button.prop('disabled', false).removeClass('loading');
                 }
             });
+        },
+
+        /**
+         * Set the position of the place order button
+         *
+         * This function can be called by the user to move the button to a specific element
+         *
+         * @param {string} targetSelector - CSS selector for the target element to append the button to
+         */
+        setPlaceOrderPosition: function(targetSelector) {
+            if (!targetSelector) return;
+
+            const $button = $('.swift-checkout-place-order-wrapper');
+            const $target = $(targetSelector);
+
+            if ($button.length && $target.length) {
+                $button.appendTo($target);
+                $button.addClass('custom-position');
+            }
         }
     };
 
     // Initialize when DOM is ready
     $(document).ready(function() {
         SwiftCheckout.init();
+
+        // Expose the setPlaceOrderPosition function globally
+        window.swiftCheckoutSetPlaceOrderPosition = SwiftCheckout.setPlaceOrderPosition;
 
         // Process each Swift Checkout container on the page
         $('.swift-checkout-container').each(function() {

@@ -84,6 +84,11 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 					continue;
 				}
 
+				// Skip shipping_method
+				if (isset($field['field_type']) && $field['field_type'] === 'shipping_method') {
+					continue;
+				}
+
 				$type = $field['field_type'];
 				$required = isset($field['field_required']) && ($field['field_required'] === 'yes' || $field['field_required'] === true);
 				$label = !empty($field['field_label']) ? $field['field_label'] : '';
@@ -341,9 +346,6 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			?>
 
 			<div class="swift-checkout-form-row swift-checkout-form-row-submit">
-				<button type="submit" id="swift-checkout-submit-order" class="swift-checkout-submit-order" name="swift_checkout_submit_order">
-					<?php esc_html_e('Place Order', 'swift-checkout'); ?>
-				</button>
 				<div class="swift-checkout-checkout-error"></div>
 			</div>
 		</div>

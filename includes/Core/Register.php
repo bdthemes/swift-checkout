@@ -3,8 +3,8 @@
 /**
  * Registration Handler Class
  *
- * @package Gebkit
- * @subpackage Gebkit/includes/Core
+ * @package SwiftCheckout
+ * @subpackage SwiftCheckout/includes/Core
  */
 
 namespace SwiftCheckout\Core;

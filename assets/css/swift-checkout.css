@@ -858,3 +858,24 @@
   border-width: 1px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
+
+/* Styles for the movable place order button wrapper */
+.swift-checkout-place-order-wrapper {
+  display: block;
+  margin: 20px 0;
+  width: fit-content; /* Take only as much width as needed */
+}
+
+/* Ensure the button stays visible */
+.swift-checkout-submit-order {
+  z-index: 50;
+}
+
+/* Allow users to position it using WordPress widgets or custom CSS */
+body.swift-checkout-frontend .swift-checkout-place-order-wrapper.custom-position {
+  position: relative;
+  top: auto;
+  left: auto;
+  bottom: auto;
+  right: auto;
+}
