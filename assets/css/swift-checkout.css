@@ -1,173 +1,173 @@
 /* Common Variables */
-.spc-container {
-  --spc-font-size: 14px;
-  --spc-color-text: #333333;
-  --spc-color-label: #666666;
-  --spc-color-primary: #0f0f11;
-  --spc-color-border: #eee;
-  --spc-color-error: #ff4444;
-  --spc-color-background: #ffffff;
-  --spc-border-radius: 4px;
+.swift-checkout-container {
+  --swift-checkout-font-size: 14px;
+  --swift-checkout-color-text: #333333;
+  --swift-checkout-color-label: #666666;
+  --swift-checkout-color-primary: #0f0f11;
+  --swift-checkout-color-border: #eee;
+  --swift-checkout-color-error: #ff4444;
+  --swift-checkout-color-background: #ffffff;
+  --swift-checkout-border-radius: 4px;
 }
 
-.spc-container .spc-products-grid {
+.swift-checkout-container .swift-checkout-products-grid {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }
 
 /* Common Button Styles */
-.spc-container .spc-add-to-cart,
-.spc-container .spc-form-section .spc-submit-order,
-.spc-container .spc-actions .button,
-.spc-container .spc-select-options,
-.spc-container .spc-add-to-cart {
+.swift-checkout-container .swift-checkout-add-to-cart,
+.swift-checkout-container .swift-checkout-form-section .swift-checkout-submit-order,
+.swift-checkout-container .swift-checkout-actions .button,
+.swift-checkout-container .swift-checkout-select-options,
+.swift-checkout-container .swift-checkout-add-to-cart {
   padding: 14px 20px;
-  background-color: var(--spc-color-primary);
-  color: var(--spc-color-background);
+  background-color: var(--swift-checkout-color-primary);
+  color: var(--swift-checkout-color-background);
   border: none;
-  border-radius: var(--spc-border-radius);
+  border-radius: var(--swift-checkout-border-radius);
   cursor: pointer;
-  font-size: var(--spc-font-size);
+  font-size: var(--swift-checkout-font-size);
   transition: background-color 0.2s ease, color 0.2s ease;
   text-decoration: none;
   display: inline-block;
   font-weight: 600;
 }
 
-.spc-container .spc-add-to-cart:hover,
-.spc-container .spc-submit-order:hover,
-.spc-container .spc-actions .button:hover,
-.spc-container .spc-select-options:hover,
-.spc-container .spc-add-to-cart:hover {
+.swift-checkout-container .swift-checkout-add-to-cart:hover,
+.swift-checkout-container .swift-checkout-submit-order:hover,
+.swift-checkout-container .swift-checkout-actions .button:hover,
+.swift-checkout-container .swift-checkout-select-options:hover,
+.swift-checkout-container .swift-checkout-add-to-cart:hover {
   background-color: #000;
 }
 
-.spc-container.modern .spc-add-to-cart,
-.spc-container.modern .spc-form-section .spc-submit-order,
-.spc-container.modern .spc-actions .button,
-.spc-container.modern .spc-select-options,
-.spc-container.modern .spc-add-to-cart {
-  color: var(--spc-color-primary);
+.swift-checkout-container.modern .swift-checkout-add-to-cart,
+.swift-checkout-container.modern .swift-checkout-form-section .swift-checkout-submit-order,
+.swift-checkout-container.modern .swift-checkout-actions .button,
+.swift-checkout-container.modern .swift-checkout-select-options,
+.swift-checkout-container.modern .swift-checkout-add-to-cart {
+  color: var(--swift-checkout-color-primary);
   background-color: transparent;
-  border: 1px solid var(--spc-color-primary);
+  border: 1px solid var(--swift-checkout-color-primary);
 }
 
-.spc-container.modern .spc-add-to-cart:hover,
-.spc-container.modern .spc-form-section .spc-submit-order:hover,
-.spc-container.modern .spc-actions .button:hover,
-.spc-container.modern .spc-select-options:hover,
-.spc-container.modern .spc-add-to-cart:hover {
-  background-color: var(--spc-color-primary);
-  color: var(--spc-color-background);
+.swift-checkout-container.modern .swift-checkout-add-to-cart:hover,
+.swift-checkout-container.modern .swift-checkout-form-section .swift-checkout-submit-order:hover,
+.swift-checkout-container.modern .swift-checkout-actions .button:hover,
+.swift-checkout-container.modern .swift-checkout-select-options:hover,
+.swift-checkout-container.modern .swift-checkout-add-to-cart:hover {
+  background-color: var(--swift-checkout-color-primary);
+  color: var(--swift-checkout-color-background);
 }
 
-.spc-add-to-cart,
-.spc-select-options {
+.swift-checkout-add-to-cart,
+.swift-checkout-select-options {
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
-.spc-container .button-left {
+.swift-checkout-container .button-left {
   text-align: left;
 }
 
-.spc-container .button-center {
+.swift-checkout-container .button-center {
   text-align: center;
 }
 
-.spc-container .button-right {
+.swift-checkout-container .button-right {
   text-align: right;
 }
 
-.spc-container .button-justify {
+.swift-checkout-container .button-justify {
   text-align: justify;
 }
 
-.spc-container .button-justify .spc-add-to-cart {
+.swift-checkout-container .button-justify .swift-checkout-add-to-cart {
   width: 100%;
 }
 
 /* Common Form Styles */
-.spc-container .spc-form-row {
+.swift-checkout-container .swift-checkout-form-row {
   margin-bottom: 20px;
   width: 100%;
   box-sizing: border-box;
 }
 
-.spc-container .spc-form-label,
-.spc-variations-wrapper .spc-variation-row label {
+.swift-checkout-container .swift-checkout-form-label,
+.swift-checkout-variations-wrapper .swift-checkout-variation-row label {
   display: block;
   font-weight: 500;
   margin-bottom: 10px;
-  font-size: var(--spc-font-size);
-  color: var(--spc-color-label);
+  font-size: var(--swift-checkout-font-size);
+  color: var(--swift-checkout-color-label);
 }
 
 /* Common Title Styles */
-.spc-container .spc-mini-cart-title,
-.spc-container .spc-checkout-title,
-.spc-container .spc-common-title {
-  font-size: calc(var(--spc-font-size) + 4px);
+.swift-checkout-container .swift-checkout-mini-cart-title,
+.swift-checkout-container .swift-checkout-checkout-title,
+.swift-checkout-container .swift-checkout-common-title {
+  font-size: calc(var(--swift-checkout-font-size) + 4px);
   padding-bottom: 10px;
   position: relative;
   margin: 0 0 20px;
-  color: var(--spc-color-text);
+  color: var(--swift-checkout-color-text);
   font-weight: 500;
 }
 
 /* simple style  */
-.spc-container.simple .spc-form-row {
+.swift-checkout-container.simple .swift-checkout-form-row {
   display: flex;
   flex-direction: column-reverse;
 }
 
-.spc-container .spc-form-row.spc-form-row-submit {
+.swift-checkout-container .swift-checkout-form-row.swift-checkout-form-row-submit {
   width: auto;
   display: block;
 }
 
 /* modern style */
-.spc-container.modern .spc-form-input {
+.swift-checkout-container.modern .swift-checkout-form-input {
   width: 100%;
   padding-right: 0 !important;
   padding-left: 0 !important;
   border: none !important;
-  border-bottom: 1px solid var(--spc-color-border) !important;
+  border-bottom: 1px solid var(--swift-checkout-color-border) !important;
   background-color: transparent !important;
   transition: all 0.3s ease;
   border-radius: 0 !important;
 }
 
 /* Remove autofill background color */
-.spc-container.modern .spc-form-input:-webkit-autofill,
-.spc-container.modern .spc-form-input:-webkit-autofill:hover,
-.spc-container.modern .spc-form-input:-webkit-autofill:focus,
-.spc-container.modern .spc-form-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px var(--spc-color-background) inset !important;
-  -webkit-text-fill-color: var(--spc-color-text) !important;
+.swift-checkout-container.modern .swift-checkout-form-input:-webkit-autofill,
+.swift-checkout-container.modern .swift-checkout-form-input:-webkit-autofill:hover,
+.swift-checkout-container.modern .swift-checkout-form-input:-webkit-autofill:focus,
+.swift-checkout-container.modern .swift-checkout-form-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--swift-checkout-color-background) inset !important;
+  -webkit-text-fill-color: var(--swift-checkout-color-text) !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-.spc-container.modern .spc-form-row::after {
+.swift-checkout-container.modern .swift-checkout-form-row::after {
   content: '';
   position: absolute;
   bottom: -1px;
   left: 0;
   width: 0;
   height: 1px;
-  background-color: var(--spc-color-primary);
+  background-color: var(--swift-checkout-color-primary);
   transition: width 0.3s ease;
 }
 
-.spc-container.modern .spc-form-row-address::after {
+.swift-checkout-container.modern .swift-checkout-form-row-address::after {
   bottom: 7px;
 }
 
-.spc-container.modern .spc-form-row:focus-within::after {
+.swift-checkout-container.modern .swift-checkout-form-row:focus-within::after {
   width: 100%;
 }
 
-.spc-container.modern .spc-form-label {
+.swift-checkout-container.modern .swift-checkout-form-label {
   position: absolute;
   top: 50%;
   left: 0;
@@ -177,63 +177,63 @@
   transform: translateY(-50%);
 }
 
-.spc-container.modern .spc-form-input:focus~.spc-form-label,
-.spc-container.modern .spc-form-input:not(:placeholder-shown)~.spc-form-label {
+.swift-checkout-container.modern .swift-checkout-form-input:focus~.swift-checkout-form-label,
+.swift-checkout-container.modern .swift-checkout-form-input:not(:placeholder-shown)~.swift-checkout-form-label {
   top: 0;
-  font-size: calc(var(--spc-font-size) - 2px);
-  color: var(--spc-color-primary);
+  font-size: calc(var(--swift-checkout-font-size) - 2px);
+  color: var(--swift-checkout-color-primary);
   font-weight: 500;
 }
 
-.spc-container.modern .spc-form-input:focus {
+.swift-checkout-container.modern .swift-checkout-form-input:focus {
   outline: none;
   border-bottom-color: transparent;
 }
 
-.spc-container.modern .spc-form-input:focus {
+.swift-checkout-container.modern .swift-checkout-form-input:focus {
   box-shadow: none !important;
 }
 
 /* Error Styles */
-.spc-container .spc-form-label .required {
-  color: var(--spc-color-error);
+.swift-checkout-container .swift-checkout-form-label .required {
+  color: var(--swift-checkout-color-error);
   margin-left: 2px;
 }
 
-.spc-container .spc-checkout-error {
-  color: var(--spc-color-error);
-  font-size: var(--spc-font-size);
+.swift-checkout-container .swift-checkout-checkout-error {
+  color: var(--swift-checkout-color-error);
+  font-size: var(--swift-checkout-font-size);
   margin-top: 10px;
 }
 
 /* Placeholder Styles */
-.spc-container.modern .spc-form-input::placeholder {
+.swift-checkout-container.modern .swift-checkout-form-input::placeholder {
   color: transparent;
 }
 
-.spc-container .spc-form-input::placeholder {
-  color: var(--spc-color-label);
+.swift-checkout-container .swift-checkout-form-input::placeholder {
+  color: var(--swift-checkout-color-label);
   opacity: 0.7;
 }
 
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
-  .spc-container .spc-input-group {
+  .swift-checkout-container .swift-checkout-input-group {
     grid-template-columns: 1fr;
     gap: 20px;
   }
 }
 
-.spc-container .spc-mini-cart,
-.spc-container .spc-checkout-form {
+.swift-checkout-container .swift-checkout-mini-cart,
+.swift-checkout-container .swift-checkout-checkout-form {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 20px;
 }
 
-.spc-container .spc-mini-cart-title:after,
-.spc-container .spc-checkout-title:after,
-.spc-container .spc-common-title:after {
+.swift-checkout-container .swift-checkout-mini-cart-title:after,
+.swift-checkout-container .swift-checkout-checkout-title:after,
+.swift-checkout-container .swift-checkout-common-title:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -244,14 +244,14 @@
   border-radius: 2px;
 }
 
-.spc-container .spc-mini-cart-contents,
-.spc-container .spc-order-table-wrapper {
+.swift-checkout-container .swift-checkout-mini-cart-contents,
+.swift-checkout-container .swift-checkout-order-table-wrapper {
   border: 1px solid #dddddd85;
   border-radius: 6px;
 }
 
-.spc-container .spc-cart-items,
-.spc-container .spc-order-table {
+.swift-checkout-container .swift-checkout-cart-items,
+.swift-checkout-container .swift-checkout-order-table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 6px;
@@ -259,15 +259,15 @@
   margin: 0;
 }
 
-.spc-container .spc-cart-items thead:first-child tr:first-child th,
-.spc-container .spc-order-table thead:first-child tr:first-child th {
+.swift-checkout-container .swift-checkout-cart-items thead:first-child tr:first-child th,
+.swift-checkout-container .swift-checkout-order-table thead:first-child tr:first-child th {
   border-block-start: 1px solid transparent;
 }
 
-.spc-container .spc-cart-items th,
-.spc-container .spc-cart-items td,
-.spc-container .spc-order-table th,
-.spc-container .spc-order-table td {
+.swift-checkout-container .swift-checkout-cart-items th,
+.swift-checkout-container .swift-checkout-cart-items td,
+.swift-checkout-container .swift-checkout-order-table th,
+.swift-checkout-container .swift-checkout-order-table td {
   padding: clamp(8px, 1.5vw, 15px);
   text-align: left;
   vertical-align: middle;
@@ -275,48 +275,48 @@
   font-size: 14px;
 }
 
-.spc-container .spc-cart-items tr,
-.spc-container .spc-order-table tr {
+.swift-checkout-container .swift-checkout-cart-items tr,
+.swift-checkout-container .swift-checkout-order-table tr {
   border-bottom: 1px solid #dddddd69;
 }
 
-.spc-container .spc-cart-items tbody tr:nth-child(even) td,
-.spc-container .spc-cart-items tfoot td,
-.spc-container .spc-cart-items thead th,
-.spc-container .spc-order-table tbody tr:nth-child(even) td,
-.spc-container .spc-order-table tfoot tr:last-child td,
-.spc-container .spc-order-table tfoot tr:last-child th,
-.spc-container .spc-order-table thead th {
+.swift-checkout-container .swift-checkout-cart-items tbody tr:nth-child(even) td,
+.swift-checkout-container .swift-checkout-cart-items tfoot td,
+.swift-checkout-container .swift-checkout-cart-items thead th,
+.swift-checkout-container .swift-checkout-order-table tbody tr:nth-child(even) td,
+.swift-checkout-container .swift-checkout-order-table tfoot tr:last-child td,
+.swift-checkout-container .swift-checkout-order-table tfoot tr:last-child th,
+.swift-checkout-container .swift-checkout-order-table thead th {
   background: #fbfbfb;
 }
 
-.spc-container .spc-cart-items tbody tr:nth-child(odd) td,
-.spc-container .spc-order-table tbody tr:nth-child(odd) td {
+.swift-checkout-container .swift-checkout-cart-items tbody tr:nth-child(odd) td,
+.swift-checkout-container .swift-checkout-order-table tbody tr:nth-child(odd) td {
   background: transparent;
 }
 
-.spc-container .spc-cart-items th,
-.spc-container .spc-order-table tfoot tr:last-child {
+.swift-checkout-container .swift-checkout-cart-items th,
+.swift-checkout-container .swift-checkout-order-table tfoot tr:last-child {
   font-weight: 600;
 }
 
-.spc-container .spc-cart-item,
-.spc-container .spc-order-table-item {
+.swift-checkout-container .swift-checkout-cart-item,
+.swift-checkout-container .swift-checkout-order-table-item {
   transition: background-color 0.2s ease;
 }
 
-.spc-container .spc-cart-item:hover,
-.spc-container .spc-order-table-item:hover {
+.swift-checkout-container .swift-checkout-cart-item:hover,
+.swift-checkout-container .swift-checkout-order-table-item:hover {
   background-color: #f9f9f9;
 }
 
-.spc-container .spc-quantity {
+.swift-checkout-container .swift-checkout-quantity {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.spc-container .spc-qty-input {
+.swift-checkout-container .swift-checkout-qty-input {
   height: 35px !important;
   width: 90px !important;
   border: 1px solid #e3e3e3 !important;
@@ -328,9 +328,9 @@
   text-align: center !important;
 }
 
-.spc-container .spc-qty-minus,
-.spc-container .spc-qty-plus,
-.spc-container .spc-remove-item {
+.swift-checkout-container .swift-checkout-qty-minus,
+.swift-checkout-container .swift-checkout-qty-plus,
+.swift-checkout-container .swift-checkout-remove-item {
   background: #f0f0f0;
   border: 1px solid #e7e8e9;
   border-radius: 6px;
@@ -343,13 +343,13 @@
   cursor: pointer;
 }
 
-.spc-container .spc-cart-items .cart-subtotal-value,
-.spc-container .spc-cart-items .cart-subtotal-label {
+.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-label {
   font-weight: 700;
 }
 
-.spc-container .spc-checkout-form .spc-form-input,
-.spc-container .spc-variation-select {
+.swift-checkout-container .swift-checkout-checkout-form .swift-checkout-form-input,
+.swift-checkout-container .swift-checkout-variation-select {
   border: 1px solid #e6e6e6;
   border-radius: 6px;
   padding: 16px 14px;
@@ -360,13 +360,13 @@
   line-height: 1;
 }
 
-.spc-container .spc-checkout-form .spc-form-input:focus,
-.spc-container .spc-variation-select:focus {
+.swift-checkout-container .swift-checkout-checkout-form .swift-checkout-form-input:focus,
+.swift-checkout-container .swift-checkout-variation-select:focus {
   border-color: transparent;
   box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.2);
 }
 
-.spc-container .spc-checkout-form .spc-input-group {
+.swift-checkout-container .swift-checkout-checkout-form .swift-checkout-input-group {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -374,20 +374,20 @@
 }
 
 @media (min-width: 768px) {
-  .spc-container .spc-checkout-form .spc-input-group {
+  .swift-checkout-container .swift-checkout-checkout-form .swift-checkout-input-group {
     flex-direction: row;
   }
 }
 
-.spc-container .spc-form-section:last-child {
+.swift-checkout-container .swift-checkout-form-section:last-child {
   margin-bottom: 0;
 }
 
-.spc-container .spc-form-section:last-child {
+.swift-checkout-container .swift-checkout-form-section:last-child {
   margin-bottom: 0;
 }
 
-.spc-container .spc-order-details {
+.swift-checkout-container .swift-checkout-order-details {
   list-style: none;
   padding: 0;
   display: flex;
@@ -395,12 +395,12 @@
   gap: 20px;
 }
 
-.spc-container .spc-thank-you-message {
+.swift-checkout-container .swift-checkout-thank-you-message {
   font-size: 14px;
   color: #141416;
 }
 
-.spc-container .spc-order-details li {
+.swift-checkout-container .swift-checkout-order-details li {
   flex: 1 1 200px;
   padding: 15px;
   border: 1px solid #eee;
@@ -409,44 +409,44 @@
   font-weight: 400;
 }
 
-.spc-container .spc-addresses {
+.swift-checkout-container .swift-checkout-addresses {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.spc-container address {
+.swift-checkout-container address {
   font-size: 14px;
   font-style: normal;
   line-height: 32px;
 }
 
-.spc-container .spc-billing-address,
-.spc-container .spc-shipping-address {
+.swift-checkout-container .swift-checkout-billing-address,
+.swift-checkout-container .swift-checkout-shipping-address {
   flex: 1 1 300px;
 }
 
-.spc-container .spc-actions {
+.swift-checkout-container .swift-checkout-actions {
   margin-top: 20px;
 }
 
-.spc-container .spc-order-details-items {
+.swift-checkout-container .swift-checkout-order-details-items {
   margin: 30px 0;
 }
 
 /* Responsive Styles */
 @media screen and (max-width: 575px) {
-  .spc-container .spc-cart-items thead {
+  .swift-checkout-container .swift-checkout-cart-items thead {
     display: none;
   }
 
-  .spc-container .spc-cart-items td {
+  .swift-checkout-container .swift-checkout-cart-items td {
     display: block;
     text-align: left;
     position: relative;
   }
 
-  .spc-container .spc-cart-items td::before {
+  .swift-checkout-container .swift-checkout-cart-items td::before {
     content: attr(data-label);
     position: absolute;
     left: 10px;
@@ -455,32 +455,32 @@
     font-weight: 600;
   }
 
-  .spc-container .spc-cart-items .spc-cart-item {
+  .swift-checkout-container .swift-checkout-cart-items .swift-checkout-cart-item {
     position: relative;
   }
 
-  .spc-container .spc-cart-items td.product-remove {
+  .swift-checkout-container .swift-checkout-cart-items td.product-remove {
     position: absolute;
     top: 0;
     right: 0;
   }
 
-  .spc-container .spc-remove-item {
+  .swift-checkout-container .swift-checkout-remove-item {
     width: 25px;
     height: 25px;
     line-height: 25px;
     font-size: 12px;
   }
 
-  .spc-container .spc-cart-items tfoot tr {
+  .swift-checkout-container .swift-checkout-cart-items tfoot tr {
     display: flex;
     justify-content: space-between;
   }
 }
 
 /* Animation & Transitions */
-.spc-container .spc-mini-cart,
-.spc-container .spc-checkout-form {
+.swift-checkout-container .swift-checkout-mini-cart,
+.swift-checkout-container .swift-checkout-checkout-form {
   display: block;
   opacity: 0;
   visibility: hidden;
@@ -492,8 +492,8 @@
   border: none;
 }
 
-.spc-container .spc-mini-cart.spc-visible,
-.spc-container .spc-checkout-form.spc-visible {
+.swift-checkout-container .swift-checkout-mini-cart.swift-checkout-visible,
+.swift-checkout-container .swift-checkout-checkout-form.swift-checkout-visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -501,11 +501,11 @@
   margin: 30px 0;
 }
 
-.spc-container .spc-mini-cart.spc-visible {
+.swift-checkout-container .swift-checkout-mini-cart.swift-checkout-visible {
   animation: slideDown 0.4s ease-out;
 }
 
-.spc-container .spc-checkout-form.spc-visible {
+.swift-checkout-container .swift-checkout-checkout-form.swift-checkout-visible {
   animation: slideDown 0.4s ease-out 0.2s backwards;
 }
 
@@ -521,16 +521,16 @@
   }
 }
 
-.spc-container .spc-cart-item {
+.swift-checkout-container .swift-checkout-cart-item {
   transition: all 0.3s ease;
 }
 
-.spc-container .spc-cart-item.updating {
+.swift-checkout-container .swift-checkout-cart-item.updating {
   background-color: #f8f9fa;
   transform: scale(0.98);
 }
 
-.spc-container .spc-cart-item.removing {
+.swift-checkout-container .swift-checkout-cart-item.removing {
   animation: fadeOut 0.3s ease-out forwards;
 }
 
@@ -546,12 +546,12 @@
   }
 }
 
-.spc-container .spc-add-to-cart.loading {
+.swift-checkout-container .swift-checkout-add-to-cart.loading {
   position: relative;
   color: transparent;
 }
 
-.spc-container .spc-add-to-cart.loading::after {
+.swift-checkout-container .swift-checkout-add-to-cart.loading::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -572,67 +572,67 @@
 }
 
 /* Variable Product Styles */
-.spc-variations-wrapper {
+.swift-checkout-variations-wrapper {
   margin-top: 15px;
 }
 
-.spc-variations-wrapper .spc-variation-row {
+.swift-checkout-variations-wrapper .swift-checkout-variation-row {
   margin-bottom: 15px;
 }
 
-.spc-variations-wrapper .spc-variation-price {
+.swift-checkout-variations-wrapper .swift-checkout-variation-price {
   margin: 15px 0;
   font-size: 16px;
   font-weight: 600;
   color: #333;
 }
 
-.spc-variations-wrapper .spc-variation-stock {
+.swift-checkout-variations-wrapper .swift-checkout-variation-stock {
   margin-bottom: 15px;
   font-size: 14px;
 }
 
-.spc-variations-wrapper .spc-variation-stock .in-stock {
+.swift-checkout-variations-wrapper .swift-checkout-variation-stock .in-stock {
   color: #28a745;
 }
 
-.spc-variations-wrapper .spc-variation-stock .out-of-stock {
+.swift-checkout-variations-wrapper .swift-checkout-variation-stock .out-of-stock {
   color: #dc3545;
 }
 
-.spc-variations-wrapper .spc-variation-add-to-cart {
+.swift-checkout-variations-wrapper .swift-checkout-variation-add-to-cart {
   margin-top: 15px;
 }
 
-.spc-variations-wrapper .spc-variation-add-to-cart button:hover:not(:disabled) {
+.swift-checkout-variations-wrapper .swift-checkout-variation-add-to-cart button:hover:not(:disabled) {
   background-color: #135e96;
 }
 
-.spc-variations-wrapper .spc-variation-add-to-cart button:disabled {
+.swift-checkout-variations-wrapper .swift-checkout-variation-add-to-cart button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
 /* Remove old modal styles */
-.spc-variable-product-modal {
+.swift-checkout-variable-product-modal {
   display: none;
 }
 
 /* Responsive styles for variable product modal */
 @media screen and (max-width: 768px) {
-  .spc-variable-product-modal .spc-modal-content {
+  .swift-checkout-variable-product-modal .swift-checkout-modal-content {
     width: 95%;
     margin: 20px auto;
     padding: 20px;
   }
 
-  .spc-variable-product-modal .spc-modal-header h3 {
+  .swift-checkout-variable-product-modal .swift-checkout-modal-header h3 {
     font-size: 18px;
   }
 }
 
 /* Form Row Animation */
-.spc-container.modern .spc-form-row {
+.swift-checkout-container.modern .swift-checkout-form-row {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.5s forwards;
@@ -646,97 +646,97 @@
 }
 
 /* Staggered Animation for Form Rows */
-.spc-container.modern .spc-form-row:nth-child(1) {
+.swift-checkout-container.modern .swift-checkout-form-row:nth-child(1) {
   animation-delay: 0.1s;
 }
 
-.spc-container.modern .spc-form-row:nth-child(2) {
+.swift-checkout-container.modern .swift-checkout-form-row:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.spc-container.modern .spc-form-row:nth-child(3) {
+.swift-checkout-container.modern .swift-checkout-form-row:nth-child(3) {
   animation-delay: 0.3s;
 }
 
-.spc-container.modern .spc-form-row:nth-child(4) {
+.swift-checkout-container.modern .swift-checkout-form-row:nth-child(4) {
   animation-delay: 0.4s;
 }
 
 /* modern add to card */
-.spc-container.modern .spc-mini-cart-contents,
-.spc-container.modern .spc-order-table-wrapper {
+.swift-checkout-container.modern .swift-checkout-mini-cart-contents,
+.swift-checkout-container.modern .swift-checkout-order-table-wrapper {
   border: 0;
 }
 
-.spc-container.modern .spc-cart-items th,
-.spc-container.modern .spc-cart-items td,
-.spc-container.modern .spc-order-table th,
-.spc-container.modern .spc-order-table td {
+.swift-checkout-container.modern .swift-checkout-cart-items th,
+.swift-checkout-container.modern .swift-checkout-cart-items td,
+.swift-checkout-container.modern .swift-checkout-order-table th,
+.swift-checkout-container.modern .swift-checkout-order-table td {
   padding: clamp(8px, 1.5vw, 20px) 0;
   border-bottom: 1px solid #eee;
 }
 
-.spc-container.modern .spc-cart-items tbody tr:nth-child(even) td,
-.spc-container.modern .spc-cart-items tfoot td,
-.spc-container.modern .spc-cart-items thead th,
-.spc-container.modern .spc-order-table tbody tr:nth-child(even) td,
-.spc-container.modern .spc-order-table tfoot tr:last-child td,
-.spc-container.modern .spc-order-table tfoot tr:last-child th,
-.spc-container.modern .spc-order-table thead th {
+.swift-checkout-container.modern .swift-checkout-cart-items tbody tr:nth-child(even) td,
+.swift-checkout-container.modern .swift-checkout-cart-items tfoot td,
+.swift-checkout-container.modern .swift-checkout-cart-items thead th,
+.swift-checkout-container.modern .swift-checkout-order-table tbody tr:nth-child(even) td,
+.swift-checkout-container.modern .swift-checkout-order-table tfoot tr:last-child td,
+.swift-checkout-container.modern .swift-checkout-order-table tfoot tr:last-child th,
+.swift-checkout-container.modern .swift-checkout-order-table thead th {
   background: transparent;
 }
 
-.spc-container.modern .spc-cart-items tbody td,
-.spc-container.modern .spc-order-table tbody td {
+.swift-checkout-container.modern .swift-checkout-cart-items tbody td,
+.swift-checkout-container.modern .swift-checkout-order-table tbody td {
   border-bottom: 0
 }
 
-.spc-container.modern .spc-cart-items tfoot td,
-.spc-container.modern .spc-order-table tfoot td,
-.spc-container.modern .spc-order-table tfoot th {
+.swift-checkout-container.modern .swift-checkout-cart-items tfoot td,
+.swift-checkout-container.modern .swift-checkout-order-table tfoot td,
+.swift-checkout-container.modern .swift-checkout-order-table tfoot th {
   border-bottom: 1px solid #eee;
   border-top: 1px solid #eee;
 }
 
-.spc-container.modern .spc-qty-minus,
-.spc-container.modern .spc-qty-plus,
-.spc-container.modern .spc-remove-item {
+.swift-checkout-container.modern .swift-checkout-qty-minus,
+.swift-checkout-container.modern .swift-checkout-qty-plus,
+.swift-checkout-container.modern .swift-checkout-remove-item {
   background: transparent;
   height: 35px;
   width: 35px;
   line-height: 35px;
 }
 
-.spc-container.modern .spc-qty-input {
+.swift-checkout-container.modern .swift-checkout-qty-input {
   height: 35px !important;
   line-height: 35px;
 }
 
-.spc-container .spc-order-table tr th:last-child,
-.spc-container .spc-order-table tr td:last-child {
+.swift-checkout-container .swift-checkout-order-table tr th:last-child,
+.swift-checkout-container .swift-checkout-order-table tr td:last-child {
   text-align: right;
 }
 
 /* Add new styles for checkout field types */
 
 /* Checkbox field styling */
-.spc-checkbox-row {
+.swift-checkout-checkbox-row {
     margin-bottom: 15px;
 }
 
-.spc-checkbox-label {
+.swift-checkout-checkbox-label {
     display: flex;
     align-items: center;
     cursor: pointer;
     font-size: 14px;
 }
 
-.spc-checkbox-input {
+.swift-checkout-checkbox-input {
     margin-right: 8px;
 }
 
 /* Shipping address fields */
-.spc-shipping-address-fields {
+.swift-checkout-shipping-address-fields {
     margin-top: 20px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -744,7 +744,7 @@
     border: 1px solid #eee;
 }
 
-.spc-shipping-title {
+.swift-checkout-shipping-title {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 15px;
@@ -753,7 +753,7 @@
 }
 
 /* Select fields (country, state) */
-.spc-form-row select.spc-form-input {
+.swift-checkout-form-row select.swift-checkout-form-input {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
@@ -770,7 +770,7 @@
     background-size: 16px;
 }
 
-.spc-form-row select.spc-form-input:focus {
+.swift-checkout-form-row select.swift-checkout-form-input:focus {
     outline: none;
     border-color: #666;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
@@ -778,83 +778,83 @@
 
 /* Mobile responsiveness for the new fields */
 @media (max-width: 768px) {
-    .spc-form-row select.spc-form-input {
+    .swift-checkout-form-row select.swift-checkout-form-input {
         font-size: 14px;
         padding: 10px;
     }
 
-    .spc-checkbox-label {
+    .swift-checkout-checkbox-label {
         font-size: 14px;
     }
 }
 
 /* Shipping Methods Styles */
-.spc-container .spc-shipping-methods-title {
-  font-size: calc(var(--spc-font-size) + 2px);
+.swift-checkout-container .swift-checkout-shipping-methods-title {
+  font-size: calc(var(--swift-checkout-font-size) + 2px);
   margin: 20px 0 15px;
-  color: var(--spc-color-text);
+  color: var(--swift-checkout-color-text);
   font-weight: 500;
 }
 
-.spc-container .spc-shipping-methods {
+.swift-checkout-container .swift-checkout-shipping-methods {
   margin-bottom: 25px;
 }
 
-.spc-container .spc-shipping-zone {
+.swift-checkout-container .swift-checkout-shipping-zone {
   margin-bottom: 15px;
 }
 
-.spc-container .spc-zone-name {
-  font-size: var(--spc-font-size);
+.swift-checkout-container .swift-checkout-zone-name {
+  font-size: var(--swift-checkout-font-size);
   margin: 0 0 10px;
-  color: var(--spc-color-label);
+  color: var(--swift-checkout-color-label);
   font-weight: 500;
 }
 
-.spc-container .spc-shipping-method {
+.swift-checkout-container .swift-checkout-shipping-method {
   padding: 12px 15px;
-  border: 1px solid var(--spc-color-border);
+  border: 1px solid var(--swift-checkout-color-border);
   margin-bottom: 8px;
-  border-radius: var(--spc-border-radius);
+  border-radius: var(--swift-checkout-border-radius);
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.spc-container .spc-shipping-method:hover {
+.swift-checkout-container .swift-checkout-shipping-method:hover {
   border-color: #ddd;
   background-color: rgba(0, 0, 0, 0.01);
 }
 
-.spc-container .spc-shipping-method.selected {
-  border-color: var(--spc-color-primary);
+.swift-checkout-container .swift-checkout-shipping-method.selected {
+  border-color: var(--swift-checkout-color-primary);
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-.spc-container .spc-shipping-method label {
+.swift-checkout-container .swift-checkout-shipping-method label {
   display: flex;
   align-items: center;
   cursor: pointer;
   width: 100%;
 }
 
-.spc-container .spc-shipping-method input[type="radio"] {
+.swift-checkout-container .swift-checkout-shipping-method input[type="radio"] {
   margin-right: 10px;
 }
 
-.spc-container .spc-shipping-methods-loading {
+.swift-checkout-container .swift-checkout-shipping-methods-loading {
   font-style: italic;
-  color: var(--spc-color-label);
+  color: var(--swift-checkout-color-label);
   padding: 10px 0;
 }
 
 /* Modern Theme Shipping Styles */
-.spc-container.modern .spc-shipping-method {
+.swift-checkout-container.modern .swift-checkout-shipping-method {
   border-width: 1px;
   transition: all 0.3s ease;
 }
 
-.spc-container.modern .spc-shipping-method.selected {
-  border-color: var(--spc-color-primary);
+.swift-checkout-container.modern .swift-checkout-shipping-method.selected {
+  border-color: var(--swift-checkout-color-primary);
   border-width: 1px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }

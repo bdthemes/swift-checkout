@@ -20,7 +20,7 @@ $product = wc_get_product($product_id);
 // Check if product exists and is purchasable
 if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
 ?>
-    <div class="spc-no-products">
+    <div class="swift-checkout-no-products">
         <?php esc_html_e('Product not found or not available.', 'swift-checkout'); ?>
     </div>
 <?php
@@ -31,20 +31,20 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
 $auto_add = isset($args['auto_add_to_cart']) && ($args['auto_add_to_cart'] === 'yes' || $args['auto_add_to_cart'] === true);
 ?>
 
-<div class="spc-product-card <?php isset($args['cartButtonAlignment']) ? esc_attr($args['cartButtonAlignment']) : ''; ?>"
+<div class="swift-checkout-product-card <?php isset($args['cartButtonAlignment']) ? esc_attr($args['cartButtonAlignment']) : ''; ?>"
     data-product-id="<?php echo esc_attr($product->get_id()); ?>">
     <?php if ($product->is_type('variable')): ?>
-        <button class="spc-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+        <button class="swift-checkout-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
             <?php esc_html_e('Select Options', 'swift-checkout'); ?>
         </button>
-        <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>"
+        <div class="swift-checkout-variations-wrapper" id="swift-checkout-variations-<?php echo esc_attr($product->get_id()); ?>"
             style="display: none;">
-            <form class="spc-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+            <form class="swift-checkout-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php
                 $attributes = $product->get_attributes();
                 foreach ($attributes as $attribute_name => $attribute):
                 ?>
-                    <div class="spc-variation-row">
+                    <div class="swift-checkout-variation-row">
                         <label for="<?php echo esc_attr(sanitize_title($attribute_name)); ?>">
                             <?php echo esc_html(wc_attribute_label($attribute_name)); ?>
                         </label>
@@ -70,7 +70,7 @@ $auto_add = isset($args['auto_add_to_cart']) && ($args['auto_add_to_cart'] === '
                             <select name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
-                                class="spc-variation-select">
+                                class="swift-checkout-variation-select">
                                 <option value=""><?php echo esc_html__('Choose an option', 'swift-checkout'); ?></option>
                                 <?php
                                 foreach ($variation_attributes['attribute_' . $attribute_name] as $value) {
@@ -89,28 +89,19 @@ $auto_add = isset($args['auto_add_to_cart']) && ($args['auto_add_to_cart'] === '
                     </div>
                 <?php endforeach; ?>
 
-                <div class="spc-variation-price"></div>
-                <div class="spc-variation-stock"></div>
+                <div class="swift-checkout-variation-price"></div>
+                <div class="swift-checkout-variation-stock"></div>
 
-                <div class="spc-variation-add-to-cart">
-                    <button type="submit" class="spc-add-to-cart" disabled>
+                <div class="swift-checkout-variation-add-to-cart">
+                    <button type="submit" class="swift-checkout-add-to-cart" disabled>
                         <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
                     </button>
                 </div>
             </form>
         </div>
     <?php else: ?>
-        <?php if (!$auto_add): ?>
-            <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-                <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
-            </button>
-        <?php else: ?>
-            <div class="spc-auto-add-notice">
-                <p><?php esc_html_e('This product will be automatically added to your cart.', 'swift-checkout'); ?></p>
-                <button class="spc-add-to-cart spc-refresh-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-                    <?php esc_html_e('Refresh Cart', 'swift-checkout'); ?>
-                </button>
-            </div>
-        <?php endif; ?>
+        <button class="swift-checkout-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+            <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
+        </button>
     <?php endif; ?>
 </div>

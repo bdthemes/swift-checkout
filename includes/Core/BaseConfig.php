@@ -24,7 +24,7 @@ abstract class BaseConfig {
      *
      * @var string
      */
-    protected string $prefix = 'spc_';
+    protected string $prefix = 'swift_checkout_';
 
     /**
      * Settings group

@@ -8,7 +8,6 @@
 
 namespace SwiftCheckout\Templates\Frontend;
 
-use SwiftCheckout\Classes\Utils;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
@@ -21,7 +20,7 @@ $product = wc_get_product($product_id);
 
 if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
     return sprintf(
-        '<div class="spc-no-products">%s</div>',
+        '<div class="swift-checkout-no-products">%s</div>',
         \esc_html__('Product not found or not available.', 'swift-checkout')
     );
 }
@@ -42,27 +41,27 @@ $sample_cart_items = array(
 // Add sample cart items to attributes for template
 $attributes['sample_cart_items'] = $sample_cart_items;
 ?>
-<div class="spc-container <?php echo esc_attr($preset); ?>" data-builder=" gutenberg">
-    <div class="spc-product-card" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+<div class="swift-checkout-container <?php echo esc_attr($preset); ?>" data-builder=" gutenberg">
+    <div class="swift-checkout-product-card" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
         <?php if ($product->is_type('variable')): ?>
-            <button class="spc-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+            <button class="swift-checkout-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php esc_html_e('Select Options', 'swift-checkout'); ?>
             </button>
-            <div class="spc-variations-wrapper" id="spc-variations-<?php echo esc_attr($product->get_id()); ?>"
+            <div class="swift-checkout-variations-wrapper" id="swift-checkout-variations-<?php echo esc_attr($product->get_id()); ?>"
                 style="display: none;">
-                <form class="spc-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                <form class="swift-checkout-variations-form" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                     <?php
                     $attributes = $product->get_attributes();
                     foreach ($attributes as $attribute_name => $attribute):
                     ?>
-                        <div class="spc-variation-row">
+                        <div class="swift-checkout-variation-row">
                             <label for="<?php echo esc_attr(sanitize_title($attribute_name)); ?>">
                                 <?php echo esc_html(wc_attribute_label($attribute_name)); ?>
                             </label>
                             <select name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 id="<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
                                 data-attribute_name="attribute_<?php echo esc_attr(sanitize_title($attribute_name)); ?>"
-                                class="spc-variation-select">
+                                class="swift-checkout-variation-select">
                                 <option value=""><?php echo esc_html__('Choose an option', 'swift-checkout'); ?></option>
                                 <?php
                                 if ($attribute->is_taxonomy()) {
@@ -81,27 +80,27 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                         </div>
                     <?php endforeach; ?>
 
-                    <div class="spc-variation-price"></div>
-                    <div class="spc-variation-stock"></div>
+                    <div class="swift-checkout-variation-price"></div>
+                    <div class="swift-checkout-variation-stock"></div>
 
-                    <div class="spc-variation-add-to-cart">
-                        <button type="submit" class="spc-add-to-cart" disabled>
+                    <div class="swift-checkout-variation-add-to-cart">
+                        <button type="submit" class="swift-checkout-add-to-cart" disabled>
                             <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
                         </button>
                     </div>
                 </form>
             </div>
         <?php else: ?>
-            <button class="spc-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+            <button class="swift-checkout-add-to-cart" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                 <?php esc_html_e('Add to Cart', 'swift-checkout'); ?>
             </button>
         <?php endif; ?>
     </div>
 
-    <div class="spc-mini-cart spc-visible">
-        <h2 class="spc-mini-cart-title"><?php esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
-        <div class="spc-mini-cart-contents">
-            <table class="spc-cart-items">
+    <div class="swift-checkout-mini-cart swift-checkout-visible">
+        <h2 class="swift-checkout-mini-cart-title"><?php esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
+        <div class="swift-checkout-mini-cart-contents">
+            <table class="swift-checkout-cart-items">
                 <thead>
                     <tr>
                         <th class="product-name"><?php esc_html_e('Product', 'swift-checkout'); ?></th>
@@ -128,11 +127,11 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 $variation_attributes = wc_get_formatted_variation($product->get_variation_attributes(), true);
                             }
                     ?>
-                            <tr class="spc-cart-item" data-item-key="<?php echo esc_attr($item_key); ?>">
+                            <tr class="swift-checkout-cart-item" data-item-key="<?php echo esc_attr($item_key); ?>">
                                 <td class="product-name">
                                     <?php echo esc_html($item['name']); ?>
                                     <?php if ($variation_attributes): ?>
-                                        <div class="spc-variation-details"><?php echo esc_html($variation_attributes); ?></div>
+                                        <div class="swift-checkout-variation-details"><?php echo esc_html($variation_attributes); ?></div>
                                     <?php endif; ?>
                                 </td>
                                 <td class="product-price">
@@ -141,13 +140,13 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                     </span>
                                 </td>
                                 <td class="product-quantity">
-                                    <div class="spc-quantity">
-                                        <button class="spc-qty-minus"
+                                    <div class="swift-checkout-quantity">
+                                        <button class="swift-checkout-qty-minus"
                                             data-item-key="<?php echo esc_attr($item_key); ?>">–</button>
-                                        <input type="number" min="1" class="spc-qty-input"
+                                        <input type="number" min="1" class="swift-checkout-qty-input"
                                             value="<?php echo esc_attr($item['quantity']); ?>"
                                             data-item-key="<?php echo esc_attr($item_key); ?>">
-                                        <button class="spc-qty-plus"
+                                        <button class="swift-checkout-qty-plus"
                                             data-item-key="<?php echo esc_attr($item_key); ?>">+</button>
                                     </div>
                                 </td>
@@ -157,7 +156,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                     </span>
                                 </td>
                                 <td class="product-remove" style="text-align: right;">
-                                    <button class="spc-remove-item"
+                                    <button class="swift-checkout-remove-item"
                                         data-item-key="<?php echo esc_attr($item_key); ?>">×</button>
                                 </td>
                             </tr>
@@ -184,10 +183,10 @@ $attributes['sample_cart_items'] = $sample_cart_items;
         </div>
     </div>
 
-    <div class="spc-checkout-form spc-visible">
-        <h2 class="spc-checkout-title"><?php \esc_html_e('Contact Information', 'swift-checkout'); ?></h2>
-        <form id="spc-checkout-form" method="post">
-            <div class="spc-form-section">
+    <div class="swift-checkout-checkout-form swift-checkout-visible">
+        <h2 class="swift-checkout-checkout-title"><?php \esc_html_e('Contact Information', 'swift-checkout'); ?></h2>
+        <form id="swift-checkout-checkout-form" method="post">
+            <div class="swift-checkout-form-section">
                 <?php
                 // Use custom fields if enabled and available, otherwise use default fields
                 $use_custom_fields = isset($args['enable_custom_fields']) && $args['enable_custom_fields'] === 'yes' && !empty($args['checkout_fields']);
@@ -260,13 +259,13 @@ $attributes['sample_cart_items'] = $sample_cart_items;
 
                     // Start phone/email group if needed
                     if ($group_phone_email && ($type === 'phone') && !$in_phone_email_group) {
-                        echo '<div class="spc-input-group">';
+                        echo '<div class="swift-checkout-input-group">';
                         $in_phone_email_group = true;
                     }
 
                     // Start first_name/last_name group if needed
                     if ($group_name_fields && ($type === 'first_name') && !$in_name_group) {
-                        echo '<div class="spc-input-group">';
+                        echo '<div class="swift-checkout-input-group">';
                         $in_name_group = true;
                     }
 
@@ -284,9 +283,9 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     if ($type === 'address' || $type === 'order_notes') {
                         // These fields use textarea
                 ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-                            <textarea id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>"></textarea>
-                            <label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+                            <textarea id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>"></textarea>
+                            <label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
                                 <?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
                             </label>
                         </div>
@@ -294,8 +293,8 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     } elseif ($type === 'country') {
                         // Country dropdown
                     ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-                            <select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+                            <select id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?>>
                                 <option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a country'); ?></option>
                                 <?php
                                 // Get countries from WooCommerce if available
@@ -313,7 +312,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 }
                                 ?>
                             </select>
-                            <label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+                            <label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
                                 <?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
                             </label>
                         </div>
@@ -321,8 +320,8 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     } elseif ($type === 'state') {
                         // State/County dropdown
                     ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-                            <select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+                            <select id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?>>
                                 <option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a state'); ?></option>
                                 <?php
                                 // Get states from WooCommerce if available
@@ -341,7 +340,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                 }
                                 ?>
                             </select>
-                            <label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+                            <label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
                                 <?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
                             </label>
                         </div>
@@ -349,9 +348,9 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     } elseif ($type === 'create_account') {
                         // Checkbox fields
                     ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
-                            <label for="spc-<?php echo esc_attr($type); ?>" class="spc-checkbox-label">
-                                <input type="checkbox" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?> swift-checkout-checkbox-row">
+                            <label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-checkbox-label">
+                                <input type="checkbox" id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
                                 <?php echo esc_html($label ? $label : 'Create an account?'); ?>
                             </label>
                         </div>
@@ -359,53 +358,53 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     } elseif ($type === 'shipping_address') {
                         // Checkbox for different shipping address
                     ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
-                            <label for="spc-shipping_address" class="spc-checkbox-label">
-                                <input type="checkbox" id="spc-shipping_address" name="shipping_address" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?> swift-checkout-checkbox-row">
+                            <label for="swift-checkout-shipping_address" class="swift-checkout-checkbox-label">
+                                <input type="checkbox" id="swift-checkout-shipping_address" name="shipping_address" class="swift-checkout-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
                                 <?php echo esc_html($label ? $label : 'Ship to a different address?'); ?>
                             </label>
                         </div>
 
                         <!-- Shipping address form - hidden by default -->
-                        <div id="spc-shipping-address-fields" class="spc-shipping-address-fields" style="display: none;">
-                            <h3 class="spc-shipping-title">Shipping Address</h3>
+                        <div id="swift-checkout-shipping-address-fields" class="swift-checkout-shipping-address-fields" style="display: none;">
+                            <h3 class="swift-checkout-shipping-title">Shipping Address</h3>
 
                             <!-- First Name and Last Name in a group -->
-                            <div class="spc-input-group">
+                            <div class="swift-checkout-input-group">
                                 <!-- First Name -->
-                                <div class="spc-form-row">
-                                    <input type="text" id="spc-shipping_first_name" name="shipping_first_name" class="spc-form-input" placeholder=" ">
-                                    <label for="spc-shipping_first_name" class="spc-form-label">First Name</label>
+                                <div class="swift-checkout-form-row">
+                                    <input type="text" id="swift-checkout-shipping_first_name" name="shipping_first_name" class="swift-checkout-form-input" placeholder=" ">
+                                    <label for="swift-checkout-shipping_first_name" class="swift-checkout-form-label">First Name</label>
                                 </div>
 
                                 <!-- Last Name -->
-                                <div class="spc-form-row">
-                                    <input type="text" id="spc-shipping_last_name" name="shipping_last_name" class="spc-form-input" placeholder=" ">
-                                    <label for="spc-shipping_last_name" class="spc-form-label">Last Name</label>
+                                <div class="swift-checkout-form-row">
+                                    <input type="text" id="swift-checkout-shipping_last_name" name="shipping_last_name" class="swift-checkout-form-input" placeholder=" ">
+                                    <label for="swift-checkout-shipping_last_name" class="swift-checkout-form-label">Last Name</label>
                                 </div>
                             </div>
 
                             <!-- Address Line 1 -->
-                            <div class="spc-form-row">
-                                <input type="text" id="spc-shipping_address_1" name="shipping_address_1" class="spc-form-input" placeholder=" ">
-                                <label for="spc-shipping_address_1" class="spc-form-label">Street Address</label>
+                            <div class="swift-checkout-form-row">
+                                <input type="text" id="swift-checkout-shipping_address_1" name="shipping_address_1" class="swift-checkout-form-input" placeholder=" ">
+                                <label for="swift-checkout-shipping_address_1" class="swift-checkout-form-label">Street Address</label>
                             </div>
 
                             <!-- Address Line 2 -->
-                            <div class="spc-form-row">
-                                <input type="text" id="spc-shipping_address_2" name="shipping_address_2" class="spc-form-input" placeholder=" ">
-                                <label for="spc-shipping_address_2" class="spc-form-label">Apartment, suite, etc. (Optional)</label>
+                            <div class="swift-checkout-form-row">
+                                <input type="text" id="swift-checkout-shipping_address_2" name="shipping_address_2" class="swift-checkout-form-input" placeholder=" ">
+                                <label for="swift-checkout-shipping_address_2" class="swift-checkout-form-label">Apartment, suite, etc. (Optional)</label>
                             </div>
 
                             <!-- City -->
-                            <div class="spc-form-row">
-                                <input type="text" id="spc-shipping_city" name="shipping_city" class="spc-form-input" placeholder=" ">
-                                <label for="spc-shipping_city" class="spc-form-label">City</label>
+                            <div class="swift-checkout-form-row">
+                                <input type="text" id="swift-checkout-shipping_city" name="shipping_city" class="swift-checkout-form-input" placeholder=" ">
+                                <label for="swift-checkout-shipping_city" class="swift-checkout-form-label">City</label>
                             </div>
 
                             <!-- State -->
-                            <div class="spc-form-row">
-                                <select id="spc-shipping_state" name="shipping_state" class="spc-form-input">
+                            <div class="swift-checkout-form-row">
+                                <select id="swift-checkout-shipping_state" name="shipping_state" class="swift-checkout-form-input">
                                     <option value="">Select a state</option>
                                     <?php
                                     // Get states from WooCommerce if available
@@ -424,18 +423,18 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                     }
                                     ?>
                                 </select>
-                                <label for="spc-shipping_state" class="spc-form-label">State/County</label>
+                                <label for="swift-checkout-shipping_state" class="swift-checkout-form-label">State/County</label>
                             </div>
 
                             <!-- Postcode -->
-                            <div class="spc-form-row">
-                                <input type="text" id="spc-shipping_postcode" name="shipping_postcode" class="spc-form-input" placeholder=" ">
-                                <label for="spc-shipping_postcode" class="spc-form-label">ZIP / Postal Code</label>
+                            <div class="swift-checkout-form-row">
+                                <input type="text" id="swift-checkout-shipping_postcode" name="shipping_postcode" class="swift-checkout-form-input" placeholder=" ">
+                                <label for="swift-checkout-shipping_postcode" class="swift-checkout-form-label">ZIP / Postal Code</label>
                             </div>
 
                             <!-- Country -->
-                            <div class="spc-form-row">
-                                <select id="spc-shipping_country" name="shipping_country" class="spc-form-input">
+                            <div class="swift-checkout-form-row">
+                                <select id="swift-checkout-shipping_country" name="shipping_country" class="swift-checkout-form-input">
                                     <option value="">Select a country</option>
                                     <?php
                                     // Get countries from WooCommerce if available
@@ -453,16 +452,16 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                                     }
                                     ?>
                                 </select>
-                                <label for="spc-shipping_country" class="spc-form-label">Country</label>
+                                <label for="swift-checkout-shipping_country" class="swift-checkout-form-label">Country</label>
                             </div>
                         </div>
                     <?php
                     } else {
                         // Regular input field
                     ?>
-                        <div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-                            <input type="<?php echo esc_attr($input_type); ?>" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>">
-                            <label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+                        <div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+                            <input type="<?php echo esc_attr($input_type); ?>" id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>">
+                            <label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
                                 <?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
                             </label>
                         </div>
@@ -492,7 +491,7 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                 ?>
             </div>
 
-            <div class="spc-form-section">
+            <div class="swift-checkout-form-section">
                 <?php
                 // Check for shipping_method in fields array
                 $shipping_method_enabled = false;
@@ -505,19 +504,19 @@ $attributes['sample_cart_items'] = $sample_cart_items;
 
                 if ($shipping_method_enabled) {
                 ?>
-                    <h3 class="spc-shipping-methods-title">Shipping Methods</h3>
-                    <div id="spc-shipping-methods" class="spc-shipping-methods">
-                        <div class="spc-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:1" class="spc-shipping-method-input">Inside Dhaka – <span class="woocommerce-Price-amount amount"><bdi>60.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
-                        <div class="spc-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:2" class="spc-shipping-method-input">Outside of Dhaka – <span class="woocommerce-Price-amount amount"><bdi>120.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
+                    <h3 class="swift-checkout-shipping-methods-title">Shipping Methods</h3>
+                    <div id="swift-checkout-shipping-methods" class="swift-checkout-shipping-methods">
+                        <div class="swift-checkout-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:1" class="swift-checkout-shipping-method-input">Inside Dhaka – <span class="woocommerce-Price-amount amount"><bdi>60.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
+                        <div class="swift-checkout-shipping-method"><label><input type="radio" name="shipping_method" value="flat_rate:2" class="swift-checkout-shipping-method-input">Outside of Dhaka – <span class="woocommerce-Price-amount amount"><bdi>120.00<span class="woocommerce-Price-currencySymbol">৳&nbsp;</span></bdi></span></label></div>
                     </div>
                 <?php
                 }
                 ?>
-                <div class="spc-form-row spc-form-row-submit">
-                    <button type="submit" id="spc-submit-order" class="spc-submit-order" name="spc_submit_order">
+                <div class="swift-checkout-form-row swift-checkout-form-row-submit">
+                    <button type="submit" id="swift-checkout-submit-order" class="swift-checkout-submit-order" name="swift_checkout_submit_order">
                         <?php \esc_html_e('Place Order', 'swift-checkout'); ?>
                     </button>
-                    <div class="spc-checkout-error"></div>
+                    <div class="swift-checkout-checkout-error"></div>
                 </div>
             </div>
         </form>

@@ -10,7 +10,6 @@
 namespace SwiftCheckout\Core;
 
 use SwiftCheckout\Traits\Singleton;
-use SwiftCheckout\Classes\Settings;
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.

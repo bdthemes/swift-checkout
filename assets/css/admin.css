@@ -180,12 +180,12 @@
 }
 
 /* Frontend checkout fields styling */
-.spc-form-row {
+.swift-checkout-form-row {
     position: relative;
     margin-bottom: 20px;
 }
 
-.spc-form-input {
+.swift-checkout-form-input {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
@@ -194,13 +194,13 @@
     transition: all 0.3s ease;
 }
 
-.spc-form-input:focus {
+.swift-checkout-form-input:focus {
     border-color: #2271b1;
     box-shadow: 0 0 0 1px #2271b1;
     outline: none;
 }
 
-.spc-form-label {
+.swift-checkout-form-label {
     position: absolute;
     top: 15px;
     left: 15px;
@@ -211,8 +211,8 @@
     background-color: transparent;
 }
 
-.spc-form-input:focus + .spc-form-label,
-.spc-form-input:not(:placeholder-shown) + .spc-form-label {
+.swift-checkout-form-input:focus + .swift-checkout-form-label,
+.swift-checkout-form-input:not(:placeholder-shown) + .swift-checkout-form-label {
     top: -10px;
     left: 10px;
     font-size: 12px;
@@ -221,37 +221,37 @@
     color: #2271b1;
 }
 
-.spc-form-input.error {
+.swift-checkout-form-input.error {
     border-color: #d63638;
 }
 
-.spc-form-input.error + .spc-form-label {
+.swift-checkout-form-input.error + .swift-checkout-form-label {
     color: #d63638;
 }
 
-.spc-input-group {
+.swift-checkout-input-group {
     display: flex;
     gap: 15px;
 }
 
-.spc-input-group .spc-form-row {
+.swift-checkout-input-group .swift-checkout-form-row {
     flex: 1;
 }
 
 /* Required field indicator */
-.spc-form-label .required {
+.swift-checkout-form-label .required {
     color: #d63638;
     margin-left: 2px;
 }
 
 /* Custom checkbox styling */
-.spc-checkbox-row {
+.swift-checkout-checkbox-row {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.spc-checkbox-label {
+.swift-checkout-checkbox-label {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -259,7 +259,7 @@
     color: #333;
 }
 
-.spc-checkbox-input {
+.swift-checkout-checkbox-input {
     margin-right: 8px;
     appearance: none;
     -webkit-appearance: none;
@@ -272,12 +272,12 @@
     position: relative;
 }
 
-.spc-checkbox-input:checked {
+.swift-checkout-checkbox-input:checked {
     background-color: #2271b1;
     border-color: #2271b1;
 }
 
-.spc-checkbox-input:checked::after {
+.swift-checkout-checkbox-input:checked::after {
     content: '';
     position: absolute;
     left: 6px;

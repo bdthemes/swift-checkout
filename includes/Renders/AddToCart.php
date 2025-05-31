@@ -9,11 +9,12 @@
 
 namespace SwiftCheckout\Renders;
 
-use SwiftCheckout\Classes\Utils;
-
 if (!defined('ABSPATH')) {
     exit;
 }
+
+use SwiftCheckout\Classes\Utils;
+
 class AddToCart {
     /**
      * Get Add to Cart markup
@@ -59,13 +60,13 @@ class AddToCart {
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
             Utils::load_template('block-editor-markup.php', $attributes);
         } else { ?>
-            <div class="spc-container <?php echo esc_attr(isset($attributes['align']) ? $attributes['align'] : ''); ?> <?php echo esc_attr(isset($attributes['stylePreset']) ? $attributes['stylePreset'] : ''); ?>"
+            <div class="swift-checkout-container <?php echo esc_attr(isset($attributes['align']) ? $attributes['align'] : ''); ?> <?php echo esc_attr(isset($attributes['stylePreset']) ? $attributes['stylePreset'] : ''); ?>"
                 data-builder="<?php echo esc_attr($builder); ?>"
                 data-product-id="<?php echo esc_attr($attributes['productId'] ?? ''); ?>"
                 data-auto-add-to-cart="<?php echo esc_attr($attributes['auto_add_to_cart'] ?? 'no'); ?>">
                 <?php Utils::load_template('add-to-cart.php', $attributes); ?>
-                <div class="spc-mini-cart">
-                    <h2 class="spc-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
+                <div class="swift-checkout-mini-cart">
+                    <h2 class="swift-checkout-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
                     <?php
                     // Pass the specific product ID to mini-cart
                     $mini_cart_args = $attributes;

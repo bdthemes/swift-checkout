@@ -27,29 +27,29 @@ class Ajax {
      */
     public static function init() {
         // Register AJAX handlers for frontend
-        \add_action('wp_ajax_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
-        \add_action('wp_ajax_nopriv_spc_add_to_cart', array(__CLASS__, 'add_to_cart'));
+        \add_action('wp_ajax_swift_checkout_add_to_cart', array(__CLASS__, 'add_to_cart'));
+        \add_action('wp_ajax_nopriv_swift_checkout_add_to_cart', array(__CLASS__, 'add_to_cart'));
 
-        \add_action('wp_ajax_spc_update_cart', array(__CLASS__, 'update_cart'));
-        \add_action('wp_ajax_nopriv_spc_update_cart', array(__CLASS__, 'update_cart'));
+        \add_action('wp_ajax_swift_checkout_update_cart', array(__CLASS__, 'update_cart'));
+        \add_action('wp_ajax_nopriv_swift_checkout_update_cart', array(__CLASS__, 'update_cart'));
 
-        \add_action('wp_ajax_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
-        \add_action('wp_ajax_nopriv_spc_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
+        \add_action('wp_ajax_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
+        \add_action('wp_ajax_nopriv_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
 
-        \add_action('wp_ajax_spc_remove_all_items', array(__CLASS__, 'remove_all_items'));
-        \add_action('wp_ajax_nopriv_spc_remove_all_items', array(__CLASS__, 'remove_all_items'));
+        \add_action('wp_ajax_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
+        \add_action('wp_ajax_nopriv_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
 
-        \add_action('wp_ajax_spc_create_order', array(__CLASS__, 'create_order'));
-        \add_action('wp_ajax_nopriv_spc_create_order', array(__CLASS__, 'create_order'));
+        \add_action('wp_ajax_swift_checkout_create_order', array(__CLASS__, 'create_order'));
+        \add_action('wp_ajax_nopriv_swift_checkout_create_order', array(__CLASS__, 'create_order'));
 
-        \add_action('wp_ajax_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
-        \add_action('wp_ajax_nopriv_spc_get_order_received', array(__CLASS__, 'get_order_received_html'));
+        \add_action('wp_ajax_swift_checkout_get_order_received', array(__CLASS__, 'get_order_received_html'));
+        \add_action('wp_ajax_nopriv_swift_checkout_get_order_received', array(__CLASS__, 'get_order_received_html'));
 
-        \add_action('wp_ajax_spc_get_variation', array(__CLASS__, 'get_variation'));
-        \add_action('wp_ajax_nopriv_spc_get_variation', array(__CLASS__, 'get_variation'));
+        \add_action('wp_ajax_swift_checkout_get_variation', array(__CLASS__, 'get_variation'));
+        \add_action('wp_ajax_nopriv_swift_checkout_get_variation', array(__CLASS__, 'get_variation'));
 
-        \add_action('wp_ajax_spc_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
-        \add_action('wp_ajax_nopriv_spc_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
+        \add_action('wp_ajax_swift_checkout_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
+        \add_action('wp_ajax_nopriv_swift_checkout_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
     }
 
     /**
@@ -58,7 +58,7 @@ class Ajax {
      * @return void
      */
     public static function add_to_cart() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $quantity = isset($_POST['quantity']) ? absint($_POST['quantity']) : 1;
@@ -108,7 +108,7 @@ class Ajax {
      * @return void
      */
     public static function update_cart() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field(wp_unslash($_POST['cart_item_key'])) : '';
         $quantity = isset($_POST['quantity']) ? absint($_POST['quantity']) : 1;
@@ -128,7 +128,7 @@ class Ajax {
      * @return void
      */
     public static function remove_from_cart() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         $cart_item_key = isset($_POST['cart_item_key']) ? sanitize_text_field(wp_unslash($_POST['cart_item_key'])) : '';
 
@@ -147,7 +147,7 @@ class Ajax {
      * @return void
      */
     public static function remove_all_items() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         if (function_exists('WC') && isset(WC()->cart)) {
             WC()->cart->empty_cart();
@@ -163,7 +163,7 @@ class Ajax {
      * @return void
      */
     public static function create_order() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         if (WC()->cart->is_empty()) {
             wp_send_json_error(array('message' => __('Your cart is empty', 'swift-checkout')));
@@ -421,7 +421,7 @@ class Ajax {
         $mini_cart = ob_get_clean();
         $data = array(
             'fragments' => array(
-                '.spc-mini-cart-contents' => $mini_cart,
+                '.swift-checkout-mini-cart-contents' => $mini_cart,
             ),
             'cart_hash' => WC()->cart->get_cart_hash(),
             'cart_total' => WC()->cart->get_cart_total(),
@@ -438,7 +438,7 @@ class Ajax {
      * @return void
      */
     public static function get_order_received_html() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         $order_id = isset($_POST['order_id']) ? absint($_POST['order_id']) : 0;
 
@@ -466,7 +466,7 @@ class Ajax {
      * Get variation details via AJAX
      */
     public static function get_variation() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
         $variation_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
@@ -512,7 +512,7 @@ class Ajax {
      * Update shipping methods based on customer address
      */
     public static function update_shipping_methods() {
-        check_ajax_referer('spc_nonce', 'nonce');
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
 
         // Get address fields from request
         $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
@@ -546,11 +546,11 @@ class Ajax {
             if (!empty($packages)) {
                 $package = reset($packages); // Get first package
                 if (!empty($package['rates'])) {
-                    echo '<div class="spc-shipping-methods-list">';
+                    echo '<div class="swift-checkout-shipping-methods-list">';
                     foreach ($package['rates'] as $method_id => $method) {
-                        echo '<div class="spc-shipping-method">';
+                        echo '<div class="swift-checkout-shipping-method">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
                         echo esc_html($method->get_label());
                         echo ' - ' . wp_kses_post($method->get_cost_html());
                         echo '</label>';
@@ -593,8 +593,8 @@ class Ajax {
             $zone_methods = $zone->get_shipping_methods(true);
 
             if (!empty($zone_methods)) {
-                echo '<div class="spc-shipping-zone">';
-                echo '<h4 class="spc-zone-name">' . esc_html($zone_data['zone_name']) . '</h4>';
+                echo '<div class="swift-checkout-shipping-zone">';
+                echo '<h4 class="swift-checkout-zone-name">' . esc_html($zone_data['zone_name']) . '</h4>';
 
                 foreach ($zone_methods as $method) {
                     $method_id = $method->id . ':' . $method->instance_id;
@@ -608,9 +608,9 @@ class Ajax {
                         }
                     }
 
-                    echo '<div class="spc-shipping-method">';
+                    echo '<div class="swift-checkout-shipping-method">';
                     echo '<label>';
-                    echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                    echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
                     echo esc_html($method_title);
                     if ($method_cost) {
                         echo ' - ' . wc_price($method_cost);
@@ -628,8 +628,8 @@ class Ajax {
         $rest_methods = $rest_of_world->get_shipping_methods(true);
 
         if (!empty($rest_methods)) {
-            echo '<div class="spc-shipping-zone">';
-            echo '<h4 class="spc-zone-name">' . esc_html__('Rest of World', 'swift-checkout') . '</h4>';
+            echo '<div class="swift-checkout-shipping-zone">';
+            echo '<h4 class="swift-checkout-zone-name">' . esc_html__('Rest of World', 'swift-checkout') . '</h4>';
 
             foreach ($rest_methods as $method) {
                 $method_id = $method->id . ':' . $method->instance_id;
@@ -643,9 +643,9 @@ class Ajax {
                     }
                 }
 
-                echo '<div class="spc-shipping-method">';
+                echo '<div class="swift-checkout-shipping-method">';
                 echo '<label>';
-                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="spc-shipping-method-input">';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
                 echo esc_html($method_title);
                 if ($method_cost) {
                     echo ' - ' . wc_price($method_cost);

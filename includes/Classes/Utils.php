@@ -38,7 +38,7 @@ class Utils {
      * @return mixed
      */
     public static function get_settings($key = '', $default = false) {
-        $settings = get_option('spc_settings', array());
+        $settings = get_option('swift_checkout_settings', array());
 
         if (empty($key)) {
             return $settings;
@@ -63,7 +63,7 @@ class Utils {
             $settings[$key] = $value;
         }
 
-        return update_option('spc_settings', $settings);
+        return update_option('swift_checkout_settings', $settings);
     }
 
     /**
@@ -135,8 +135,8 @@ class Utils {
     public static function set_current_product_id($product_id) {
         // Use a cookie to store the current product ID
         if (!headers_sent() && $product_id) {
-            setcookie('spc_current_product_id', $product_id, time() + 3600, '/');
-            $_COOKIE['spc_current_product_id'] = $product_id;
+            setcookie('swift_checkout_current_product_id', $product_id, time() + 3600, '/');
+            $_COOKIE['swift_checkout_current_product_id'] = $product_id;
         }
     }
 
@@ -146,7 +146,7 @@ class Utils {
      * @return int|null Product ID or null if not found
      */
     public static function get_current_product_id() {
-        return isset($_COOKIE['spc_current_product_id']) ? (int)$_COOKIE['spc_current_product_id'] : null;
+        return isset($_COOKIE['swift_checkout_current_product_id']) ? (int)$_COOKIE['swift_checkout_current_product_id'] : null;
     }
 
     /**

@@ -44,10 +44,10 @@ $use_custom_fields = isset($enable_custom_fields) && $enable_custom_fields === '
 $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 ?>
 
-<div class="spc-checkout-form">
-	<h2 class="spc-checkout-title">Contact Information</h2>
-	<form id="spc-checkout-form" method="post">
-		<div class="spc-form-section">
+<div class="swift-checkout-checkout-form">
+	<h2 class="swift-checkout-checkout-title">Contact Information</h2>
+	<form id="swift-checkout-checkout-form" method="post">
+		<div class="swift-checkout-form-section">
 			<?php
 			// Track if we have phone and email for putting them in the same row
 			$has_phone = false;
@@ -91,13 +91,13 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 
 				// Start phone/email group if needed
 				if ($group_phone_email && ($type === 'phone') && !$in_phone_email_group) {
-					echo '<div class="spc-input-group">';
+					echo '<div class="swift-checkout-input-group">';
 					$in_phone_email_group = true;
 				}
 
 				// Start first_name/last_name group if needed
 				if ($group_name_fields && ($type === 'first_name') && !$in_name_group) {
-					echo '<div class="spc-input-group">';
+					echo '<div class="swift-checkout-input-group">';
 					$in_name_group = true;
 				}
 
@@ -115,9 +115,9 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				if ($type === 'address' || $type === 'order_notes') {
 					// These fields use textarea
 			?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-						<textarea id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>"></textarea>
-						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+						<textarea id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" rows="3" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>"></textarea>
+						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
 							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
@@ -125,8 +125,8 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				} elseif ($type === 'country') {
 					// Country dropdown
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-						<select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+						<select id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?>>
 							<option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a country'); ?></option>
 							<?php
 							// Get countries from WooCommerce if available
@@ -144,7 +144,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 							}
 							?>
 						</select>
-						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
 							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
@@ -152,8 +152,8 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				} elseif ($type === 'state') {
 					// State/County dropdown
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-						<select id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?>>
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+						<select id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?>>
 							<option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a state'); ?></option>
 							<?php
 							// Get states from WooCommerce if available
@@ -172,7 +172,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 							}
 							?>
 						</select>
-						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
 							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
@@ -180,9 +180,9 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				} elseif ($type === 'create_account') {
 					// Checkbox fields
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
-						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-checkbox-label">
-							<input type="checkbox" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?> swift-checkout-checkbox-row">
+						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-checkbox-label">
+							<input type="checkbox" id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
 							<?php echo esc_html($label ? $label : 'Create an account?'); ?>
 						</label>
 					</div>
@@ -190,53 +190,53 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				} elseif ($type === 'shipping_address') {
 					// Checkbox for different shipping address
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?> spc-checkbox-row">
-						<label for="spc-shipping_address" class="spc-checkbox-label">
-							<input type="checkbox" id="spc-shipping_address" name="shipping_address" class="spc-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?> swift-checkout-checkbox-row">
+						<label for="swift-checkout-shipping_address" class="swift-checkout-checkbox-label">
+							<input type="checkbox" id="swift-checkout-shipping_address" name="shipping_address" class="swift-checkout-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
 							<?php echo esc_html($label ? $label : 'Ship to a different address?'); ?>
 						</label>
 					</div>
 
 					<!-- Shipping address form - hidden by default -->
-					<div id="spc-shipping-address-fields" class="spc-shipping-address-fields" style="display: none;">
-						<h3 class="spc-shipping-title">Shipping Address</h3>
+					<div id="swift-checkout-shipping-address-fields" class="swift-checkout-shipping-address-fields" style="display: none;">
+						<h3 class="swift-checkout-shipping-title">Shipping Address</h3>
 
 						<!-- First Name and Last Name in a group -->
-						<div class="spc-input-group">
+						<div class="swift-checkout-input-group">
 							<!-- First Name -->
-							<div class="spc-form-row">
-								<input type="text" id="spc-shipping_first_name" name="shipping_first_name" class="spc-form-input" placeholder=" ">
-								<label for="spc-shipping_first_name" class="spc-form-label">First Name</label>
+							<div class="swift-checkout-form-row">
+								<input type="text" id="swift-checkout-shipping_first_name" name="shipping_first_name" class="swift-checkout-form-input" placeholder=" ">
+								<label for="swift-checkout-shipping_first_name" class="swift-checkout-form-label">First Name</label>
 							</div>
 
 							<!-- Last Name -->
-							<div class="spc-form-row">
-								<input type="text" id="spc-shipping_last_name" name="shipping_last_name" class="spc-form-input" placeholder=" ">
-								<label for="spc-shipping_last_name" class="spc-form-label">Last Name</label>
+							<div class="swift-checkout-form-row">
+								<input type="text" id="swift-checkout-shipping_last_name" name="shipping_last_name" class="swift-checkout-form-input" placeholder=" ">
+								<label for="swift-checkout-shipping_last_name" class="swift-checkout-form-label">Last Name</label>
 							</div>
 						</div>
 
 						<!-- Address Line 1 -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_address_1" name="shipping_address_1" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_address_1" class="spc-form-label">Street Address</label>
+						<div class="swift-checkout-form-row">
+							<input type="text" id="swift-checkout-shipping_address_1" name="shipping_address_1" class="swift-checkout-form-input" placeholder=" ">
+							<label for="swift-checkout-shipping_address_1" class="swift-checkout-form-label">Street Address</label>
 						</div>
 
 						<!-- Address Line 2 -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_address_2" name="shipping_address_2" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_address_2" class="spc-form-label">Apartment, suite, etc. (Optional)</label>
+						<div class="swift-checkout-form-row">
+							<input type="text" id="swift-checkout-shipping_address_2" name="shipping_address_2" class="swift-checkout-form-input" placeholder=" ">
+							<label for="swift-checkout-shipping_address_2" class="swift-checkout-form-label">Apartment, suite, etc. (Optional)</label>
 						</div>
 
 						<!-- City -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_city" name="shipping_city" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_city" class="spc-form-label">City</label>
+						<div class="swift-checkout-form-row">
+							<input type="text" id="swift-checkout-shipping_city" name="shipping_city" class="swift-checkout-form-input" placeholder=" ">
+							<label for="swift-checkout-shipping_city" class="swift-checkout-form-label">City</label>
 						</div>
 
 						<!-- State -->
-						<div class="spc-form-row">
-							<select id="spc-shipping_state" name="shipping_state" class="spc-form-input">
+						<div class="swift-checkout-form-row">
+							<select id="swift-checkout-shipping_state" name="shipping_state" class="swift-checkout-form-input">
 								<option value="">Select a state</option>
 								<?php
 								// Get states from WooCommerce if available
@@ -255,18 +255,18 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 								}
 								?>
 							</select>
-							<label for="spc-shipping_state" class="spc-form-label">State/County</label>
+							<label for="swift-checkout-shipping_state" class="swift-checkout-form-label">State/County</label>
 						</div>
 
 						<!-- Postcode -->
-						<div class="spc-form-row">
-							<input type="text" id="spc-shipping_postcode" name="shipping_postcode" class="spc-form-input" placeholder=" ">
-							<label for="spc-shipping_postcode" class="spc-form-label">ZIP / Postal Code</label>
+						<div class="swift-checkout-form-row">
+							<input type="text" id="swift-checkout-shipping_postcode" name="shipping_postcode" class="swift-checkout-form-input" placeholder=" ">
+							<label for="swift-checkout-shipping_postcode" class="swift-checkout-form-label">ZIP / Postal Code</label>
 						</div>
 
 						<!-- Country -->
-						<div class="spc-form-row">
-							<select id="spc-shipping_country" name="shipping_country" class="spc-form-input">
+						<div class="swift-checkout-form-row">
+							<select id="swift-checkout-shipping_country" name="shipping_country" class="swift-checkout-form-input">
 								<option value="">Select a country</option>
 								<?php
 								// Get countries from WooCommerce if available
@@ -284,16 +284,16 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 								}
 								?>
 							</select>
-							<label for="spc-shipping_country" class="spc-form-label">Country</label>
+							<label for="swift-checkout-shipping_country" class="swift-checkout-form-label">Country</label>
 						</div>
 					</div>
 				<?php
 				} else {
 					// Regular input field
 				?>
-					<div class="spc-form-row spc-form-row-<?php echo esc_attr($type); ?>">
-						<input type="<?php echo esc_attr($input_type); ?>" id="spc-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="spc-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>">
-						<label for="spc-<?php echo esc_attr($type); ?>" class="spc-form-label">
+					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
+						<input type="<?php echo esc_attr($input_type); ?>" id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?> placeholder="<?php echo esc_attr($placeholder); ?>">
+						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
 							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
@@ -322,7 +322,7 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			}
 			?>
 		</div>
-		<div class="spc-form-section">
+		<div class="swift-checkout-form-section">
 			<!-- Shipping Methods Section -->
 
 			<?php
@@ -340,11 +340,11 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 			}
 			?>
 
-			<div class="spc-form-row spc-form-row-submit">
-				<button type="submit" id="spc-submit-order" class="spc-submit-order" name="spc_submit_order">
+			<div class="swift-checkout-form-row swift-checkout-form-row-submit">
+				<button type="submit" id="swift-checkout-submit-order" class="swift-checkout-submit-order" name="swift_checkout_submit_order">
 					<?php esc_html_e('Place Order', 'swift-checkout'); ?>
 				</button>
-				<div class="spc-checkout-error"></div>
+				<div class="swift-checkout-checkout-error"></div>
 			</div>
 		</div>
 	</form>
