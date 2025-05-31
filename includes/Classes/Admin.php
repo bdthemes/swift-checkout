@@ -109,7 +109,7 @@ class Admin {
             'spcAdminData',
             [
                 'ajax_url' => \admin_url('admin-ajax.php'),
-                'nonce' => \wp_create_nonce('spc_admin_nonce'),
+                'nonce' => \wp_create_nonce('swift_checkout_admin_nonce'),
                 'i18n' => [
                     'drag_to_reorder' => \__('Drag to reorder', 'swift-checkout'),
                     'unnamed_field' => \__('Unnamed Field', 'swift-checkout'),

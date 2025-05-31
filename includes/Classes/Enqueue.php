@@ -9,7 +9,6 @@
 
 namespace SwiftCheckout\Classes;
 
-use SwiftCheckout\Classes\Utils;
 use SwiftCheckout\Traits\Singleton;
 
 // Exit if accessed directly
@@ -76,7 +75,7 @@ class Enqueue {
             'spcData',
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('spc_nonce'),
+                'nonce' => wp_create_nonce('swift_checkout_nonce'),
                 'currency_symbol' => get_woocommerce_currency_symbol(),
                 'checkout_url' => wc_get_checkout_url(),
                 'i18n' => array(

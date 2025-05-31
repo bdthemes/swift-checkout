@@ -29,10 +29,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/Traits/Singleton.php';
 use SwiftCheckout\Traits\Singleton;
 use SwiftCheckout\Core\Register;
 use SwiftCheckout\Classes\Dependencies;
-use SwiftCheckout\Classes\Shortcode;
 use SwiftCheckout\Classes\Enqueue;
 use SwiftCheckout\Classes\Ajax;
-use SwiftCheckout\Classes\Settings;
 use SwiftCheckout\Classes\Admin;
 
 /**
