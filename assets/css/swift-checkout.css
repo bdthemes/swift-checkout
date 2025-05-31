@@ -344,8 +344,25 @@
 }
 
 .swift-checkout-container .swift-checkout-cart-items .cart-subtotal-value,
-.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-label {
+.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-label,
+.swift-checkout-container .swift-checkout-cart-items .cart-shipping-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-shipping-label,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-label {
   font-weight: 700;
+}
+
+.swift-checkout-container .swift-checkout-cart-items .cart-total-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-label {
+  font-size: 1.1em;
+}
+
+.swift-checkout-container .swift-checkout-cart-items tfoot tr {
+  border-top: 1px solid #eee;
+}
+
+.swift-checkout-container .swift-checkout-cart-items tfoot tr:last-child {
+  border-top: 2px solid #ddd;
 }
 
 .swift-checkout-container .swift-checkout-checkout-form .swift-checkout-form-input,
@@ -878,4 +895,56 @@ body.swift-checkout-frontend .swift-checkout-place-order-wrapper.custom-position
   left: auto;
   bottom: auto;
   right: auto;
+}
+
+/* Improved smooth transitions for price updates */
+.cart-shipping-value,
+.cart-total-value,
+.cart-subtotal-value {
+  transition: opacity 0.3s ease-in-out;
+  position: relative;
+}
+
+/* Loading indicators with improved styling */
+.cart-shipping-value.is-updating,
+.cart-total-value.is-updating {
+  position: relative;
+}
+
+.cart-shipping-value.is-updating::before,
+.cart-total-value.is-updating::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 1;
+  border-radius: 2px;
+}
+
+/* Remove old style */
+.cart-shipping-value.updating,
+.cart-total-value.updating {
+  opacity: 0.7;
+  position: relative;
+}
+
+.cart-shipping-value.updating:after,
+.cart-total-value.updating:after {
+  display: none;
+}
+
+/* New value transition style */
+.new-value {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.new-value.visible {
+  opacity: 1;
 }

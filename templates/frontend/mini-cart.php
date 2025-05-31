@@ -97,7 +97,7 @@ if ($specific_product_id > 0) {
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3" class="cart-subtotal-label"><?php esc_html_e('Total', 'swift-checkout'); ?></td>
+                <td colspan="3" class="cart-subtotal-label"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></td>
                 <td colspan="2" class="cart-subtotal-value">
                     <?php
                     // Calculate subtotal for this product's items only
@@ -110,6 +110,38 @@ if ($specific_product_id > 0) {
                         echo wp_kses_post(wc_price($subtotal));
                     } else {
                         echo wp_kses_post($cart->get_cart_subtotal());
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="cart-shipping-label"><?php esc_html_e('Shipping', 'swift-checkout'); ?></td>
+                <td colspan="2" class="cart-shipping-value">
+                    <?php
+                    if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) {
+                        echo wp_kses_post(WC()->cart->get_cart_shipping_total());
+                    } else {
+                        echo esc_html__('Free', 'swift-checkout');
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="cart-total-label"><?php esc_html_e('Total', 'swift-checkout'); ?></td>
+                <td colspan="2" class="cart-total-value">
+                    <?php
+                    // Calculate total including shipping for specific product only
+                    if ($specific_product_id > 0 && !empty($cart_items)) {
+                        $subtotal = 0;
+                        foreach ($cart_items as $cart_item) {
+                            $_product = $cart_item['data'];
+                            $subtotal += $_product->get_price() * $cart_item['quantity'];
+                        }
+                        // We can't easily calculate shipping for just this product
+                        // so we'll display the subtotal as the total for specific product case
+                        echo wp_kses_post(wc_price($subtotal));
+                    } else {
+                        echo wp_kses_post($cart->get_total());
                     }
                     ?>
                 </td>

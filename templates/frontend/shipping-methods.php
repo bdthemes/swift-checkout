@@ -58,7 +58,7 @@ if (!defined('ABSPATH')) {
 
                         echo '<div class="swift-checkout-shipping-method">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
                         echo esc_html($method_title);
                         if ($method_cost) {
                             echo ' - ' . wp_kses_post(\wc_price($method_cost));
@@ -75,7 +75,7 @@ if (!defined('ABSPATH')) {
             foreach ($shipping_methods as $method) {
                 echo '<div class="swift-checkout-shipping-method">';
                 echo '<label>';
-                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input">';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
                 echo esc_html($method->get_label());
                 echo ' - ' . wp_kses_post(\wc_price($method->get_cost()));
                 echo '</label>';

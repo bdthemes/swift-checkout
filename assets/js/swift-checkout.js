@@ -4,16 +4,41 @@
 (function($) {
     'use strict';
 
+    // Debounce function to prevent multiple rapid updates
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
     const SwiftCheckout = {
+        // Debounced version of the shipping method update
+        debouncedUpdateShippingMethod: null,
+
         /**
          * Initialize
          */
         init: function() {
+            // Initialize the debounced function
+            this.debouncedUpdateShippingMethod = debounce(this.updateSelectedShippingMethod, 300);
+
             this.bindEvents();
             this.updateCartVisibility();
 
             // Update cart visibility when fragments are refreshed
             $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', this.updateCartVisibility);
+
+            // Initial update of order totals based on default shipping method
+            $(document).ready(function() {
+                // If there's a pre-selected shipping method, update totals
+                const $selectedMethod = $('input[name="shipping_method"]:checked');
+                if ($selectedMethod.length) {
+                    // Use direct update without animation for initial load
+                    updateInitialTotals($selectedMethod.val());
+                }
+            });
         },
 
         /**
@@ -57,6 +82,15 @@
 
             // Shipping method selection
             $(document).on('change', '.swift-checkout-shipping-method-input', this.updateOrderTotal);
+
+            // Also handle clicks on shipping methods (in case the radio button isn't directly clicked)
+            $(document).on('click', '.swift-checkout-shipping-method label', function(e) {
+                // Don't process if the radio input itself was clicked (it will trigger the change event)
+                if (e.target.type !== 'radio') {
+                    const $input = $(this).find('input[type="radio"]');
+                    $input.prop('checked', true).trigger('change');
+                }
+            });
         },
 
         /**
@@ -408,11 +442,84 @@
         /**
          * Update order total when shipping method is selected
          */
-        updateOrderTotal: function() {
-            // This could be extended to show real-time order total updates
-            // For now, we'll just highlight the selected shipping method
+        updateOrderTotal: function(e) {
+            // Highlight the selected shipping method
             $('.swift-checkout-shipping-method').removeClass('selected');
-            $(this).closest('.swift-checkout-shipping-method').addClass('selected');
+            const $selectedMethod = $(this).closest('.swift-checkout-shipping-method');
+            $selectedMethod.addClass('selected');
+
+            // Get selected shipping method
+            const shippingMethod = $(this).val(); // Get value directly from the clicked radio button
+
+            if (!shippingMethod) {
+                console.warn('No shipping method selected');
+                return;
+            }
+
+            console.log('Selected shipping method:', shippingMethod);
+            // Use the debounced version to prevent flickering with rapid changes
+            SwiftCheckout.debouncedUpdateShippingMethod(shippingMethod);
+        },
+
+        /**
+         * Update cart totals based on selected shipping method
+         *
+         * @param {string} shippingMethod The selected shipping method
+         */
+        updateSelectedShippingMethod: function(shippingMethod) {
+            // Cache DOM elements
+            const $shippingValue = $('.cart-shipping-value');
+            const $totalValue = $('.cart-total-value');
+
+            // Create new span elements to hold new values
+            const $newShipping = $('<span>').addClass('new-value');
+            const $newTotal = $('<span>').addClass('new-value');
+
+            // Add loading indicators without changing the current content
+            $shippingValue.addClass('is-updating');
+            $totalValue.addClass('is-updating');
+
+            // Update cart totals via AJAX
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'swift_checkout_update_cart_totals',
+                    shipping_method: shippingMethod,
+                    nonce: spcData.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data) {
+                        // Set new values to the hidden spans
+                        $newShipping.html(response.data.shipping_total);
+                        $newTotal.html(response.data.cart_total);
+
+                        // Apply the new values using a fade transition
+                        $shippingValue.fadeOut(100, function() {
+                            $(this).html(response.data.shipping_total).fadeIn(100);
+                        });
+
+                        $totalValue.fadeOut(100, function() {
+                            $(this).html(response.data.cart_total).fadeIn(100);
+                        });
+
+                        console.log('Updated shipping total:', response.data.shipping_total);
+                        console.log('Updated cart total:', response.data.cart_total);
+                    } else {
+                        console.error('Failed to update cart totals', response);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                },
+                complete: function() {
+                    // Remove updating class with slight delay to ensure smooth transition
+                    setTimeout(function() {
+                        $shippingValue.removeClass('is-updating');
+                        $totalValue.removeClass('is-updating');
+                    }, 300);
+                }
+            });
         },
 
         /**
@@ -698,12 +805,21 @@
                                     if (response.success) {
                                         SwiftCheckout.updateFragments(response.data.fragments);
                                         SwiftCheckout.updateCartVisibility();
+
+                                        // Initialize shipping methods after cart is updated
+                                        initializeShippingMethods();
                                     }
                                 }
                             });
+                        } else {
+                            // Initialize shipping methods if no auto-add
+                            initializeShippingMethods();
                         }
                     }
                 });
+            } else {
+                // Initialize shipping methods if no product ID
+                initializeShippingMethods();
             }
         });
 
@@ -714,15 +830,66 @@
             $shippingCheckbox.trigger('change');
         }
 
-        // Initialize shipping methods
-        setTimeout(function() {
-            if ($('.swift-checkout-shipping-method-input').length === 0) {
-                SwiftCheckout.updateShippingMethods();
-            } else {
-                // Pre-select first shipping method
-                $('.swift-checkout-shipping-method-input').first().prop('checked', true);
-            }
-        }, 500);
+        // Function to initialize shipping methods with a single update
+        function initializeShippingMethods() {
+            // Short delay to ensure cart is fully updated
+            setTimeout(function() {
+                // First check if there are already shipping methods displayed
+                const $existingMethods = $('.swift-checkout-shipping-method-input');
+
+                // If no shipping methods are displayed, fetch them
+                if ($existingMethods.length === 0) {
+                    console.log('No shipping methods found, fetching methods...');
+                    SwiftCheckout.updateShippingMethods();
+                    return;
+                }
+
+                console.log('Shipping methods found:', $existingMethods.length);
+
+                // Find any already selected method
+                let $selectedMethod = $existingMethods.filter(':checked');
+
+                // If no method is selected, select the first one
+                if ($selectedMethod.length === 0) {
+                    $selectedMethod = $existingMethods.first();
+                    if ($selectedMethod.length) {
+                        // Mark it as selected but don't trigger unnecessary updates
+                        $selectedMethod.prop('checked', true);
+                        $selectedMethod.closest('.swift-checkout-shipping-method').addClass('selected');
+
+                        // We only want to update once on page load, so we'll update directly
+                        // without animation to avoid flickering
+                        const shippingMethod = $selectedMethod.val();
+                        if (shippingMethod) {
+                            // Use direct AJAX call without animation for initial load
+                            updateInitialTotals(shippingMethod);
+                        }
+                    }
+                }
+            }, 300); // Reduced delay for better user experience
+        }
+
+        // Helper function for initial totals update without animations
+        function updateInitialTotals(shippingMethod) {
+            // Direct AJAX call to update totals without animations
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'swift_checkout_update_cart_totals',
+                    shipping_method: shippingMethod,
+                    nonce: spcData.nonce
+                },
+                success: function(response) {
+                    if (response.success && response.data) {
+                        // Update shipping and cart totals without animation
+                        $('.cart-shipping-value').html(response.data.shipping_total);
+                        $('.cart-total-value').html(response.data.cart_total);
+                        console.log('Initial totals updated successfully');
+                    }
+                }
+            });
+        }
     });
 
 })(jQuery);
