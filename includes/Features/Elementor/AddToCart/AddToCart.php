@@ -337,11 +337,6 @@ class AddToCart extends \Elementor\Widget_Base {
      */
     protected function render() {
         $settings = $this->get_settings_for_display();
-        $markup = \SwiftCheckout\Renders\AddToCart::get_markup('elementor', $settings, $this);
-        if ($markup !== null) {
-            echo wp_kses_post($markup); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        } else {
-            echo ''; // Return empty string if markup is null
-        }
+        echo wp_kses_post(\SwiftCheckout\Renders\AddToCart::get_markup('elementor', $settings, $this));
     }
 }
