@@ -50,6 +50,9 @@ class Ajax {
 
         \add_action('wp_ajax_swift_checkout_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
         \add_action('wp_ajax_nopriv_swift_checkout_update_shipping_methods', array(__CLASS__, 'update_shipping_methods'));
+
+        \add_action('wp_ajax_swift_checkout_update_cart_totals', array(__CLASS__, 'update_cart_totals'));
+        \add_action('wp_ajax_nopriv_swift_checkout_update_cart_totals', array(__CLASS__, 'update_cart_totals'));
     }
 
     /**
@@ -550,7 +553,7 @@ class Ajax {
                     foreach ($package['rates'] as $method_id => $method) {
                         echo '<div class="swift-checkout-shipping-method">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
                         echo esc_html($method->get_label());
                         echo ' - ' . wp_kses_post($method->get_cost_html());
                         echo '</label>';
@@ -610,7 +613,7 @@ class Ajax {
 
                     echo '<div class="swift-checkout-shipping-method">';
                     echo '<label>';
-                    echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
+                    echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
                     echo esc_html($method_title);
                     if ($method_cost) {
                         echo ' - ' . wp_kses_post(\wc_price($method_cost));
@@ -645,7 +648,7 @@ class Ajax {
 
                 echo '<div class="swift-checkout-shipping-method">';
                 echo '<label>';
-                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input">';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart">';
                 echo esc_html($method_title);
                 if ($method_cost) {
                     echo ' - ' . wp_kses_post(\wc_price($method_cost));
@@ -656,5 +659,61 @@ class Ajax {
 
             echo '</div>';
         }
+    }
+
+    /**
+     * Update cart totals when shipping method is selected
+     */
+    public static function update_cart_totals() {
+        check_ajax_referer('swift_checkout_nonce', 'nonce');
+
+        // Get the selected shipping method
+        $shipping_method = isset($_POST['shipping_method']) ? sanitize_text_field(wp_unslash($_POST['shipping_method'])) : '';
+
+        $response = array(
+            'success' => false,
+            'shipping_total' => '',
+            'cart_total' => ''
+        );
+
+        if (empty($shipping_method)) {
+            wp_send_json_error($response);
+            return;
+        }
+
+        // Update the chosen shipping method
+        if (function_exists('WC') && WC()->cart) {
+            try {
+                // Split the shipping method if it has format like "flat_rate:1"
+                if (strpos($shipping_method, ':') !== false) {
+                    list($method_id, $instance_id) = explode(':', $shipping_method, 2);
+                }
+
+                // Set the chosen shipping method for all packages
+                WC()->session->set('chosen_shipping_methods', array($shipping_method));
+
+                // Make sure the method is applied immediately
+                WC()->shipping()->calculate_shipping();
+
+                // Recalculate totals
+                WC()->cart->calculate_shipping();
+                WC()->cart->calculate_totals();
+
+                // Get updated values
+                $response['success'] = true;
+                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+            } catch (Exception $e) {
+                // Log error but don't interrupt the user experience
+                error_log('Swift Checkout - Error updating cart totals: ' . $e->getMessage());
+
+                // Try to return data anyway to prevent UI issues
+                $response['success'] = true;
+                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+            }
+        }
+
+        wp_send_json_success($response);
     }
 }

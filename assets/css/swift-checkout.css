@@ -344,8 +344,25 @@
 }
 
 .swift-checkout-container .swift-checkout-cart-items .cart-subtotal-value,
-.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-label {
+.swift-checkout-container .swift-checkout-cart-items .cart-subtotal-label,
+.swift-checkout-container .swift-checkout-cart-items .cart-shipping-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-shipping-label,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-label {
   font-weight: 700;
+}
+
+.swift-checkout-container .swift-checkout-cart-items .cart-total-value,
+.swift-checkout-container .swift-checkout-cart-items .cart-total-label {
+  font-size: 1.1em;
+}
+
+.swift-checkout-container .swift-checkout-cart-items tfoot tr {
+  border-top: 1px solid #eee;
+}
+
+.swift-checkout-container .swift-checkout-cart-items tfoot tr:last-child {
+  border-top: 2px solid #ddd;
 }
 
 .swift-checkout-container .swift-checkout-checkout-form .swift-checkout-form-input,
@@ -857,4 +874,50 @@
   border-color: var(--swift-checkout-color-primary);
   border-width: 1px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Styles for the movable place order button wrapper */
+.swift-checkout-place-order-wrapper {
+  display: block;
+  margin: 20px 0;
+  width: fit-content; /* Take only as much width as needed */
+}
+
+/* Ensure the button stays visible */
+.swift-checkout-submit-order {
+  z-index: 50;
+}
+
+/* Allow users to position it using WordPress widgets or custom CSS */
+body.swift-checkout-frontend .swift-checkout-place-order-wrapper.custom-position {
+  position: relative;
+  top: auto;
+  left: auto;
+  bottom: auto;
+  right: auto;
+}
+
+/* Smooth transitions for price updates */
+.cart-shipping-value,
+.cart-total-value,
+.cart-subtotal-value {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Loading indicators */
+.cart-shipping-value.updating,
+.cart-total-value.updating {
+  opacity: 0.7;
+  position: relative;
+}
+
+.cart-shipping-value.updating:after,
+.cart-total-value.updating:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.4);
 }

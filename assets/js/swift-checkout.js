@@ -4,69 +4,93 @@
 (function($) {
     'use strict';
 
-    const SwiftCheckout = {
+    class SwiftCheckout {
+        /**
+         * Constructor - initializes the Swift Checkout functionality
+         */
+        constructor() {
+            this.init();
+        }
+
         /**
          * Initialize
          */
-        init: function() {
+        init() {
             this.bindEvents();
             this.updateCartVisibility();
 
             // Update cart visibility when fragments are refreshed
-            $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', this.updateCartVisibility);
-        },
+            $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', this.updateCartVisibility.bind(this));
+
+            // No longer making initial AJAX request for cart totals
+            // Instead, just check if there's a pre-selected shipping method
+            $(document).ready(() => {
+                const $selectedMethod = $('input[name="shipping_method"]:checked');
+                if ($selectedMethod.length) {
+                    // Just update the UI to reflect the selected method without AJAX call
+                    $('.swift-checkout-shipping-method').removeClass('selected');
+                    $selectedMethod.closest('.swift-checkout-shipping-method').addClass('selected');
+                }
+            });
+        }
 
         /**
          * Bind events
          */
-        bindEvents: function() {
+        bindEvents() {
             // Add to cart - combined handler for both regular and variable products
-            $(document).on('click', '.swift-checkout-add-to-cart:not([type="submit"])', this.addToCart);
-            $(document).on('submit', '.swift-checkout-variations-form', this.addVariableToCart);
-
-            // Handle refresh cart button for auto-add products
-            $(document).on('click', '.swift-checkout-refresh-cart', this.refreshCart);
+            $(document).on('click', '.swift-checkout-add-to-cart:not([type="submit"])', this.addToCart.bind(this));
+            $(document).on('submit', '.swift-checkout-variations-form', this.addVariableToCart.bind(this));
 
             // Variable product handling
-            $(document).on('click', '.swift-checkout-select-options', this.toggleVariations);
-            $(document).on('change', '.swift-checkout-variation-select', this.updateVariation);
+            $(document).on('click', '.swift-checkout-select-options', this.toggleVariations.bind(this));
+            $(document).on('change', '.swift-checkout-variation-select', this.updateVariation.bind(this));
 
             // Update cart quantity
-            $(document).on('click', '.swift-checkout-qty-plus', this.increaseQuantity);
-            $(document).on('click', '.swift-checkout-qty-minus', this.decreaseQuantity);
-            $(document).on('change', '.swift-checkout-qty-input', this.updateCartItem);
+            $(document).on('click', '.swift-checkout-qty-plus', this.increaseQuantity.bind(this));
+            $(document).on('click', '.swift-checkout-qty-minus', this.decreaseQuantity.bind(this));
+            $(document).on('change', '.swift-checkout-qty-input', this.updateCartItem.bind(this));
 
             // Remove from cart
-            $(document).on('click', '.swift-checkout-remove-item', this.removeFromCart);
+            $(document).on('click', '.swift-checkout-remove-item', this.removeFromCart.bind(this));
 
-            // Submit order
-            $(document).on('submit', '#swift-checkout-checkout-form', this.submitOrder);
+            // Submit order - button is now outside the form
+            $(document).on('click', '#swift-checkout-submit-order', this.triggerOrderSubmit.bind(this));
 
             // Toggle shipping address fields
-            $(document).on('change', '#swift-checkout-shipping_address', this.toggleShippingFields);
+            $(document).on('change', '#swift-checkout-shipping_address', this.toggleShippingFields.bind(this));
 
             // Address fields change for shipping calculation
-            $(document).on('change', '#swift-checkout-postcode, #swift-checkout-state, #swift-checkout-country, #swift-checkout-city', this.updateShippingMethods);
+            $(document).on('change', '#swift-checkout-postcode, #swift-checkout-state, #swift-checkout-country, #swift-checkout-city', this.updateShippingMethods.bind(this));
             $(document).on('change', '#swift-checkout-shipping_postcode, #swift-checkout-shipping_state, #swift-checkout-shipping_country, #swift-checkout-shipping_city',
-                function() {
+                () => {
                     if ($('#swift-checkout-shipping_address').is(':checked')) {
-                        SwiftCheckout.updateShippingMethods();
+                        this.updateShippingMethods();
                     }
                 }
             );
 
             // Shipping method selection
-            $(document).on('change', '.swift-checkout-shipping-method-input', this.updateOrderTotal);
-        },
+            $(document).on('change', '.swift-checkout-shipping-method-input', this.updateOrderTotal.bind(this));
+
+            // Also handle clicks on shipping methods (in case the radio button isn't directly clicked)
+            $(document).on('click', '.swift-checkout-shipping-method label', (e) => {
+                // Don't process if the radio input itself was clicked (it will trigger the change event)
+                if (e.target.type !== 'radio') {
+                    const $input = $(e.currentTarget).find('input[type="radio"]');
+                    $input.prop('checked', true).trigger('change');
+                }
+            });
+        }
 
         /**
          * Toggle variations visibility
          */
-        toggleVariations: function(e) {
+        toggleVariations(e) {
             e.preventDefault();
-            const productId = $(this).data('product-id');
+            const productId = $(e.currentTarget).data('product-id');
             const $variations = $(`#swift-checkout-variations-${productId}`);
-            const $button = $(this);
+            const $button = $(e.currentTarget);
 
             if ($variations.is(':visible')) {
                 $variations.slideUp(300);
@@ -75,13 +99,13 @@
                 $variations.slideDown(300);
                 // $button.text(spcData.i18n.hide_options);
             }
-        },
+        }
 
         /**
          * Update variation details
          */
-        updateVariation: function() {
-            const $form = $(this).closest('form');
+        updateVariation(e) {
+            const $form = $(e.currentTarget).closest('form');
             const productId = $form.data('product-id');
             const $price = $form.find('.swift-checkout-variation-price');
             const $stock = $form.find('.swift-checkout-variation-stock');
@@ -98,7 +122,7 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
                         $price.html(response.data.price_html);
                         $stock.html(response.data.stock_html);
@@ -111,16 +135,16 @@
                     }
                 }
             });
-        },
+        }
 
         /**
          * Add to cart event handler for regular products
          *
          * @param {Event} e Click event
          */
-        addToCart: function(e) {
+        addToCart(e) {
             e.preventDefault();
-            const $button = $(this);
+            const $button = $(e.currentTarget);
             const productId = $button.data('product-id');
 
             if (!productId) {
@@ -139,35 +163,35 @@
                     variations: JSON.stringify({}),
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
-                        SwiftCheckout.updateFragments(response.data.fragments);
+                        this.updateFragments(response.data.fragments);
                         // Hide other add to cart buttons since we now have an item in cart
                         $('.swift-checkout-add-to-cart:not([data-product-id="' + productId + '"])').hide();
-                        setTimeout(function() {
-                            SwiftCheckout.updateCartVisibility();
+                        setTimeout(() => {
+                            this.updateCartVisibility();
                         }, 100);
                     } else {
                         alert(response.data.message || 'Error adding to cart');
                     }
                 },
-                error: function() {
+                error: () => {
                     alert('Error connecting to server');
                 },
-                complete: function() {
+                complete: () => {
                     $button.prop('disabled', false).removeClass('loading');
                 }
             });
-        },
+        }
 
         /**
          * Add variable product to cart
          *
          * @param {Event} e Submit event
          */
-        addVariableToCart: function(e) {
+        addVariableToCart(e) {
             e.preventDefault();
-            const $form = $(this);
+            const $form = $(e.currentTarget);
             const $button = $form.find('.swift-checkout-add-to-cart');
             const productId = $form.data('product-id');
 
@@ -198,69 +222,69 @@
                     variations: JSON.stringify(variations),
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
-                        SwiftCheckout.updateFragments(response.data.fragments);
+                        this.updateFragments(response.data.fragments);
                         // Hide variations after adding to cart
                         $form.closest('.swift-checkout-variations-wrapper').slideUp(300);
                         // Hide other add to cart buttons since we now have an item in cart
                         $('.swift-checkout-add-to-cart:not([data-product-id="' + productId + '"])').hide();
                         $('.swift-checkout-select-options:not([data-product-id="' + productId + '"])').hide();
-                        setTimeout(function() {
-                            SwiftCheckout.updateCartVisibility();
+                        setTimeout(() => {
+                            this.updateCartVisibility();
                         }, 100);
                     } else {
                         alert(response.data.message || 'Error adding to cart');
                     }
                 },
-                error: function() {
+                error: () => {
                     alert('Error connecting to server');
                 },
-                complete: function() {
+                complete: () => {
                     $button.prop('disabled', false).removeClass('loading');
                 }
             });
-        },
+        }
 
         /**
          * Increase quantity handler
          *
          * @param {Event} e Click event
          */
-        increaseQuantity: function(e) {
+        increaseQuantity(e) {
             e.preventDefault();
 
-            const $button = $(this);
+            const $button = $(e.currentTarget);
             const $input = $button.siblings('.swift-checkout-qty-input');
             const currentQty = parseInt($input.val(), 10);
 
             $input.val(currentQty + 1).trigger('change');
-        },
+        }
 
         /**
          * Decrease quantity handler
          *
          * @param {Event} e Click event
          */
-        decreaseQuantity: function(e) {
+        decreaseQuantity(e) {
             e.preventDefault();
 
-            const $button = $(this);
+            const $button = $(e.currentTarget);
             const $input = $button.siblings('.swift-checkout-qty-input');
             const currentQty = parseInt($input.val(), 10);
 
             if (currentQty > 1) {
                 $input.val(currentQty - 1).trigger('change');
             }
-        },
+        }
 
         /**
          * Update cart item handler
          *
          * @param {Event} e Change event
          */
-        updateCartItem: function(e) {
-            const $input = $(this);
+        updateCartItem(e) {
+            const $input = $(e.currentTarget);
             const cartItemKey = $input.data('item-key');
             const quantity = parseInt($input.val(), 10);
 
@@ -280,31 +304,31 @@
                     quantity: quantity,
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
-                        SwiftCheckout.updateFragments(response.data.fragments);
+                        this.updateFragments(response.data.fragments);
                     } else {
                         alert(response.data.message || 'Error updating cart');
                     }
                 },
-                error: function() {
+                error: () => {
                     alert('Error connecting to server');
                 },
-                complete: function() {
+                complete: () => {
                     $row.removeClass('updating');
                 }
             });
-        },
+        }
 
         /**
          * Remove from cart handler
          *
          * @param {Event} e Click event
          */
-        removeFromCart: function(e) {
+        removeFromCart(e) {
             e.preventDefault();
 
-            const $button = $(this);
+            const $button = $(e.currentTarget);
             const cartItemKey = $button.data('item-key');
 
             if (!cartItemKey) {
@@ -322,30 +346,30 @@
                     cart_item_key: cartItemKey,
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
-                        SwiftCheckout.updateFragments(response.data.fragments);
+                        this.updateFragments(response.data.fragments);
                         // Force update cart visibility after removing item
-                        setTimeout(function() {
-                            SwiftCheckout.updateCartVisibility();
+                        setTimeout(() => {
+                            this.updateCartVisibility();
                         }, 100);
                     } else {
                         alert(response.data.message || 'Error removing item');
                     }
                 },
-                error: function() {
+                error: () => {
                     alert('Error connecting to server');
                 },
-                complete: function() {
+                complete: () => {
                     $row.removeClass('removing');
                 }
             });
-        },
+        }
 
         /**
          * Update available shipping methods based on address
          */
-        updateShippingMethods: function() {
+        updateShippingMethods() {
             const $shippingMethods = $('#swift-checkout-shipping-methods');
             const $loading = $shippingMethods.find('.swift-checkout-shipping-methods-loading');
 
@@ -386,7 +410,7 @@
                     city: city,
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success && response.data.html) {
                         // Replace shipping methods with new HTML
                         $shippingMethods.html(response.data.html);
@@ -395,44 +419,97 @@
                         const $firstMethod = $shippingMethods.find('.swift-checkout-shipping-method-input').first();
                         if ($firstMethod.length) {
                             $firstMethod.prop('checked', true);
-                            SwiftCheckout.updateOrderTotal();
+                            this.updateOrderTotal();
                         }
                     }
                 },
-                complete: function() {
+                complete: () => {
                     $loading.hide();
                 }
             });
-        },
+        }
 
         /**
          * Update order total when shipping method is selected
          */
-        updateOrderTotal: function() {
-            // This could be extended to show real-time order total updates
-            // For now, we'll just highlight the selected shipping method
+        updateOrderTotal(e) {
+            // Highlight the selected shipping method
             $('.swift-checkout-shipping-method').removeClass('selected');
-            $(this).closest('.swift-checkout-shipping-method').addClass('selected');
-        },
+            const $selectedMethod = $(e ? e.currentTarget : '.swift-checkout-shipping-method-input:checked').closest('.swift-checkout-shipping-method');
+            $selectedMethod.addClass('selected');
+
+            // Get selected shipping method
+            const shippingMethod = $(e ? e.currentTarget : '.swift-checkout-shipping-method-input:checked').val();
+
+            if (!shippingMethod) {
+                console.warn('No shipping method selected');
+                return;
+            }
+
+            console.log('Selected shipping method:', shippingMethod);
+            this.updateSelectedShippingMethod(shippingMethod);
+        }
 
         /**
-         * Submit order handler
+         * Update cart totals based on selected shipping method
          *
-         * @param {Event} e Submit event
+         * @param {string} shippingMethod The selected shipping method
          */
-        submitOrder: function(e) {
+        updateSelectedShippingMethod(shippingMethod) {
+            // Don't show loading indicator that causes blinking
+            const $shippingValue = $('.cart-shipping-value');
+            const $totalValue = $('.cart-total-value');
+
+            // Add a subtle loading class instead of replacing content
+            $shippingValue.addClass('updating');
+            $totalValue.addClass('updating');
+
+            // Update cart totals via AJAX
+            $.ajax({
+                url: spcData.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'swift_checkout_update_cart_totals',
+                    shipping_method: shippingMethod,
+                    nonce: spcData.nonce
+                },
+                success: (response) => {
+                    if (response.success && response.data) {
+                        // Update shipping total in mini-cart
+                        $shippingValue.html(response.data.shipping_total);
+
+                        // Update cart total in mini-cart
+                        $totalValue.html(response.data.cart_total);
+
+                        // Log for debugging
+                        console.log('Updated shipping total:', response.data.shipping_total);
+                        console.log('Updated cart total:', response.data.cart_total);
+                    } else {
+                        console.error('Failed to update cart totals', response);
+                    }
+                },
+                error: (xhr, status, error) => {
+                    console.error('AJAX error:', status, error);
+                },
+                complete: () => {
+                    // Remove updating class
+                    $shippingValue.removeClass('updating');
+                    $totalValue.removeClass('updating');
+                }
+            });
+        }
+
+        /**
+         * Trigger order submission when the standalone button is clicked
+         *
+         * @param {Event} e Click event
+         */
+        triggerOrderSubmit(e) {
             e.preventDefault();
 
-            const $form = $(this);
-            const $submitButton = $form.find('#swift-checkout-submit-order');
+            const $form = $('#swift-checkout-checkout-form');
+            const $submitButton = $(e.currentTarget);
             const isShippingDifferent = $('#swift-checkout-shipping_address').is(':checked');
-
-            // Check if shipping method is selected
-            // const $selectedShipping = $form.find('input[name="shipping_method"]:checked');
-            // if ($selectedShipping.length === 0) {
-            //     $('.swift-checkout-checkout-error').html('Please select a shipping method');
-            //     return;
-            // }
 
             // Collect required fields information
             const requiredFields = {};
@@ -460,29 +537,29 @@
                 url: spcData.ajax_url,
                 type: 'POST',
                 data: formData + '&action=swift_checkout_create_order&nonce=' + spcData.nonce,
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
                         // Show success message or redirect
-                        SwiftCheckout.showOrderConfirmation(response.data);
+                        this.showOrderConfirmation(response.data);
                     } else {
                         $('.swift-checkout-checkout-error').html(response.data.message || 'Error creating order');
                     }
                 },
-                error: function() {
+                error: () => {
                     $('.swift-checkout-checkout-error').text('Error connecting to server');
                 },
-                complete: function() {
+                complete: () => {
                     $submitButton.prop('disabled', false).removeClass('loading');
                 }
             });
-        },
+        }
 
         /**
          * Show order confirmation
          *
          * @param {Object} data Order data
          */
-        showOrderConfirmation: function(data) {
+        showOrderConfirmation(data) {
             // Load order received content via AJAX
             $.ajax({
                 url: spcData.ajax_url,
@@ -492,7 +569,7 @@
                     order_id: data.order_id,
                     nonce: spcData.nonce
                 },
-                success: function(response) {
+                success: (response) => {
                     if (response.success) {
                         // Replace checkout content with order received content
                         $('.swift-checkout-container').html(response.data.html);
@@ -500,18 +577,18 @@
                         alert(response.data.message || 'Error loading order details');
                     }
                 },
-                error: function() {
+                error: () => {
                     alert('Error connecting to server');
                 }
             });
-        },
+        }
 
         /**
          * Update page fragments
          *
          * @param {Object} fragments HTML fragments to update
          */
-        updateFragments: function(fragments) {
+        updateFragments(fragments) {
             if (!fragments) {
                 return;
             }
@@ -521,17 +598,17 @@
             });
 
             // Force update cart visibility after fragments update
-            setTimeout(function() {
-                SwiftCheckout.updateCartVisibility();
+            setTimeout(() => {
+                this.updateCartVisibility();
             }, 100);
 
             $(document.body).trigger('swift_checkout_fragments_refreshed');
-        },
+        }
 
         /**
          * Update cart visibility based on cart contents
          */
-        updateCartVisibility: function() {
+        updateCartVisibility() {
             const $cartItems = $('.swift-checkout-cart-item');
             const $miniCart = $('.swift-checkout-mini-cart');
             const $checkoutForm = $('.swift-checkout-checkout-form');
@@ -558,13 +635,13 @@
                 $addToCartButtons.show();
                 $selectOptionsButtons.show();
             }
-        },
+        }
 
         /**
          * Toggle shipping address fields visibility
          */
-        toggleShippingFields: function() {
-            const $checkbox = $(this);
+        toggleShippingFields(e) {
+            const $checkbox = $(e.currentTarget);
             const $shippingFields = $('#swift-checkout-shipping-address-fields');
 
             if ($checkbox.is(':checked')) {
@@ -576,72 +653,36 @@
             }
 
             // Update shipping methods when shipping address option changes
-            SwiftCheckout.updateShippingMethods();
-        },
+            this.updateShippingMethods();
+        }
 
         /**
-         * Handle refresh cart button for auto-add products
+         * Set the position of the place order button
          *
-         * @param {Event} e Click event
+         * This function can be called by the user to move the button to a specific element
+         *
+         * @param {string} targetSelector - CSS selector for the target element to append the button to
          */
-        refreshCart: function(e) {
-            e.preventDefault();
-            const $button = $(this);
-            const productId = $button.data('product-id');
+        setPlaceOrderPosition(targetSelector) {
+            if (!targetSelector) return;
 
-            if (!productId) {
-                return;
+            const $button = $('.swift-checkout-place-order-wrapper');
+            const $target = $(targetSelector);
+
+            if ($button.length && $target.length) {
+                $button.appendTo($target);
+                $button.addClass('custom-position');
             }
-
-            $button.prop('disabled', true).addClass('loading');
-
-            // First clear the cart
-            $.ajax({
-                url: spcData.ajax_url,
-                type: 'POST',
-                data: {
-                    action: 'swift_checkout_remove_all_items',
-                    nonce: spcData.nonce
-                },
-                success: function() {
-                    // Then add the product
-                    $.ajax({
-                        url: spcData.ajax_url,
-                        type: 'POST',
-                        data: {
-                            action: 'swift_checkout_add_to_cart',
-                            product_id: productId,
-                            quantity: 1,
-                            variations: JSON.stringify({}),
-                            nonce: spcData.nonce
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                SwiftCheckout.updateFragments(response.data.fragments);
-                                SwiftCheckout.updateCartVisibility();
-                            } else {
-                                alert(response.data.message || 'Error adding to cart');
-                            }
-                        },
-                        error: function() {
-                            alert('Error connecting to server');
-                        },
-                        complete: function() {
-                            $button.prop('disabled', false).removeClass('loading');
-                        }
-                    });
-                },
-                error: function() {
-                    alert('Error connecting to server');
-                    $button.prop('disabled', false).removeClass('loading');
-                }
-            });
         }
-    };
+    }
 
     // Initialize when DOM is ready
     $(document).ready(function() {
-        SwiftCheckout.init();
+        // Create an instance of SwiftCheckout
+        const swiftCheckout = new SwiftCheckout();
+
+        // Expose the setPlaceOrderPosition function globally
+        window.swiftCheckoutSetPlaceOrderPosition = swiftCheckout.setPlaceOrderPosition.bind(swiftCheckout);
 
         // Process each Swift Checkout container on the page
         $('.swift-checkout-container').each(function() {
@@ -674,14 +715,23 @@
                                 },
                                 success: function(response) {
                                     if (response.success) {
-                                        SwiftCheckout.updateFragments(response.data.fragments);
-                                        SwiftCheckout.updateCartVisibility();
+                                        swiftCheckout.updateFragments(response.data.fragments);
+                                        swiftCheckout.updateCartVisibility();
+
+                                        // Initialize shipping methods after cart is updated
+                                        initializeShippingMethods();
                                     }
                                 }
                             });
+                        } else {
+                            // Initialize shipping methods if no auto-add
+                            initializeShippingMethods();
                         }
                     }
                 });
+            } else {
+                // Initialize shipping methods if no product ID
+                initializeShippingMethods();
             }
         });
 
@@ -692,15 +742,24 @@
             $shippingCheckbox.trigger('change');
         }
 
-        // Initialize shipping methods
-        setTimeout(function() {
-            if ($('.swift-checkout-shipping-method-input').length === 0) {
-                SwiftCheckout.updateShippingMethods();
-            } else {
-                // Pre-select first shipping method
-                $('.swift-checkout-shipping-method-input').first().prop('checked', true);
-            }
-        }, 500);
+        // Function to initialize shipping methods with a single update
+        function initializeShippingMethods() {
+            // Give a short delay to ensure cart is fully updated
+            setTimeout(function() {
+                if ($('.swift-checkout-shipping-method-input').length === 0) {
+                    // Update shipping methods if none are displayed
+                    swiftCheckout.updateShippingMethods();
+                } else {
+                    // Select first shipping method if available without making AJAX call
+                    const $firstMethod = $('.swift-checkout-shipping-method-input').first();
+                    if ($firstMethod.length && !$firstMethod.is(':checked')) {
+                        $firstMethod.prop('checked', true);
+                        const $shippingMethod = $firstMethod.closest('.swift-checkout-shipping-method');
+                        $shippingMethod.addClass('selected');
+                    }
+                }
+            }, 800);
+        }
     });
 
 })(jQuery);
