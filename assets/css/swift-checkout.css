@@ -204,6 +204,61 @@
   opacity: 0.7;
 }
 
+
+.swift-checkout-container .swift-checkout-cart-item,
+.swift-checkout-cart-item-inner,
+.swift-checkout-cart-right,
+.swift-checkout-cart-item-inner .product-quantity,
+.swift-checkout-qty-price {
+  display: flex;
+  align-items: center;
+}
+
+.swift-checkout-container .swift-checkout-cart-item {
+  justify-content: space-between;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 20px;
+}
+
+.swift-checkout-cart-item-inner {
+  gap: 15px;
+}
+
+.swift-checkout-cart-right {
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.swift-checkout-cart-item-inner .product-image img {
+  width: 65px !important;
+  vertical-align: middle;
+  border-radius: 6px;
+}
+
+.swift-checkout-cart-item-inner .product-quantity {
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.swift-checkout-cart-item-inner .product-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1b1b21;
+}
+
+.swift-checkout-qty-price {
+  gap: 3px;
+}
+
+input.swift-checkout-qty-input-text {
+  border: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+
+
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
   .swift-checkout-container .swift-checkout-input-group {
@@ -239,12 +294,12 @@
 }
 
 .swift-checkout-container .swift-checkout-qty-input {
-  height: 35px !important;
-  width: 90px !important;
+  height: 30px !important;
+  width: 70px !important;
   border: 1px solid #e3e3e3 !important;
   background: transparent;
   border-radius: 6px !important;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
   outline: none;
   text-align: center !important;
@@ -257,12 +312,13 @@
   border: 1px solid #e7e8e9;
   border-radius: 6px;
   padding: 0;
-  font-size: 17px;
-  height: 35px;
-  line-height: 35px;
-  width: 40px;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  width: 34px;
   color: #333;
   cursor: pointer;
+  font-weight: 500;
 }
 
 

@@ -58,33 +58,44 @@ if ($specific_product_id > 0) {
                     if ($_product && $_product->exists() && $cart_item['quantity'] > 0) :
             ?>
                         <div class="swift-checkout-cart-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">
+
+                            <div class="swift-checkout-cart-item-inner">
                             <div class="product-image">
                                 <?php echo $_product->get_image(); ?>
                             </div>
-                            <div class="product-name">
-                                <?php echo esc_html($_product->get_name()); ?>
-                            </div>
-                          
-                            <div class="product-quantity">
-                                <div class="swift-checkout-quantity">
-                                    <button class="swift-checkout-qty-minus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">-</button>
-                                    <input type="number" min="1" class="swift-checkout-qty-input"
-                                        value="<?php echo esc_attr($cart_item['quantity']); ?>"
-                                        data-item-key="<?php echo esc_attr($cart_item_key); ?>">
-                                    <button class="swift-checkout-qty-plus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">+</button>
+                            <div class="swift-checkout-content">
+                                <div class="product-name">
+                                    <?php echo esc_html($_product->get_name()); ?>
+                                </div>
+                                <div class="product-quantity">
+                                   <div class="product-remove">
+                                        <button class="swift-checkout-remove-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">×</button>
+                                    </div>
+                                    <div class="swift-checkout-quantity">
+                                        <button class="swift-checkout-qty-minus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">-</button>
+                                        <input type="number" min="1" class="swift-checkout-qty-input"
+                                            value="<?php echo esc_attr($cart_item['quantity']); ?>"
+                                            data-item-key="<?php echo esc_attr($cart_item_key); ?>">
+                                        <button class="swift-checkout-qty-plus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">+</button>
+                                    </div>
+                                   
                                 </div>
                             </div>
+                            </div>
 
-                              
-                            <div class="product-price">
-                                <?php echo wp_kses_post($cart->get_product_price($_product)); ?>
+                            <div class="swift-checkout-cart-right">
+                                <div class="swift-checkout-qty-price">
+                                    <span class="swift-checkout-qty-input-text">
+                                        <?php echo esc_attr($cart_item['quantity']); ?>
+                                    </span>
+
+                                    <span>x</span>
+                                </div>
+                                <span class="product-price">
+                                    <?php echo wp_kses_post($cart->get_product_price($_product)); ?>
+                                </span>
                             </div>
-                            <div class="product-subtotal">
-                                <?php echo wp_kses_post($cart->get_product_subtotal($_product, $cart_item['quantity'])); ?>
-                            </div>
-                            <div class="product-remove" style="text-align: right;">
-                                <button class="swift-checkout-remove-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">×</button>
-                            </div>
+                           
                         </div>
             <?php
                     endif;
