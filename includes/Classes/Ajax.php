@@ -724,9 +724,6 @@ class Ajax {
                     $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
                 }
             } catch (Exception $e) {
-                // Log error but don't interrupt the user experience
-                error_log('Swift Checkout - Error updating cart totals: ' . $e->getMessage());
-
                 // Try to return data anyway to prevent UI issues
                 $response['success'] = true;
                 if (WC()->cart->is_empty()) {

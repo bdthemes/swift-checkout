@@ -454,7 +454,6 @@
                 return;
             }
 
-            console.log('Selected shipping method:', shippingMethod);
             this.updateSelectedShippingMethod(shippingMethod);
         }
 
@@ -489,9 +488,6 @@
                         // Update cart total in mini-cart
                         $totalValue.html(response.data.cart_total);
 
-                        // Log for debugging
-                        console.log('Updated shipping total:', response.data.shipping_total);
-                        console.log('Updated cart total:', response.data.cart_total);
                     } else {
                         console.error('Failed to update cart totals', response);
                     }
@@ -732,13 +728,11 @@
                     $shippingFields.addClass('shipping-active');
                 });
                 $shippingLabel.addClass('shipping-enabled');
-                console.log('Showing shipping fields');
             } else {
                 $shippingFields.slideUp(300, function() {
                     $shippingFields.removeClass('shipping-active');
                 });
                 $shippingLabel.removeClass('shipping-enabled');
-                console.log('Hiding shipping fields');
             }
 
             // Update shipping methods when shipping address option changes

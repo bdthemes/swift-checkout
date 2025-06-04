@@ -258,6 +258,7 @@
   width: 70px !important;
   vertical-align: middle;
   border-radius: 6px;
+  height: auto;
 }
 
 .swift-checkout-cart-item-inner .product-quantity {
