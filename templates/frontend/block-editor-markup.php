@@ -516,7 +516,6 @@ $attributes['sample_cart_items'] = $sample_cart_items;
                     <button type="submit" id="swift-checkout-submit-order" class="swift-checkout-submit-order" name="swift_checkout_submit_order">
                         <?php \esc_html_e('Place Order', 'swift-checkout'); ?>
                     </button>
-                    <div class="swift-checkout-checkout-error"></div>
                 </div>
             </div>
         </form>

@@ -628,12 +628,12 @@
                             }
                         } else {
                             // Display general error
-                            $('.swift-checkout-checkout-error').html(response.data.message || 'Error creating order');
+                            console.error(response.data.message || 'Error creating order');
                         }
                     }
                 },
                 error: () => {
-                    $('.swift-checkout-checkout-error').text('Error connecting to server. Please try again.');
+                    console.error('Error connecting to server');
                 },
                 complete: () => {
                     $submitButton.prop('disabled', false).removeClass('loading');
@@ -788,61 +788,7 @@
         enhanceCountrySelectors();
 
         // Process each Swift Checkout container on the page
-        $('.swift-checkout-container').each(function() {
-            const $container = $(this);
-            const productId = $container.data('product-id');
-            const autoAddToCart = $container.data('auto-add-to-cart');
 
-            if (productId) {
-                // First clear the cart completely
-                $.ajax({
-                    url: spcData.ajax_url,
-                    type: 'POST',
-                    data: {
-                        action: 'swift_checkout_remove_all_items',
-                        nonce: spcData.nonce
-                    },
-                    success: function() {
-                        // After clearing, add the product if auto-add is enabled
-                        if (autoAddToCart === 'yes') {
-                            // Add product to cart
-                            $.ajax({
-                                url: spcData.ajax_url,
-                                type: 'POST',
-                                data: {
-                                    action: 'swift_checkout_add_to_cart',
-                                    product_id: productId,
-                                    quantity: 1,
-                                    variations: JSON.stringify({}),
-                                    nonce: spcData.nonce
-                                },
-                                success: function(response) {
-                                    if (response.success) {
-                                        swiftCheckout.updateFragments(response.data.fragments);
-                                        swiftCheckout.updateCartVisibility();
-
-                                        // Initialize shipping methods after cart is updated
-                                        initializeShippingMethods();
-                                    }
-                                }
-                            });
-                        } else {
-                            // Initialize shipping methods if no auto-add
-                            initializeShippingMethods();
-
-                            // Ensure place order button is hidden when auto-add is disabled
-                            swiftCheckout.updateCartVisibility();
-                        }
-                    }
-                });
-            } else {
-                // Initialize shipping methods if no product ID
-                initializeShippingMethods();
-
-                // Ensure place order button is hidden when no product is specified
-                swiftCheckout.updateCartVisibility();
-            }
-        });
 
         // Initialize shipping fields visibility
         const $shippingCheckbox = $('#swift-checkout-shipping_address');
@@ -851,29 +797,6 @@
             $shippingCheckbox.trigger('change');
         }
 
-        // Function to initialize shipping methods with a single update
-        function initializeShippingMethods() {
-            // Give a short delay to ensure cart is fully updated
-            setTimeout(function() {
-                // Always update shipping methods regardless of whether auto add to cart is enabled
-                swiftCheckout.updateShippingMethods();
-
-                // Select first shipping method if available
-                setTimeout(function() {
-                    const $firstMethod = $('.swift-checkout-shipping-method-input').first();
-                    if ($firstMethod.length && !$firstMethod.is(':checked')) {
-                        $firstMethod.prop('checked', true);
-                        const $shippingMethod = $firstMethod.closest('.swift-checkout-shipping-method');
-                        $shippingMethod.addClass('selected');
-
-                        // Trigger update of cart totals
-                        if ($firstMethod.attr('data-trigger') === 'update-cart') {
-                            swiftCheckout.updateOrderTotal();
-                        }
-                    }
-                }, 200);
-            }, 800);
-        }
 
         // Function to enhance country selectors with search functionality
         function enhanceCountrySelectors() {

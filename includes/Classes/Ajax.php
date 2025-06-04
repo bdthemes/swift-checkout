@@ -36,9 +36,6 @@ class Ajax {
         \add_action('wp_ajax_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
         \add_action('wp_ajax_nopriv_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
 
-        \add_action('wp_ajax_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
-        \add_action('wp_ajax_nopriv_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
-
         \add_action('wp_ajax_swift_checkout_create_order', array(__CLASS__, 'create_order'));
         \add_action('wp_ajax_nopriv_swift_checkout_create_order', array(__CLASS__, 'create_order'));
 
@@ -144,21 +141,6 @@ class Ajax {
         self::get_refreshed_fragments();
     }
 
-    /**
-     * AJAX handler for removing all items from cart
-     *
-     * @return void
-     */
-    public static function remove_all_items() {
-        check_ajax_referer('swift_checkout_nonce', 'nonce');
-
-        if (function_exists('WC') && isset(WC()->cart)) {
-            WC()->cart->empty_cart();
-            wp_send_json_success();
-        } else {
-            wp_send_json_error(array('message' => __('WooCommerce cart not available', 'swift-checkout')));
-        }
-    }
 
     /**
      * AJAX handler for creating an order

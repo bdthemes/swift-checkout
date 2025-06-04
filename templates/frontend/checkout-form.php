@@ -347,10 +347,6 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 				include 'shipping-methods.php';
 			}
 			?>
-
-			<div class="swift-checkout-form-row swift-checkout-form-row-submit">
-				<div class="swift-checkout-checkout-error"></div>
-			</div>
 		</div>
 	</form>
 </div>

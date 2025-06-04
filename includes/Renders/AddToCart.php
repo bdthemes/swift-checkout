@@ -68,8 +68,9 @@ class AddToCart {
         $attributes['enable_custom_fields'] = $enable_custom_fields ? 'yes' : 'no';
         $attributes['checkout_fields'] = $checkout_fields;
         $attributes['align'] = isset($attributes['align']) ? 'align' . $attributes['align'] : '';
-
         $attributes['product_id'] = $attributes['productId'];
+        $mini_cart_args = $attributes;
+        $mini_cart_args['specific_product_id'] = $attributes['productId'] ?? 0;
         if ($builder === 'gutenberg' && defined('REST_REQUEST')) {
             Utils::load_template('block-editor-markup.php', $attributes);
         } else { ?>
@@ -81,12 +82,7 @@ class AddToCart {
                 <?php Utils::load_template('checkout-form.php', $attributes); ?>
                 <div class="swift-checkout-mini-cart">
                     <h2 class="swift-checkout-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
-                    <?php
-                    // Pass the specific product ID to mini-cart
-                    $mini_cart_args = $attributes;
-                    $mini_cart_args['specific_product_id'] = $attributes['productId'] ?? 0;
-                    Utils::load_template('mini-cart.php', $mini_cart_args);
-                    ?>
+                    <?php Utils::load_template('mini-cart.php', $mini_cart_args); ?>
                 </div>
                 <?php Utils::load_template('place-order.php', $attributes); ?>
 
