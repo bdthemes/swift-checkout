@@ -1,11 +1,10 @@
-.elementor-widget-swift-checkout-add-to-cart {
-  .elementor-widget-container {
+.swift-checkout-order-received,
+.swift-checkout-place-order-wrapper {
     background: #fff;
     padding: clamp(25px, 4vw, 40px);
     border: 1px solid #e9e9e9;
     border-radius: 6px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  }
 }
 
 /* Common Variables */
@@ -627,8 +626,6 @@ input.swift-checkout-qty-input-text {
 }
 
 .swift-checkout-place-order-wrapper {
-  /* margin-top: 30px;a */
-  /* text-align: right; */
   display: none; /* Hide by default */
 }
 
@@ -656,10 +653,7 @@ input.swift-checkout-qty-input-text {
   visibility: visible;
   transform: translateY(0);
   max-height: 2000px;
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+
 }
 
 .swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-mini-cart {
