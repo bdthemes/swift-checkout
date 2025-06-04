@@ -102,37 +102,39 @@ if ($specific_product_id > 0) {
                 endforeach;
             endif;
             ?>
-            <div>
-                <span class="cart-subtotal-label"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></span>
-                <span class="cart-subtotal-value">
-                    <?php
-                    // Calculate subtotal for this product's items only
-                    if ($specific_product_id > 0 && !empty($cart_items)) {
-                        $subtotal = 0;
-                        foreach ($cart_items as $cart_item) {
-                            $_product = $cart_item['data'];
-                            $subtotal += $_product->get_price() * $cart_item['quantity'];
+            <div class="swift-checkout-cart-subtotal-shipping">
+                <div class="swift-checkout-cart-subtotal">
+                    <span class="cart-subtotal-label"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></span>
+                    <span class="cart-subtotal-value">
+                        <?php
+                        // Calculate subtotal for this product's items only
+                        if ($specific_product_id > 0 && !empty($cart_items)) {
+                            $subtotal = 0;
+                            foreach ($cart_items as $cart_item) {
+                                $_product = $cart_item['data'];
+                                $subtotal += $_product->get_price() * $cart_item['quantity'];
+                            }
+                            echo wp_kses_post(wc_price($subtotal));
+                        } else {
+                            echo wp_kses_post($cart->get_cart_subtotal());
                         }
-                        echo wp_kses_post(wc_price($subtotal));
-                    } else {
-                        echo wp_kses_post($cart->get_cart_subtotal());
-                    }
-                    ?>
-                </span>
+                        ?>
+                    </span>
+                </div>
+                <div class="swift-checkout-cart-shipping">
+                    <span class="cart-shipping-label"><?php esc_html_e('Shipping', 'swift-checkout'); ?></span>
+                    <span class="cart-shipping-value">
+                        <?php
+                        if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) {
+                            echo wp_kses_post(WC()->cart->get_cart_shipping_total());
+                        } else {
+                            echo esc_html__('Free', 'swift-checkout');
+                        }
+                        ?>
+                    </span>
+                </div>
             </div>
-            <div>
-                <span class="cart-shipping-label"><?php esc_html_e('Shipping', 'swift-checkout'); ?></span>
-                <span class="cart-shipping-value">
-                    <?php
-                    if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) {
-                        echo wp_kses_post(WC()->cart->get_cart_shipping_total());
-                    } else {
-                        echo esc_html__('Free', 'swift-checkout');
-                    }
-                    ?>
-                </span>
-            </div>
-            <div>
+            <div class="swift-checkout-cart-total">
                 <span class="cart-total-label"><?php esc_html_e('Total', 'swift-checkout'); ?></span>
                 <span class="cart-total-value">
                     <?php

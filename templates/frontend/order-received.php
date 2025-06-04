@@ -15,7 +15,12 @@ $order = $args['order'];
 ?>
 
 <div class="swift-checkout-order-received">
-    <h2 class="swift-checkout-order-received-title swift-checkout-common-title"><?php esc_html_e('Order received', 'swift-checkout'); ?></h2>
+    <div class="swift-checkout-success-icon">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="32" fill="#4CAF50"/>
+            <path d="M27.5 36.7L21.3 30.5L19 32.8L27.5 41.3L45.5 23.3L43.2 21L27.5 36.7Z" fill="white"/>
+        </svg>
+    </div>
 
     <p class="swift-checkout-thank-you-message">
         <?php esc_html_e('Thank you. Your order has been received.', 'swift-checkout'); ?>
