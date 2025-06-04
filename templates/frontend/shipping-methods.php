@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 
 ?>
 
-<h3 class="swift-checkout-shipping-methods-title"><?php esc_html_e('Shipping Methods', 'swift-checkout'); ?></h3>
+<h2 class="swift-checkout-shipping-methods-title swift-checkout-common-title"><?php esc_html_e('Shipping Methods', 'swift-checkout'); ?></h2>
 <div id="swift-checkout-shipping-methods" class="swift-checkout-shipping-methods">
     <?php
     // Get available shipping methods from WooCommerce
@@ -43,7 +43,7 @@ if (!defined('ABSPATH')) {
 
                 if (!empty($zone_methods)) {
                     echo '<div class="swift-checkout-shipping-zone">';
-                    echo '<h4 class="swift-checkout-zone-name">' . esc_html($zone_data['zone_name']) . '</h4>';
+                    // echo '<h4 class="swift-checkout-zone-name">' . esc_html($zone_data['zone_name']) . '</h4>';
 
                     foreach ($zone_methods as $method) {
                         $method_id = $method->id . ':' . $method->instance_id;
