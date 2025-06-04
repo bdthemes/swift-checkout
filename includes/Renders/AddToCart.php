@@ -79,13 +79,14 @@ class AddToCart {
                 data-product-id="<?php echo esc_attr($attributes['productId'] ?? ''); ?>"
                 data-auto-add-to-cart="<?php echo esc_attr($attributes['auto_add_to_cart'] ?? 'no'); ?>">
                 <?php Utils::load_template('add-to-cart.php', $attributes); ?>
-                <?php Utils::load_template('checkout-form.php', $attributes); ?>
-                <div class="swift-checkout-mini-cart">
-                    <h2 class="swift-checkout-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
-                    <?php Utils::load_template('mini-cart.php', $mini_cart_args); ?>
+                <div class="swift-checkout-place-order-wrapper">
+                    <?php Utils::load_template('checkout-form.php', $attributes); ?>
+                    <div class="swift-checkout-mini-cart">
+                        <h2 class="swift-checkout-mini-cart-title"><?php \esc_html_e('Your Cart', 'swift-checkout'); ?></h2>
+                        <?php Utils::load_template('mini-cart.php', $mini_cart_args); ?>
+                    </div>
+                    <?php Utils::load_template('place-order.php', $attributes); ?>
                 </div>
-                <?php Utils::load_template('place-order.php', $attributes); ?>
-
             </div>
 <?php
         }

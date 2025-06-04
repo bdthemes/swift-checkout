@@ -352,8 +352,6 @@
 
                         // Check if the cart is now empty and update UI immediately
                         if (response.data.cart_items_count === 0) {
-                            $('.swift-checkout-mini-cart').removeClass('swift-checkout-visible');
-                            $('.swift-checkout-checkout-form').removeClass('swift-checkout-visible');
                             $('.swift-checkout-place-order-wrapper').removeClass('swift-checkout-visible');
                             $('.swift-checkout-add-to-cart').show();
                             $('.swift-checkout-select-options').show();
@@ -697,18 +695,14 @@
          */
         updateCartVisibility() {
             const $cartItems = $('.swift-checkout-cart-item');
-            const $miniCart = $('.swift-checkout-mini-cart');
-            const $checkoutForm = $('.swift-checkout-checkout-form');
+            const $placeOrderWrapper = $('.swift-checkout-place-order-wrapper');
             const $addToCartButtons = $('.swift-checkout-add-to-cart:not(.swift-checkout-refresh-cart)');
             const $refreshButtons = $('.swift-checkout-refresh-cart');
             const $selectOptionsButtons = $('.swift-checkout-select-options');
-            const $placeOrderButton = $('.swift-checkout-place-order-wrapper');
 
             if ($cartItems.length > 0) {
-                // Show cart, checkout form and place order button when we have items
-                $miniCart.addClass('swift-checkout-visible');
-                $checkoutForm.addClass('swift-checkout-visible');
-                $placeOrderButton.addClass('swift-checkout-visible');
+                // Show place order wrapper when we have items (which will show all child elements)
+                $placeOrderWrapper.addClass('swift-checkout-visible');
 
                 // Hide regular add to cart buttons, but keep refresh buttons visible
                 $addToCartButtons.hide();
@@ -716,10 +710,8 @@
                 $refreshButtons.show();
             }
             else {
-                // Hide cart, checkout form and place order button when empty
-                $miniCart.removeClass('swift-checkout-visible');
-                $checkoutForm.removeClass('swift-checkout-visible');
-                $placeOrderButton.removeClass('swift-checkout-visible');
+                // Hide place order wrapper when cart is empty (which will hide all child elements)
+                $placeOrderWrapper.removeClass('swift-checkout-visible');
 
                 // Show all buttons when cart is empty
                 $addToCartButtons.show();
@@ -784,11 +776,15 @@
         // Immediately update cart visibility state
         swiftCheckout.updateCartVisibility();
 
+        // Initialize trigger for when fragments are refreshed
+        $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', function() {
+            swiftCheckout.updateCartVisibility();
+        });
+
         // Enhance country selectors
         enhanceCountrySelectors();
 
         // Process each Swift Checkout container on the page
-
 
         // Initialize shipping fields visibility
         const $shippingCheckbox = $('#swift-checkout-shipping_address');
@@ -796,7 +792,6 @@
             // Trigger the change event to set initial state
             $shippingCheckbox.trigger('change');
         }
-
 
         // Function to enhance country selectors with search functionality
         function enhanceCountrySelectors() {

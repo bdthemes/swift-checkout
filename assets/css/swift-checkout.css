@@ -627,13 +627,47 @@ input.swift-checkout-qty-input-text {
 }
 
 .swift-checkout-place-order-wrapper {
-  margin-top: 30px;
-  text-align: right;
+  /* margin-top: 30px;a */
+  /* text-align: right; */
   display: none; /* Hide by default */
 }
 
 .swift-checkout-place-order-wrapper.swift-checkout-visible {
   display: block; /* Show only when visible class is added */
+}
+
+/* Make child elements inherit visibility from parent wrapper */
+.swift-checkout-place-order-wrapper .swift-checkout-mini-cart,
+.swift-checkout-place-order-wrapper .swift-checkout-checkout-form {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-mini-cart,
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-checkout-form {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  max-height: 2000px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-mini-cart {
+  animation: slideDown 0.4s ease-out;
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-checkout-form {
+  animation: slideDown 0.4s ease-out 0.2s backwards;
 }
 
 /* Form Row Animation */
