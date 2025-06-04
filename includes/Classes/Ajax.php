@@ -36,9 +36,6 @@ class Ajax {
         \add_action('wp_ajax_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
         \add_action('wp_ajax_nopriv_swift_checkout_remove_from_cart', array(__CLASS__, 'remove_from_cart'));
 
-        \add_action('wp_ajax_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
-        \add_action('wp_ajax_nopriv_swift_checkout_remove_all_items', array(__CLASS__, 'remove_all_items'));
-
         \add_action('wp_ajax_swift_checkout_create_order', array(__CLASS__, 'create_order'));
         \add_action('wp_ajax_nopriv_swift_checkout_create_order', array(__CLASS__, 'create_order'));
 
@@ -144,21 +141,6 @@ class Ajax {
         self::get_refreshed_fragments();
     }
 
-    /**
-     * AJAX handler for removing all items from cart
-     *
-     * @return void
-     */
-    public static function remove_all_items() {
-        check_ajax_referer('swift_checkout_nonce', 'nonce');
-
-        if (function_exists('WC') && isset(WC()->cart)) {
-            WC()->cart->empty_cart();
-            wp_send_json_success();
-        } else {
-            wp_send_json_error(array('message' => __('WooCommerce cart not available', 'swift-checkout')));
-        }
-    }
 
     /**
      * AJAX handler for creating an order
@@ -208,22 +190,30 @@ class Ajax {
 
         // Basic validation - only check fields that are marked as required
         $validation_errors = array();
+        $field_errors = array();
 
         foreach ($required_fields as $field => $is_required) {
             if ($is_required && empty($fields[$field])) {
                 $field_label = ucfirst(str_replace('_', ' ', $field));
                 /* translators: %s: Field label (e.g. "First Name", "Email", etc.) */
-                $validation_errors[] = sprintf(__('Please enter your %s', 'swift-checkout'), $field_label);
+                $error_message = sprintf(__('Please enter your %s', 'swift-checkout'), $field_label);
+                $validation_errors[] = $error_message;
+                $field_errors[$field] = $error_message;
             }
         }
 
         // Email format validation (only if email is provided)
         if (!empty($fields['email']) && !is_email($fields['email'])) {
-            $validation_errors[] = __('Please enter a valid email address', 'swift-checkout');
+            $error_message = __('Please enter a valid email address', 'swift-checkout');
+            $validation_errors[] = $error_message;
+            $field_errors['email'] = $error_message;
         }
 
         if (!empty($validation_errors)) {
-            wp_send_json_error(array('message' => implode('<br>', $validation_errors)));
+            wp_send_json_error(array(
+                'message' => implode('<br>', $validation_errors),
+                'field_errors' => $field_errors
+            ));
             exit;
         }
 
@@ -533,16 +523,34 @@ class Ajax {
             WC()->customer->set_billing_location($country, $state, $postcode, $city);
             WC()->customer->set_shipping_location($country, $state, $postcode, $city);
 
+            // For empty cart situations, create a temporary dummy product
+            $cart_is_empty = WC()->cart->is_empty();
+            $temp_product_added = false;
+
+            if ($cart_is_empty) {
+                // Find a valid, simple product to temporarily add to cart
+                $products = wc_get_products(array(
+                    'limit' => 1,
+                    'type' => 'simple',
+                    'status' => 'publish',
+                ));
+
+                if (!empty($products)) {
+                    $temp_product = $products[0];
+                    WC()->cart->add_to_cart($temp_product->get_id(), 1);
+                    $temp_product_added = true;
+                }
+            }
+
             // Recalculate shipping for the cart
             WC()->cart->calculate_shipping();
             WC()->cart->calculate_totals();
-        }
 
-        // Get available shipping methods
-        ob_start();
+            // Get available shipping methods
+            ob_start();
 
-        $shipping_methods = array();
-        if (function_exists('WC')) {
+            $shipping_methods = array();
+
             // Get shipping packages
             $packages = WC()->shipping()->get_packages();
 
@@ -567,6 +575,11 @@ class Ajax {
             } else {
                 // Fallback to shipping zones if no packages available
                 self::get_shipping_zones_html();
+            }
+
+            // Remove the temporary product if it was added
+            if ($cart_is_empty && $temp_product_added) {
+                WC()->cart->empty_cart();
             }
         } else {
             // Fallback message if WooCommerce is not available
@@ -711,9 +724,6 @@ class Ajax {
                     $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
                 }
             } catch (Exception $e) {
-                // Log error but don't interrupt the user experience
-                error_log('Swift Checkout - Error updating cart totals: ' . $e->getMessage());
-
                 // Try to return data anyway to prevent UI issues
                 $response['success'] = true;
                 if (WC()->cart->is_empty()) {

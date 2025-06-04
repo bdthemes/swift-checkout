@@ -60,9 +60,9 @@ if (!defined('ABSPATH')) {
                         $selected = $first_method ? ' checked="checked"' : '';
                         $method_class = $first_method ? 'swift-checkout-shipping-method selected' : 'swift-checkout-shipping-method';
 
-                        echo '<div class="' . $method_class . '">';
+                        echo '<div class="' . esc_attr($method_class) . '">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . $selected . '>';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . esc_attr($selected) . '>';
                         echo esc_html($method_title);
                         if ($method_cost) {
                             echo ' - ' . wp_kses_post(\wc_price($method_cost));
@@ -100,9 +100,9 @@ if (!defined('ABSPATH')) {
                         $selected = $first_method ? ' checked="checked"' : '';
                         $method_class = $first_method ? 'swift-checkout-shipping-method selected' : 'swift-checkout-shipping-method';
 
-                        echo '<div class="' . $method_class . '">';
+                        echo '<div class="' . esc_attr($method_class) . '">';
                         echo '<label>';
-                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . $selected . '>';
+                        echo '<input type="radio" name="shipping_method" value="' . esc_attr($method_id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . esc_attr($selected) . '>';
                         echo esc_html($method_title);
                         if ($method_cost) {
                             echo ' - ' . wp_kses_post(\wc_price($method_cost));
@@ -122,9 +122,9 @@ if (!defined('ABSPATH')) {
                 $selected = $first_method ? ' checked="checked"' : '';
                 $method_class = $first_method ? 'swift-checkout-shipping-method selected' : 'swift-checkout-shipping-method';
 
-                echo '<div class="' . $method_class . '">';
+                echo '<div class="' . esc_attr($method_class) . '">';
                 echo '<label>';
-                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . $selected . '>';
+                echo '<input type="radio" name="shipping_method" value="' . esc_attr($method->id) . '" class="swift-checkout-shipping-method-input" data-trigger="update-cart"' . esc_attr($selected) . '>';
                 echo esc_html($method->get_label());
                 echo ' - ' . wp_kses_post(\wc_price($method->get_cost()));
                 echo '</label>';

@@ -1,11 +1,10 @@
-.elementor-widget-swift-checkout-add-to-cart {
-  .elementor-widget-container {
+.swift-checkout-order-received,
+.swift-checkout-place-order-wrapper {
     background: #fff;
     padding: clamp(25px, 4vw, 40px);
     border: 1px solid #e9e9e9;
     border-radius: 6px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  }
 }
 
 /* Common Variables */
@@ -42,6 +41,8 @@
   font-weight: 600;
   line-height: 1;
 }
+
+
 
 .swift-checkout-container .swift-checkout-add-to-cart:hover,
 .swift-checkout-container .swift-checkout-submit-order:hover,
@@ -191,10 +192,27 @@
   margin-left: 2px;
 }
 
-.swift-checkout-container .swift-checkout-checkout-error {
+/* Input error styles */
+.swift-checkout-container .swift-checkout-input-error {
+  border-color: var(--swift-checkout-color-error) !important;
+  box-shadow: 0 0 0 1px var(--swift-checkout-color-error) !important;
+  background-color: rgba(255, 68, 68, 0.03) !important;
+}
+
+.swift-checkout-container .swift-checkout-form-error {
   color: var(--swift-checkout-color-error);
-  font-size: var(--swift-checkout-font-size);
-  margin-top: 10px;
+  font-size: calc(var(--swift-checkout-font-size) - 1px);
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.swift-checkout-container.modern .swift-checkout-input-error {
+  border-bottom-color: var(--swift-checkout-color-error) !important;
+}
+
+.swift-checkout-container.modern .swift-checkout-form-row:has(.swift-checkout-input-error)::after {
+  background-color: var(--swift-checkout-color-error);
+  width: 100%;
 }
 
 /* Placeholder Styles */
@@ -240,6 +258,7 @@
   width: 70px !important;
   vertical-align: middle;
   border-radius: 6px;
+  height: auto;
 }
 
 .swift-checkout-cart-item-inner .product-quantity {
@@ -291,6 +310,54 @@ input.swift-checkout-qty-input-text {
   .swift-checkout-container .swift-checkout-input-group {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+
+  .swift-checkout-cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .swift-checkout-cart-right {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .swift-checkout-container .swift-checkout-shipping-method label {
+    flex-wrap: wrap;
+  }
+
+  .swift-checkout-container .swift-checkout-mini-cart,
+  .swift-checkout-container .swift-checkout-checkout-form {
+    padding: 15px;
+  }
+
+  .swift-checkout-container .swift-checkout-place-order-wrapper  {
+    text-align: center;
+  }
+
+  .swift-checkout-container .swift-checkout-submit-order {
+    width: 100%;
+  }
+
+  .swift-checkout-cart-subtotal,
+  .swift-checkout-cart-shipping,
+  .swift-checkout-cart-total {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .swift-checkout-container .swift-checkout-cart-item .product-image img {
+    width: 50px !important;
+  }
+
+  .swift-checkout-container .swift-checkout-common-title {
+    font-size: 16px;
+  }
+
+  .swift-checkout-container .swift-checkout-qty-input {
+    width: 50px !important;
   }
 }
 
@@ -562,9 +629,47 @@ input.swift-checkout-qty-input-text {
 }
 
 .swift-checkout-place-order-wrapper {
+  display: none; /* Hide by default */
+}
+
+.swift-checkout-place-order-wrapper .swift-checkout-submit-order {
   margin-top: 20px;
 }
 
+.swift-checkout-place-order-wrapper.swift-checkout-visible {
+  display: block; /* Show only when visible class is added */
+}
+
+/* Make child elements inherit visibility from parent wrapper */
+.swift-checkout-place-order-wrapper .swift-checkout-mini-cart,
+.swift-checkout-place-order-wrapper .swift-checkout-checkout-form {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-mini-cart,
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-checkout-form {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  max-height: 2000px;
+
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-mini-cart {
+  animation: slideDown 0.4s ease-out;
+}
+
+.swift-checkout-place-order-wrapper.swift-checkout-visible .swift-checkout-checkout-form {
+  animation: slideDown 0.4s ease-out 0.2s backwards;
+}
 
 /* Form Row Animation */
 .swift-checkout-container.modern .swift-checkout-form-row {
@@ -621,4 +726,152 @@ input.swift-checkout-qty-input-text {
   text-align: center;
   color: var(--swift-checkout-color-label);
   font-style: italic;
+}
+
+/* Shipping Address Toggle Styles */
+.swift-checkout-container .swift-checkout-shipping-toggle {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: var(--swift-checkout-border-radius);
+  border: 1px solid #e6e6e6;
+  transition: all 0.3s ease;
+}
+
+.swift-checkout-container .swift-checkout-shipping-toggle label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.swift-checkout-container .swift-checkout-shipping-toggle label.shipping-enabled {
+  color: var(--swift-checkout-color-primary);
+}
+
+.swift-checkout-container #swift-checkout-shipping-address-fields {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.swift-checkout-container #swift-checkout-shipping-address-fields.shipping-active {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State Styles */
+.swift-checkout-container .swift-checkout-submit-order.loading,
+.swift-checkout-container .swift-checkout-add-to-cart.loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.swift-checkout-container .swift-checkout-submit-order.loading::after,
+.swift-checkout-container .swift-checkout-add-to-cart.loading::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.updating {
+  position: relative;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+/* Pulse animation for updating elements */
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.swift-checkout-cart-total-value.updating,
+.swift-checkout-cart-shipping-value.updating {
+  animation: pulse 1s infinite;
+}
+
+/* Country Selector Styles */
+.swift-checkout-country-search-container {
+  position: relative;
+  margin-top: 5px;
+}
+
+.swift-checkout-country-search {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: var(--swift-checkout-border-radius);
+  box-sizing: border-box;
+  font-size: var(--swift-checkout-font-size);
+}
+
+.swift-checkout-country-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-top: none;
+  border-radius: 0 0 var(--swift-checkout-border-radius) var(--swift-checkout-border-radius);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swift-checkout-country-dropdown.active {
+  max-height: 200px;
+  opacity: 1;
+  overflow-y: auto;
+}
+
+.swift-checkout-country-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.swift-checkout-country-options li {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.swift-checkout-country-options li:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.swift-checkout-form-row-country {
+  position: relative;
 }

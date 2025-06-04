@@ -31,7 +31,7 @@ if (!$product || !$product->is_purchasable() || !$product->is_in_stock()) {
 $auto_add = isset($args['auto_add_to_cart']) && ($args['auto_add_to_cart'] === 'yes' || $args['auto_add_to_cart'] === true);
 ?>
 
-<div class="swift-checkout-product-card <?php isset($args['cartButtonAlignment']) ? esc_attr($args['cartButtonAlignment']) : ''; ?>"
+<div class="swift-checkout-product-card <?php echo isset($args['cartButtonAlignment']) ? esc_attr($args['cartButtonAlignment']) : ''; ?>"
     data-product-id="<?php echo esc_attr($product->get_id()); ?>">
     <?php if ($product->is_type('variable')): ?>
         <button class="swift-checkout-select-options" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
