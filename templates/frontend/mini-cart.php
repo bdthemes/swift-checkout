@@ -47,58 +47,65 @@ if ($specific_product_id > 0) {
 ?>
 
 <div class="swift-checkout-mini-cart-contents">
-    <table class="swift-checkout-cart-items">
-        <thead>
-            <tr>
-                <th class="product-name"><?php esc_html_e('Product', 'swift-checkout'); ?></th>
-                <th class="product-price"><?php esc_html_e('Price', 'swift-checkout'); ?></th>
-                <th class="product-quantity"><?php esc_html_e('Quantity', 'swift-checkout'); ?></th>
-                <th class="product-subtotal"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></th>
-                <th class="product-remove" style="text-align: right;"><?php esc_html_e('Remove', 'swift-checkout'); ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (!empty($cart_items)) :
-                foreach ($cart_items as $cart_item_key => $cart_item) :
-                    $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-                    $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
+    <div class="swift-checkout-cart-items">
 
-                    if ($_product && $_product->exists() && $cart_item['quantity'] > 0) :
-            ?>
-                        <tr class="swift-checkout-cart-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">
-                            <td class="product-name">
-                                <?php echo esc_html($_product->get_name()); ?>
-                            </td>
-                            <td class="product-price">
-                                <?php echo wp_kses_post($cart->get_product_price($_product)); ?>
-                            </td>
-                            <td class="product-quantity">
-                                <div class="swift-checkout-quantity">
-                                    <button class="swift-checkout-qty-minus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">-</button>
-                                    <input type="number" min="1" class="swift-checkout-qty-input"
-                                        value="<?php echo esc_attr($cart_item['quantity']); ?>"
-                                        data-item-key="<?php echo esc_attr($cart_item_key); ?>">
-                                    <button class="swift-checkout-qty-plus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">+</button>
+        <?php
+        if (!empty($cart_items)) :
+            foreach ($cart_items as $cart_item_key => $cart_item) :
+                $_product = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
+                $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
+
+                if ($_product && $_product->exists() && $cart_item['quantity'] > 0) :
+        ?>
+                    <div class="swift-checkout-cart-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">
+
+                        <div class="swift-checkout-cart-item-inner">
+                            <div class="product-image">
+                                <?php echo wp_kses_post($_product->get_image()); ?>
+                            </div>
+                            <div class="swift-checkout-content">
+                                <div class="product-name">
+                                    <?php echo esc_html($_product->get_name()); ?>
                                 </div>
-                            </td>
-                            <td class="product-subtotal">
-                                <?php echo wp_kses_post($cart->get_product_subtotal($_product, $cart_item['quantity'])); ?>
-                            </td>
-                            <td class="product-remove" style="text-align: right;">
-                                <button class="swift-checkout-remove-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">×</button>
-                            </td>
-                        </tr>
-            <?php
-                    endif;
-                endforeach;
-            endif;
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="cart-subtotal-label"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></td>
-                <td colspan="2" class="cart-subtotal-value">
+                                <div class="product-quantity">
+                                    <div class="product-remove">
+                                        <button class="swift-checkout-remove-item" data-item-key="<?php echo esc_attr($cart_item_key); ?>">×</button>
+                                    </div>
+                                    <div class="swift-checkout-quantity">
+                                        <button class="swift-checkout-qty-minus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">-</button>
+                                        <input type="number" min="1" class="swift-checkout-qty-input"
+                                            value="<?php echo esc_attr($cart_item['quantity']); ?>"
+                                            data-item-key="<?php echo esc_attr($cart_item_key); ?>">
+                                        <button class="swift-checkout-qty-plus" data-item-key="<?php echo esc_attr($cart_item_key); ?>">+</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="swift-checkout-cart-right">
+                            <div class="swift-checkout-qty-price">
+                                <span class="swift-checkout-qty-input-text">
+                                    <?php echo esc_attr($cart_item['quantity']); ?>
+                                </span>
+
+                                <span>x</span>
+                            </div>
+                            <span class="product-price">
+                                <?php echo wp_kses_post($cart->get_product_price($_product)); ?>
+                            </span>
+                        </div>
+
+                    </div>
+        <?php
+                endif;
+            endforeach;
+        endif;
+        ?>
+        <div class="swift-checkout-cart-subtotal-shipping">
+            <div class="swift-checkout-cart-subtotal">
+                <span class="cart-subtotal-label"><?php esc_html_e('Subtotal', 'swift-checkout'); ?></span>
+                <span class="cart-subtotal-value">
                     <?php
                     // Calculate subtotal for this product's items only
                     if ($specific_product_id > 0 && !empty($cart_items)) {
@@ -112,11 +119,11 @@ if ($specific_product_id > 0) {
                         echo wp_kses_post($cart->get_cart_subtotal());
                     }
                     ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" class="cart-shipping-label"><?php esc_html_e('Shipping', 'swift-checkout'); ?></td>
-                <td colspan="2" class="cart-shipping-value">
+                </span>
+            </div>
+            <div class="swift-checkout-cart-shipping">
+                <span class="cart-shipping-label"><?php esc_html_e('Shipping', 'swift-checkout'); ?></span>
+                <span class="cart-shipping-value">
                     <?php
                     if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) {
                         echo wp_kses_post(WC()->cart->get_cart_shipping_total());
@@ -124,28 +131,28 @@ if ($specific_product_id > 0) {
                         echo esc_html__('Free', 'swift-checkout');
                     }
                     ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" class="cart-total-label"><?php esc_html_e('Total', 'swift-checkout'); ?></td>
-                <td colspan="2" class="cart-total-value">
-                    <?php
-                    // Calculate total including shipping for specific product only
-                    if ($specific_product_id > 0 && !empty($cart_items)) {
-                        $subtotal = 0;
-                        foreach ($cart_items as $cart_item) {
-                            $_product = $cart_item['data'];
-                            $subtotal += $_product->get_price() * $cart_item['quantity'];
-                        }
-                        // We can't easily calculate shipping for just this product
-                        // so we'll display the subtotal as the total for specific product case
-                        echo wp_kses_post(wc_price($subtotal));
-                    } else {
-                        echo wp_kses_post($cart->get_total());
+                </span>
+            </div>
+        </div>
+        <div class="swift-checkout-cart-total">
+            <span class="cart-total-label"><?php esc_html_e('Total', 'swift-checkout'); ?></span>
+            <span class="cart-total-value">
+                <?php
+                // Calculate total including shipping for specific product only
+                if ($specific_product_id > 0 && !empty($cart_items)) {
+                    $subtotal = 0;
+                    foreach ($cart_items as $cart_item) {
+                        $_product = $cart_item['data'];
+                        $subtotal += $_product->get_price() * $cart_item['quantity'];
                     }
-                    ?>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+                    // We can't easily calculate shipping for just this product
+                    // so we'll display the subtotal as the total for specific product case
+                    echo wp_kses_post(wc_price($subtotal));
+                } else {
+                    echo wp_kses_post($cart->get_total());
+                }
+                ?>
+            </span>
+        </div>
+    </div>
 </div>

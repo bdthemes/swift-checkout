@@ -349,6 +349,14 @@
                 success: (response) => {
                     if (response.success) {
                         this.updateFragments(response.data.fragments);
+
+                        // Check if the cart is now empty and update UI immediately
+                        if (response.data.cart_items_count === 0) {
+                            $('.swift-checkout-place-order-wrapper').removeClass('swift-checkout-visible');
+                            $('.swift-checkout-add-to-cart').show();
+                            $('.swift-checkout-select-options').show();
+                        }
+
                         // Force update cart visibility after removing item
                         setTimeout(() => {
                             this.updateCartVisibility();
@@ -446,7 +454,6 @@
                 return;
             }
 
-            console.log('Selected shipping method:', shippingMethod);
             this.updateSelectedShippingMethod(shippingMethod);
         }
 
@@ -481,9 +488,6 @@
                         // Update cart total in mini-cart
                         $totalValue.html(response.data.cart_total);
 
-                        // Log for debugging
-                        console.log('Updated shipping total:', response.data.shipping_total);
-                        console.log('Updated cart total:', response.data.cart_total);
                     } else {
                         console.error('Failed to update cart totals', response);
                     }
@@ -511,6 +515,58 @@
             const $submitButton = $(e.currentTarget);
             const isShippingDifferent = $('#swift-checkout-shipping_address').is(':checked');
 
+            // Clear previous error states
+            $('.swift-checkout-form-input').removeClass('swift-checkout-input-error');
+            $('.swift-checkout-form-error').remove();
+            $('.swift-checkout-checkout-error').empty();
+
+            // Client-side validation
+            let hasErrors = false;
+
+            $form.find('.swift-checkout-form-input[required]').each(function() {
+                const $input = $(this);
+                // Skip shipping fields if shipping address is not checked
+                if (!isShippingDifferent && $input.attr('name') && $input.attr('name').startsWith('shipping_')) {
+                    return;
+                }
+
+                if (!$input.val().trim()) {
+                    hasErrors = true;
+                    $input.addClass('swift-checkout-input-error');
+                    const fieldName = $input.attr('name');
+                    const $parent = $input.closest('.swift-checkout-form-row');
+                    const errorMsg = `<div class="swift-checkout-form-error">This field is required</div>`;
+                    if (!$parent.find('.swift-checkout-form-error').length) {
+                        $parent.append(errorMsg);
+                    }
+                }
+
+                // Email validation
+                if ($input.attr('type') === 'email' && $input.val().trim()) {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test($input.val().trim())) {
+                        hasErrors = true;
+                        $input.addClass('swift-checkout-input-error');
+                        const $parent = $input.closest('.swift-checkout-form-row');
+                        const errorMsg = `<div class="swift-checkout-form-error">Please enter a valid email address</div>`;
+                        if (!$parent.find('.swift-checkout-form-error').length) {
+                            $parent.append(errorMsg);
+                        }
+                    }
+                }
+            });
+
+            if (hasErrors) {
+                // Scroll to the first error
+                const $firstError = $('.swift-checkout-input-error').first();
+                if ($firstError.length) {
+                    $('html, body').animate({
+                        scrollTop: $firstError.offset().top - 100
+                    }, 300);
+                }
+                return;
+            }
+
             // Collect required fields information
             const requiredFields = {};
             $form.find('.swift-checkout-form-input').each(function() {
@@ -531,7 +587,6 @@
             const formData = $form.serialize() + '&required_fields=' + encodeURIComponent(JSON.stringify(requiredFields));
 
             $submitButton.prop('disabled', true).addClass('loading');
-            $('.swift-checkout-checkout-error').empty();
 
             $.ajax({
                 url: spcData.ajax_url,
@@ -542,11 +597,37 @@
                         // Show success message or redirect
                         this.showOrderConfirmation(response.data);
                     } else {
-                        $('.swift-checkout-checkout-error').html(response.data.message || 'Error creating order');
+                        // Display server-side validation errors
+                        if (response.data && response.data.field_errors) {
+                            // Handle field-specific errors
+                            const fieldErrors = response.data.field_errors;
+                            for (const [fieldName, errorMsg] of Object.entries(fieldErrors)) {
+                                const $field = $(`[name="${fieldName}"]`);
+                                if ($field.length) {
+                                    $field.addClass('swift-checkout-input-error');
+                                    const $parent = $field.closest('.swift-checkout-form-row');
+                                    const errorElem = `<div class="swift-checkout-form-error">${errorMsg}</div>`;
+                                    if (!$parent.find('.swift-checkout-form-error').length) {
+                                        $parent.append(errorElem);
+                                    }
+                                }
+                            }
+
+                            // Scroll to the first error
+                            const $firstError = $('.swift-checkout-input-error').first();
+                            if ($firstError.length) {
+                                $('html, body').animate({
+                                    scrollTop: $firstError.offset().top - 100
+                                }, 300);
+                            }
+                        } else {
+                            // Display general error
+                            console.error(response.data.message || 'Error creating order');
+                        }
                     }
                 },
                 error: () => {
-                    $('.swift-checkout-checkout-error').text('Error connecting to server');
+                    console.error('Error connecting to server');
                 },
                 complete: () => {
                     $submitButton.prop('disabled', false).removeClass('loading');
@@ -610,16 +691,14 @@
          */
         updateCartVisibility() {
             const $cartItems = $('.swift-checkout-cart-item');
-            const $miniCart = $('.swift-checkout-mini-cart');
-            const $checkoutForm = $('.swift-checkout-checkout-form');
+            const $placeOrderWrapper = $('.swift-checkout-place-order-wrapper');
             const $addToCartButtons = $('.swift-checkout-add-to-cart:not(.swift-checkout-refresh-cart)');
             const $refreshButtons = $('.swift-checkout-refresh-cart');
             const $selectOptionsButtons = $('.swift-checkout-select-options');
 
             if ($cartItems.length > 0) {
-                // Show cart and checkout when we have items
-                $miniCart.addClass('swift-checkout-visible');
-                $checkoutForm.addClass('swift-checkout-visible');
+                // Show place order wrapper when we have items (which will show all child elements)
+                $placeOrderWrapper.addClass('swift-checkout-visible');
 
                 // Hide regular add to cart buttons, but keep refresh buttons visible
                 $addToCartButtons.hide();
@@ -627,9 +706,8 @@
                 $refreshButtons.show();
             }
             else {
-                // Hide cart and checkout when empty
-                $miniCart.removeClass('swift-checkout-visible');
-                $checkoutForm.removeClass('swift-checkout-visible');
+                // Hide place order wrapper when cart is empty (which will hide all child elements)
+                $placeOrderWrapper.removeClass('swift-checkout-visible');
 
                 // Show all buttons when cart is empty
                 $addToCartButtons.show();
@@ -643,13 +721,18 @@
         toggleShippingFields(e) {
             const $checkbox = $(e.currentTarget);
             const $shippingFields = $('#swift-checkout-shipping-address-fields');
+            const $shippingLabel = $checkbox.closest('label');
 
             if ($checkbox.is(':checked')) {
-                $shippingFields.slideDown(300);
-                console.log('Showing shipping fields');
+                $shippingFields.slideDown(300, function() {
+                    $shippingFields.addClass('shipping-active');
+                });
+                $shippingLabel.addClass('shipping-enabled');
             } else {
-                $shippingFields.slideUp(300);
-                console.log('Hiding shipping fields');
+                $shippingFields.slideUp(300, function() {
+                    $shippingFields.removeClass('shipping-active');
+                });
+                $shippingLabel.removeClass('shipping-enabled');
             }
 
             // Update shipping methods when shipping address option changes
@@ -684,56 +767,18 @@
         // Expose the setPlaceOrderPosition function globally
         window.swiftCheckoutSetPlaceOrderPosition = swiftCheckout.setPlaceOrderPosition.bind(swiftCheckout);
 
-        // Process each Swift Checkout container on the page
-        $('.swift-checkout-container').each(function() {
-            const $container = $(this);
-            const productId = $container.data('product-id');
-            const autoAddToCart = $container.data('auto-add-to-cart');
+        // Immediately update cart visibility state
+        swiftCheckout.updateCartVisibility();
 
-            if (productId) {
-                // First clear the cart completely
-                $.ajax({
-                    url: spcData.ajax_url,
-                    type: 'POST',
-                    data: {
-                        action: 'swift_checkout_remove_all_items',
-                        nonce: spcData.nonce
-                    },
-                    success: function() {
-                        // After clearing, add the product if auto-add is enabled
-                        if (autoAddToCart === 'yes') {
-                            // Add product to cart
-                            $.ajax({
-                                url: spcData.ajax_url,
-                                type: 'POST',
-                                data: {
-                                    action: 'swift_checkout_add_to_cart',
-                                    product_id: productId,
-                                    quantity: 1,
-                                    variations: JSON.stringify({}),
-                                    nonce: spcData.nonce
-                                },
-                                success: function(response) {
-                                    if (response.success) {
-                                        swiftCheckout.updateFragments(response.data.fragments);
-                                        swiftCheckout.updateCartVisibility();
-
-                                        // Initialize shipping methods after cart is updated
-                                        initializeShippingMethods();
-                                    }
-                                }
-                            });
-                        } else {
-                            // Initialize shipping methods if no auto-add
-                            initializeShippingMethods();
-                        }
-                    }
-                });
-            } else {
-                // Initialize shipping methods if no product ID
-                initializeShippingMethods();
-            }
+        // Initialize trigger for when fragments are refreshed
+        $(document.body).on('wc_fragments_refreshed swift_checkout_fragments_refreshed', function() {
+            swiftCheckout.updateCartVisibility();
         });
+
+        // Enhance country selectors
+        enhanceCountrySelectors();
+
+        // Process each Swift Checkout container on the page
 
         // Initialize shipping fields visibility
         const $shippingCheckbox = $('#swift-checkout-shipping_address');
@@ -742,23 +787,83 @@
             $shippingCheckbox.trigger('change');
         }
 
-        // Function to initialize shipping methods with a single update
-        function initializeShippingMethods() {
-            // Give a short delay to ensure cart is fully updated
-            setTimeout(function() {
-                if ($('.swift-checkout-shipping-method-input').length === 0) {
-                    // Update shipping methods if none are displayed
-                    swiftCheckout.updateShippingMethods();
-                } else {
-                    // Select first shipping method if available without making AJAX call
-                    const $firstMethod = $('.swift-checkout-shipping-method-input').first();
-                    if ($firstMethod.length && !$firstMethod.is(':checked')) {
-                        $firstMethod.prop('checked', true);
-                        const $shippingMethod = $firstMethod.closest('.swift-checkout-shipping-method');
-                        $shippingMethod.addClass('selected');
+        // Function to enhance country selectors with search functionality
+        function enhanceCountrySelectors() {
+            $('.swift-checkout-country-select').each(function() {
+                const $select = $(this);
+                const $wrapper = $select.closest('.swift-checkout-form-row');
+
+                // Create search input
+                const $searchContainer = $('<div class="swift-checkout-country-search-container"></div>');
+                const $searchInput = $('<input type="text" class="swift-checkout-country-search" placeholder="Search country...">');
+
+                // Create dropdown
+                const $dropdown = $('<div class="swift-checkout-country-dropdown"></div>');
+                const $optionsList = $('<ul class="swift-checkout-country-options"></ul>');
+
+                // Add search and dropdown to DOM
+                $searchContainer.append($searchInput);
+                $searchContainer.append($dropdown);
+                $dropdown.append($optionsList);
+                $wrapper.append($searchContainer);
+
+                // Create country options list
+                $select.find('option').each(function() {
+                    const $option = $(this);
+                    if ($option.val()) {
+                        const $li = $('<li data-value="' + $option.val() + '">' + $option.text() + '</li>');
+                        $optionsList.append($li);
+                    }
+                });
+
+                // Hide the original select
+                $select.css('position', 'absolute').css('opacity', '0').css('pointer-events', 'none');
+
+                // Show selected country in search input
+                function updateSelectedCountry() {
+                    const selectedVal = $select.val();
+                    if (selectedVal) {
+                        const selectedText = $select.find('option[value="' + selectedVal + '"]').text();
+                        $searchInput.val(selectedText);
                     }
                 }
-            }, 800);
+
+                // Initialize with selected value
+                updateSelectedCountry();
+
+                // Handle search input focus
+                $searchInput.on('focus', function() {
+                    $dropdown.addClass('active');
+                });
+
+                // Handle search input blur
+                $searchInput.on('blur', function() {
+                    setTimeout(function() {
+                        $dropdown.removeClass('active');
+                    }, 200);
+                });
+
+                // Handle search input
+                $searchInput.on('input', function() {
+                    const searchText = $(this).val().toLowerCase();
+                    $optionsList.find('li').each(function() {
+                        const countryName = $(this).text().toLowerCase();
+                        if (countryName.indexOf(searchText) > -1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+
+                // Handle option selection
+                $optionsList.on('click', 'li', function() {
+                    const value = $(this).data('value');
+                    $select.val(value).trigger('change');
+                    $searchInput.val($(this).text());
+                    $dropdown.removeClass('active');
+                });
+            });
         }
     });
 

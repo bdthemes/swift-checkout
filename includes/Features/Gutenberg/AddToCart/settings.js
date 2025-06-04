@@ -7,7 +7,7 @@ import { times, remove } from 'lodash';
 import { arrayMoveItem } from '@wordpress/rich-text';
 
 const Settings = ({ attributes, setAttributes }) => {
-    const { productId, stylePreset, auto_add_to_cart, enable_custom_fields, checkout_fields } = attributes;
+    const { productId, stylePreset, auto_add_to_cart, enable_custom_fields, checkout_fields, cartButtonAlignment } = attributes;
 
     // Track which fields are expanded
     const [expandedFields, setExpandedFields] = useState({});
@@ -129,6 +129,7 @@ const Settings = ({ attributes, setAttributes }) => {
                     ]}
                     onChange={(value) => setAttributes({ productId: parseInt(value) })}
                 />
+
                 <SelectControl
                     label={__('Style Preset', 'swift-checkout')}
                     value={stylePreset}
@@ -137,6 +138,17 @@ const Settings = ({ attributes, setAttributes }) => {
                         { label: __('Modern', 'swift-checkout'), value: 'modern' }
                     ]}
                     onChange={(value) => setAttributes({ stylePreset: value })}
+                />
+                <SelectControl
+                    label={__('Cart Button Alignment', 'swift-checkout')}
+                    value={cartButtonAlignment}
+                    options={[
+                        { label: __('Button Left', 'swift-checkout'), value: 'button-left' },
+                        { label: __('Button Right', 'swift-checkout'), value: 'button-right' },
+                        { label: __('Button Center', 'swift-checkout'), value: 'button-center' },
+                        { label: __('Button Justify', 'swift-checkout'), value: 'button-justify' }
+                    ]}
+                    onChange={(value) => setAttributes({ cartButtonAlignment: value })}
                 />
                 <ToggleControl
                     label={__('Auto Add to Cart', 'swift-checkout')}
