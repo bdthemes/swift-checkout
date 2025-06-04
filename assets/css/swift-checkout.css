@@ -42,6 +42,8 @@
   line-height: 1;
 }
 
+
+
 .swift-checkout-container .swift-checkout-add-to-cart:hover,
 .swift-checkout-container .swift-checkout-submit-order:hover,
 .swift-checkout-container .swift-checkout-actions .button:hover,
@@ -329,7 +331,7 @@ input.swift-checkout-qty-input-text {
     padding: 15px;
   }
 
-  .swift-checkout-container .swift-checkout-place-order-wrapper {
+  .swift-checkout-container .swift-checkout-place-order-wrapper  {
     text-align: center;
   }
 
@@ -627,6 +629,10 @@ input.swift-checkout-qty-input-text {
 
 .swift-checkout-place-order-wrapper {
   display: none; /* Hide by default */
+}
+
+.swift-checkout-place-order-wrapper .swift-checkout-submit-order {
+  margin-top: 20px;
 }
 
 .swift-checkout-place-order-wrapper.swift-checkout-visible {
