@@ -128,29 +128,32 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 					</div>
 				<?php
 				} elseif ($type === 'country') {
-					// Country dropdown
+					// Country dropdown with list of countries
 				?>
-					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?>">
-						<select id="swift-checkout-<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($type); ?>" class="swift-checkout-form-input" <?php echo $required ? 'required' : ''; ?>>
-							<option value=""><?php echo esc_html($placeholder ? $placeholder : 'Select a country'); ?></option>
+					<div class="swift-checkout-form-row swift-checkout-form-row-country">
+						<select id="swift-checkout-country" name="country" class="swift-checkout-form-input swift-checkout-country-select" <?php echo $required ? 'required' : ''; ?>>
+							<option value=""><?php esc_html_e('Select country', 'swift-checkout'); ?></option>
 							<?php
-							// Get countries from WooCommerce if available
-							$countries = array();
+							// Get countries from WooCommerce
 							if (function_exists('WC')) {
-								$wc = WC();
-								if (isset($wc->countries) && is_object($wc->countries)) {
-									$countries = $wc->countries->get_countries();
-								}
-							}
+								$countries = WC()->countries->get_countries();
+								$base_country = WC()->countries->get_base_country();
 
-							// Display countries
-							foreach ($countries as $code => $country_name) {
-								echo '<option value="' . esc_attr($code) . '">' . esc_html($country_name) . '</option>';
+								// Show the base country first
+								if (!empty($base_country) && isset($countries[$base_country])) {
+									echo '<option value="' . esc_attr($base_country) . '" selected>' . esc_html($countries[$base_country]) . '</option>';
+									unset($countries[$base_country]);
+								}
+
+								// Show the rest of the countries
+								foreach ($countries as $code => $name) {
+									echo '<option value="' . esc_attr($code) . '">' . esc_html($name) . '</option>';
+								}
 							}
 							?>
 						</select>
-						<label for="swift-checkout-<?php echo esc_attr($type); ?>" class="swift-checkout-form-label">
-							<?php echo esc_html($label); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
+						<label for="swift-checkout-country" class="swift-checkout-form-label">
+							<?php echo esc_html($label ? $label : __('Country', 'swift-checkout')); ?> <?php echo $required ? '<span class="required">*</span>' : ''; ?>
 						</label>
 					</div>
 				<?php
@@ -193,18 +196,18 @@ $fields_to_display = $use_custom_fields ? $checkout_fields : $default_fields;
 					</div>
 				<?php
 				} elseif ($type === 'shipping_address') {
-					// Checkbox for different shipping address
+					// Shipping Address Toggle
 				?>
-					<div class="swift-checkout-form-row swift-checkout-form-row-<?php echo esc_attr($type); ?> swift-checkout-checkbox-row">
-						<label for="swift-checkout-shipping_address" class="swift-checkout-checkbox-label">
-							<input type="checkbox" id="swift-checkout-shipping_address" name="shipping_address" class="swift-checkout-checkbox-input" <?php echo $required ? 'required' : ''; ?>>
-							<?php echo esc_html($label ? $label : 'Ship to a different address?'); ?>
+					<div class="swift-checkout-shipping-toggle">
+						<label for="swift-checkout-shipping_address">
+							<input type="checkbox" id="swift-checkout-shipping_address" name="shipping_address" value="1" class="swift-checkout-form-checkbox">
+							<?php esc_html_e('Ship to a different address?', 'swift-checkout'); ?>
 						</label>
 					</div>
 
-					<!-- Shipping address form - hidden by default -->
-					<div id="swift-checkout-shipping-address-fields" class="swift-checkout-shipping-address-fields" style="display: none;">
-						<h3 class="swift-checkout-shipping-title">Shipping Address</h3>
+					<!-- Shipping Address Fields (hidden by default) -->
+					<div id="swift-checkout-shipping-address-fields" style="display: none;">
+						<h3 class="swift-checkout-shipping-address-title"><?php esc_html_e('Shipping Address', 'swift-checkout'); ?></h3>
 
 						<!-- First Name and Last Name in a group -->
 						<div class="swift-checkout-input-group">
