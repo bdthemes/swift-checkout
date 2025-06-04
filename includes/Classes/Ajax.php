@@ -517,7 +517,7 @@ class Ajax {
     public static function update_shipping_methods() {
         check_ajax_referer('swift_checkout_nonce', 'nonce');
 
-        // Get address fields from request
+        // Get the destination address from the POST data
         $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
         $state = isset($_POST['state']) ? sanitize_text_field(wp_unslash($_POST['state'])) : '';
         $postcode = isset($_POST['postcode']) ? sanitize_text_field(wp_unslash($_POST['postcode'])) : '';
@@ -542,7 +542,7 @@ class Ajax {
         ob_start();
 
         $shipping_methods = array();
-        if (function_exists('WC') && !WC()->cart->is_empty()) {
+        if (function_exists('WC')) {
             // Get shipping packages
             $packages = WC()->shipping()->get_packages();
 
@@ -561,16 +561,16 @@ class Ajax {
                     }
                     echo '</div>';
                 } else {
-                    // No shipping methods for this address
-                    echo '<p>' . esc_html__('No shipping methods available for your location.', 'swift-checkout') . '</p>';
+                    // No shipping methods for this address - fall back to zones
+                    self::get_shipping_zones_html();
                 }
             } else {
                 // Fallback to shipping zones if no packages available
                 self::get_shipping_zones_html();
             }
         } else {
-            // Fallback message if cart is empty
-            echo '<p>' . esc_html__('No shipping methods available. Please add items to your cart.', 'swift-checkout') . '</p>';
+            // Fallback message if WooCommerce is not available
+            echo '<p>' . esc_html__('No shipping methods available. WooCommerce is not active.', 'swift-checkout') . '</p>';
         }
 
         $html = ob_get_clean();
@@ -701,16 +701,28 @@ class Ajax {
 
                 // Get updated values
                 $response['success'] = true;
-                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
-                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+
+                // If cart is empty, show zero values
+                if (WC()->cart->is_empty()) {
+                    $response['shipping_total'] = wp_kses_post(wc_price(0));
+                    $response['cart_total'] = wp_kses_post(wc_price(0));
+                } else {
+                    $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                    $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+                }
             } catch (Exception $e) {
                 // Log error but don't interrupt the user experience
                 error_log('Swift Checkout - Error updating cart totals: ' . $e->getMessage());
 
                 // Try to return data anyway to prevent UI issues
                 $response['success'] = true;
-                $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
-                $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+                if (WC()->cart->is_empty()) {
+                    $response['shipping_total'] = wp_kses_post(wc_price(0));
+                    $response['cart_total'] = wp_kses_post(wc_price(0));
+                } else {
+                    $response['shipping_total'] = wp_kses_post(WC()->cart->get_cart_shipping_total());
+                    $response['cart_total'] = wp_kses_post(WC()->cart->get_total());
+                }
             }
         }
 

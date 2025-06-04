@@ -746,18 +746,23 @@
         function initializeShippingMethods() {
             // Give a short delay to ensure cart is fully updated
             setTimeout(function() {
-                if ($('.swift-checkout-shipping-method-input').length === 0) {
-                    // Update shipping methods if none are displayed
-                    swiftCheckout.updateShippingMethods();
-                } else {
-                    // Select first shipping method if available without making AJAX call
+                // Always update shipping methods regardless of whether auto add to cart is enabled
+                swiftCheckout.updateShippingMethods();
+
+                // Select first shipping method if available
+                setTimeout(function() {
                     const $firstMethod = $('.swift-checkout-shipping-method-input').first();
                     if ($firstMethod.length && !$firstMethod.is(':checked')) {
                         $firstMethod.prop('checked', true);
                         const $shippingMethod = $firstMethod.closest('.swift-checkout-shipping-method');
                         $shippingMethod.addClass('selected');
+
+                        // Trigger update of cart totals
+                        if ($firstMethod.attr('data-trigger') === 'update-cart') {
+                            swiftCheckout.updateOrderTotal();
+                        }
                     }
-                }
+                }, 200);
             }, 800);
         }
     });

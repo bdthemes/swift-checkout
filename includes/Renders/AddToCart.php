@@ -41,6 +41,19 @@ class AddToCart {
                     \WC()->cart->add_to_cart($attributes['productId']);
                 }
             }
+        } else {
+            // When auto add is disabled, make sure shipping methods can still be calculated
+            if (function_exists('\\WC') && isset(\WC()->customer) && isset(\WC()->shipping)) {
+                // Set a default country if none is set, to ensure shipping methods appear
+                if (empty(\WC()->customer->get_shipping_country())) {
+                    $base_country = \WC()->countries->get_base_country();
+                    \WC()->customer->set_shipping_location($base_country, '', '', '');
+                    \WC()->customer->set_billing_location($base_country, '', '', '');
+
+                    // Force shipping calculation even with empty cart
+                    \WC()->shipping()->calculate_shipping();
+                }
+            }
         }
 
         // Process checkout fields configuration
